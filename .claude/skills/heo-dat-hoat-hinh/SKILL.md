@@ -49,6 +49,7 @@ Theo thứ tự (xem `template.html` trong thư mục skill này để có bộ 
 | Thẻ lật | `<div class="cards"><button class="flip" type="button"><span class="front">Thuật ngữ</span><span class="back">Giải thích</span></button></div>` |
 | Bài tập | `ul#tasks[data-module="NN"]`, mỗi mục `<li><label><input type="checkbox" id="tN"><span>…</span></label></li>` |
 | Định dạng số | `Truyen.money(v)` → "3,8 tỷ"/"45 triệu"; `Truyen.pct(x)`; `Truyen.num(x, d)`; `Truyen.trim(x, d)`; `Truyen.niceStep(max)` cho trục biểu đồ |
+| Nhớ chỗ đang đọc | Tự chạy trên mọi trang có `nav.topnav`: lưu mục đang đọc (`section.chapter[id]`), mở lại đúng chỗ. Trang có `ul#tasks` ghi thêm `heo-dat:last` cho thẻ "Đọc tiếp" ở mục lục. Mỗi `section.chapter` cần có `id`. |
 | Lưu trữ | `Truyen.store(key, val)` đọc/ghi localStorage có try/catch |
 | Khối khác | `.chalk` (công thức), `.callout` / `.callout.warn` / `.callout.good`, `.tbl-wrap > table.tbl`, `.stat.money` / `.stat.warn`, `.chips > .chip`, `.legend`, `.chart-box > svg`, `.verdict` |
 

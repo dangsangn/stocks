@@ -4,6 +4,7 @@
    - .mcq[data-answer]                                → câu đố một đáp án đúng
    - .flip                                            → thẻ lật (thuật ngữ)
    - ul#tasks[data-module="01"]                       → checklist bài tập, lưu tiến độ, cho Heo ăn xu
+   - nav.topnav                                       → nhớ chỗ đang đọc, mở lại đúng mục đó
    Trang riêng gọi Truyen.pig(), Truyen.owl(), Truyen.money()... trong script của mình. */
 (function () {
   var PIG_MOODS = ['happy', 'worried', 'wow', 'proud', 'sad'];
@@ -130,11 +131,74 @@
     render(false);
   }
 
+  // ---------- đánh dấu chỗ đang đọc ----------
+  // Mọi trang có nav.topnav: lưu vị trí của trang vào 'heo-dat:pos:<file>' và mở lại đúng chỗ đó.
+  // Trang module (có ul#tasks) còn ghi 'heo-dat:last' để mục lục hiện thẻ "Đọc tiếp".
+  function initBookmark() {
+    var nav = document.querySelector('.topnav');
+    if (!nav) return;
+    var file = decodeURIComponent(location.pathname.split('/').pop()) || 'index.html';
+    var posKey = 'heo-dat:pos:' + file;
+    var isModule = !!document.querySelector('ul#tasks[data-module]');
+    var secs = [].slice.call(document.querySelectorAll('section.chapter[id]'));
+    var h1 = document.querySelector('h1'), label = nav.querySelector('.note');
+    var ready = false;
+
+    function current() {
+      var line = window.innerHeight * 0.3, cur = null;
+      secs.forEach(function (s) { if (s.getBoundingClientRect().top <= line) cur = s; });
+      return cur;
+    }
+    function save() {
+      if (!ready) return;
+      var s = current(), y = window.scrollY;
+      store(posKey, s ? { sec: s.id, off: Math.round(y - (s.getBoundingClientRect().top + y)) } : { sec: '', off: Math.round(y) });
+      if (!isModule) return;
+      var h2 = s && s.querySelector('h2');
+      store('heo-dat:last', {
+        file: file, title: h1 ? h1.textContent.trim() : document.title, label: label ? label.textContent.trim() : '',
+        sec: s ? s.id : '', secTitle: h2 ? h2.textContent.trim() : '', at: Date.now()
+      });
+    }
+    var timer;
+    window.addEventListener('scroll', function () { clearTimeout(timer); timer = setTimeout(save, 400); }, { passive: true });
+    window.addEventListener('pagehide', save);
+
+    function toast(secTitle) {
+      var el = document.createElement('div');
+      el.className = 'resume-toast panel';
+      el.setAttribute('role', 'status');
+      el.innerHTML = '<span class="char">' + pig('happy') + '</span><p>Mở lại chỗ bạn đang đọc' +
+        (secTitle ? ': <strong></strong>' : '') + '</p><button type="button">Về đầu trang</button>';
+      if (secTitle) el.querySelector('strong').textContent = secTitle;
+      el.querySelector('button').addEventListener('click', function () { window.scrollTo(0, 0); el.remove(); });
+      document.body.appendChild(el);
+      setTimeout(function () { el.classList.add('out'); setTimeout(function () { el.remove(); }, 400); }, 7000);
+    }
+    function restore() {
+      var pos = store(posKey), s = pos && pos.sec && document.getElementById(pos.sec);
+      var y = pos ? (s ? s.getBoundingClientRect().top + window.scrollY : 0) + (pos.off || 0) : 0;
+      if (!location.hash && y > 200) {
+        window.scrollTo(0, y);
+        var h2 = s && s.querySelector('h2');
+        toast(h2 ? h2.textContent.trim() : '');
+      }
+      ready = true;
+      save();
+    }
+    if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+    // đợi phông chữ tải xong để chiều cao trang ổn định rồi mới cuộn
+    var fonts = document.fonts && document.fonts.ready;
+    var done = false, go = function () { if (!done) { done = true; restore(); } };
+    if (fonts) { fonts.then(go); setTimeout(go, 1500); } else go();
+  }
+
   function init() {
     document.querySelectorAll('[data-char]').forEach(function (el) { draw(el, el.dataset.char); });
     document.querySelectorAll('.mcq[data-answer]').forEach(initMcq);
     document.querySelectorAll('.flip').forEach(initFlip);
     document.querySelectorAll('ul#tasks[data-module]').forEach(initTasks);
+    initBookmark();
   }
 
   window.Truyen = {

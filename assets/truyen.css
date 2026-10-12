@@ -235,6 +235,20 @@ input[type=number] { font-weight: 700; }
 .next { display: flex; gap: 14px; align-items: center; flex-wrap: wrap; justify-content: space-between; text-decoration: none; }
 a.next:hover { transform: translateY(-2px); }
 
+/* thông báo "mở lại chỗ đang đọc" */
+.resume-toast {
+  position: fixed; left: 50%; bottom: 16px; transform: translateX(-50%); z-index: 50;
+  width: min(480px, calc(100% - 32px)); padding: 10px 14px;
+  display: grid; grid-template-columns: 52px minmax(0, 1fr) auto; gap: 10px; align-items: center;
+  font-size: .92rem; transition: opacity .4s ease;
+}
+.resume-toast.out { opacity: 0; }
+.resume-toast button {
+  font: inherit; font-weight: 700; color: var(--ink); background: var(--chip); cursor: pointer;
+  border: 2.5px solid var(--border); border-radius: 999px; padding: 4px 12px;
+}
+@media (max-width: 420px) { .resume-toast { grid-template-columns: 44px minmax(0, 1fr); } .resume-toast button { grid-column: 1 / -1; } }
+
 .bob { animation: bob 2.6s ease-in-out infinite; }
 @keyframes bob { 50% { transform: translateY(-4px); } }
 @media (prefers-reduced-motion: reduce) {

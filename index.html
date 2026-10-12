@@ -38,6 +38,11 @@
 .extra input { padding: 5px 8px; font-size: .9rem; border-width: 2px; }
 @media (max-width: 480px) { .extra { grid-template-columns: 1fr; } }
 
+.resume { display: grid; grid-template-columns: 80px minmax(0, 1fr) auto; gap: 14px; align-items: center; text-decoration: none; background: var(--bubble-owl); }
+a.resume:hover { transform: translateY(-2px); }
+.resume .go { font-family: var(--f-display); font-weight: 800; border: 2.5px solid var(--border); border-radius: 999px; padding: 4px 14px; background: var(--panel); white-space: nowrap; }
+@media (max-width: 480px) { .resume { grid-template-columns: 64px minmax(0, 1fr); } .resume .go { grid-column: 1 / -1; justify-self: start; } }
+
 .rules { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
 .rules .panel { display: grid; gap: 8px; align-content: start; }
 .rules .num { font-family: var(--f-display); font-size: 2.2rem; line-height: 1; color: var(--pig-deep); }
@@ -59,6 +64,15 @@
         <span class="char" data-char="owl:smile"></span>
       </div>
     </div>
+    <a class="panel resume" id="resume" hidden>
+      <span class="char bob" data-char="pig:wow"></span>
+      <div class="stack" style="gap:2px">
+        <span class="eyebrow" id="resumeLabel">Đọc tiếp</span>
+        <strong id="resumeTitle"></strong>
+        <span class="note" id="resumeMeta"></span>
+      </div>
+      <span class="go">Đọc tiếp →</span>
+    </a>
     <div class="panel overall">
       <span class="char" id="overallPig"></span>
       <div class="stack" style="gap:8px">
@@ -139,6 +153,19 @@
       });
     });
   });
+
+  // Thẻ "Đọc tiếp": trang module cuối cùng đã mở; trang đó tự cuộn về đúng mục đang đọc.
+  var last = T.store('heo-dat:last');
+  var lastMod = last && MODULES.filter(function (m) { return m.file === last.file; })[0];
+  if (lastMod) {
+    var mins = Math.round((Date.now() - last.at) / 60000);
+    var ago = mins < 1 ? 'vừa xong' : mins < 60 ? mins + ' phút trước' : mins < 1440 ? Math.round(mins / 60) + ' giờ trước' : Math.round(mins / 1440) + ' ngày trước';
+    $('resume').href = lastMod.file;
+    $('resumeLabel').textContent = 'Đọc tiếp · ' + (last.label || lastMod.name);
+    $('resumeTitle').textContent = last.title || lastMod.name;
+    $('resumeMeta').textContent = (last.secTitle ? 'Đang ở mục: ' + last.secTitle + ' · ' : '') + 'Lần đọc gần nhất ' + ago;
+    $('resume').hidden = false;
+  }
 
   $('overallBar').style.width = (finished / counted * 100) + '%';
   $('overallPig').innerHTML = T.pig(finished === counted ? 'proud' : finished === 0 ? 'wow' : 'happy');
