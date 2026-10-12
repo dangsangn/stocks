@@ -1,0 +1,882 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Heo Đất học sống sót</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;800&family=Be+Vietnam+Pro:wght@400;600;700&family=Patrick+Hand&display=swap">
+<link rel="stylesheet" href="assets/truyen.css">
+<style>
+/* Riêng Module 8: bảng bấm được, danh sách kiểm tra, thước ký quỹ, thanh tái cân bằng */
+.tbl button.opt { padding: 2px 12px; font-variant-numeric: tabular-nums; }
+.tbl tr.on td { background: var(--bubble-pig); }
+
+.checks { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.checks li { display: grid; grid-template-columns: 76px minmax(0, 1fr); gap: 10px; align-items: start; padding: 8px 12px; border: 2.5px solid var(--border); border-radius: 10px; background: var(--panel); }
+.badge { font-family: var(--f-display); font-weight: 800; font-size: .85rem; text-align: center; border: 2px solid var(--border); border-radius: 999px; padding: 1px 6px; background: var(--chip); color: var(--ink); }
+.badge.ok { background: var(--money-soft); color: var(--money); border-color: var(--money); }
+.badge.mid { background: var(--bubble-owl); }
+.badge.bad { background: var(--warn-soft); color: var(--warn); border-color: var(--warn); }
+
+.gauge { position: relative; height: 26px; border: 3px solid var(--border); border-radius: 999px; background: var(--chip); overflow: hidden; }
+.gauge > .fill { height: 100%; width: 0; background: var(--money); transition: width .2s ease, background .2s ease; }
+.gauge > .mk { position: absolute; top: 0; bottom: 0; width: 3px; background: var(--border); }
+.gauge-lbl { position: relative; height: 20px; font-size: .8rem; color: var(--muted); font-weight: 700; }
+.gauge-lbl span { position: absolute; transform: translateX(-50%); white-space: nowrap; }
+
+.split { display: grid; gap: 10px; }
+.split-row { display: grid; grid-template-columns: 90px minmax(0, 1fr); gap: 10px; align-items: center; font-weight: 600; font-size: .92rem; }
+.split-bar { display: flex; height: 34px; border: 3px solid var(--border); border-radius: 8px; overflow: hidden; }
+.split-bar > div { display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: .85rem; color: #1D2140; min-width: 0; overflow: hidden; white-space: nowrap; transition: width .2s ease; }
+.split-bar .s { background: var(--money); }
+.split-bar .c { background: var(--save); }
+
+.entry { border: 3px dashed var(--border); border-radius: 10px; padding: 14px; display: grid; gap: 6px; background: var(--chip); font-size: .95rem; }
+.entry dl { margin: 0; display: grid; grid-template-columns: max-content minmax(0, 1fr); gap: 4px 12px; }
+.entry dt { color: var(--muted); font-weight: 600; }
+.entry dd { margin: 0; font-weight: 600; overflow-wrap: anywhere; }
+.scen { display: grid; gap: 14px; }
+.scen .mcq { border: 2.5px solid var(--border); border-radius: 10px; padding: 12px 14px; }
+</style>
+</head>
+<body>
+<main class="book">
+
+  <nav class="topnav"><a href="index.html">← Mục lục</a><span class="note">Module 8 / 9</span></nav>
+
+  <!-- MỞ ĐẦU -->
+  <header class="hero">
+    <div class="hero-title">
+      <span class="eyebrow">Module 8 · Tuần 34–38</span>
+      <h1>Heo Đất học sống sót</h1>
+      <p class="sub">Quản trị rủi ro và danh mục: lỗ ít khi sai, lãi nhiều khi đúng. Kéo thử máy tính cắt lỗ, tỷ trọng và margin, rồi tick bài tập ở cuối trang.</p>
+    </div>
+    <div class="strip">
+      <div class="panel">
+        <div class="say pig"><span class="char" data-char="pig:wow"></span><p class="bubble">Em vay margin gấp đôi vốn. Thị trường lên 10% là em lãi 20%!</p></div>
+      </div>
+      <div class="panel">
+        <div class="say owl right"><p class="bubble">Còn thị trường giảm 10% thì con lỗ 20%. Giảm khoảng 29% là con mất 57% vốn.</p><span class="char" data-char="owl:stern"></span></div>
+      </div>
+      <div class="panel">
+        <div class="say pig"><span class="char" data-char="pig:worried"></span><p class="bubble">Nhưng em chọn mã kỹ lắm, ít khi sai mà…</p></div>
+      </div>
+      <div class="panel">
+        <div class="say owl right"><p class="bubble">Nhà đầu tư giỏi sai rất thường xuyên. Họ chỉ <b>lỗ ít khi sai và lãi nhiều khi đúng</b>.</p><span class="char" data-char="owl:talk"></span></div>
+      </div>
+      <div class="panel wide">
+        <div class="say owl"><span class="char" data-char="owl:talk"></span><p class="bubble">Quản trị rủi ro quyết định con <b>có tồn tại đủ lâu</b> trên thị trường để kiến thức phát huy tác dụng hay không. Quy tắc số 1 của Buffett: "Đừng bao giờ mất tiền." Quy tắc số 2: "Đừng quên quy tắc số 1."</p></div>
+      </div>
+    </div>
+  </header>
+
+  <!-- 8.1 -->
+  <section class="chapter" id="toan-thua-lo">
+    <div class="chapter-head"><span class="tag">8.1</span><h2>Toán học của thua lỗ: hố càng sâu càng khó leo</h2></div>
+    <div class="panel talk">
+      <div class="say pig"><span class="char" data-char="pig:happy"></span><p class="bubble">Lỗ 50% thì lần sau lãi 50% là về bờ thôi thầy.</p></div>
+      <div class="say owl right"><p class="bubble">Sai. 100 triệu lỗ 50% còn 50 triệu. Lãi 50% trên 50 triệu chỉ được 75 triệu. Muốn về 100 triệu, con cần <b>+100%</b>.</p><span class="char" data-char="owl:stern"></span></div>
+    </div>
+    <div class="panel toy">
+      <div class="toy-title"><h3>Cái hố thua lỗ</h3><span class="pill">Kéo thử</span></div>
+      <div class="ctl" style="max-width:460px"><label for="loss">Mức lỗ <output id="lossOut"></output></label><input id="loss" type="range" min="1" max="90" step="1" value="30"></div>
+      <div class="chalk" aria-label="Công thức mức tăng cần để hòa vốn">
+        <span class="f">Cần tăng = 1 / (1 − mức lỗ) − 1</span>
+      </div>
+      <div class="result">
+        <div class="stat warn"><div class="k">100 triệu còn lại</div><div class="v" id="lossLeft"></div></div>
+        <div class="stat money"><div class="k">Cần tăng để hòa vốn</div><div class="v" id="lossNeed"></div></div>
+        <div class="stat"><div class="k">Gấp mấy lần mức lỗ</div><div class="v" id="lossRatio"></div></div>
+      </div>
+      <div class="chart-box"><svg id="lossChart" viewBox="0 0 640 260" role="img" aria-label="Biểu đồ mức tăng cần để hòa vốn theo mức lỗ"></svg></div>
+      <div class="legend"><span><i style="background:var(--warn)"></i>Mức tăng cần để hòa vốn</span><span><i style="background:var(--save)"></i>Nếu lỗ và gỡ "đối xứng" (không có thật)</span></div>
+      <div class="say pig"><span class="char" id="lossPig"></span><p class="bubble" id="lossSay"></p></div>
+      <p class="note">Bấm vào một mức lỗ trong bảng để kéo thanh trượt tới đó.</p>
+      <div class="tbl-wrap">
+        <table class="tbl" id="lossTbl">
+          <thead><tr><th>Mức lỗ</th><th class="r">Cần tăng bao nhiêu để hòa vốn</th></tr></thead>
+          <tbody>
+            <tr data-l="10"><td><button class="opt" type="button">−10%</button></td><td class="r">+11,1%</td></tr>
+            <tr data-l="20"><td><button class="opt" type="button">−20%</button></td><td class="r">+25%</td></tr>
+            <tr data-l="30"><td><button class="opt" type="button">−30%</button></td><td class="r">+42,9%</td></tr>
+            <tr data-l="50"><td><button class="opt" type="button">−50%</button></td><td class="r">+100%</td></tr>
+            <tr data-l="70"><td><button class="opt" type="button">−70%</button></td><td class="r">+233%</td></tr>
+            <tr data-l="90"><td><button class="opt" type="button">−90%</button></td><td class="r">+900%</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="callout good"><strong>Vì sao phải cắt lỗ sớm</strong><p>Lỗ càng sâu thì càng khó gỡ, theo cấp số nhân. Lỗ 8% thì một lần thắng nhỏ là gỡ lại được (chỉ cần khoảng +8,7%); lỗ 50% có thể mất nhiều năm.</p></div>
+    </div>
+    <div class="panel quiz">
+      <div class="mcq q" data-answer="2" data-right="Đúng. 1 / (1 − 0,7) − 1 ≈ 2,33, tức +233%. Mức tăng cần có gấp hơn 3 lần mức lỗ." data-wrong="Chưa đúng. Lỗ 70% thì 100 triệu còn 30 triệu. Từ 30 triệu lên lại 100 triệu là tăng bao nhiêu %?">
+        <h3>Danh mục giảm 70%. Cần tăng bao nhiêu để hòa vốn?</h3>
+        <div class="opts">
+          <button class="opt" type="button">+70%</button>
+          <button class="opt" type="button">+140%</button>
+          <button class="opt" type="button">+233%</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 8.2 -->
+  <section class="chapter" id="da-dang-hoa">
+    <div class="chapter-head"><span class="tag">8.2</span><h2>Đa dạng hóa: đừng để hết trứng vào một giỏ</h2></div>
+    <div class="panel talk">
+      <div class="say pig"><span class="char" data-char="pig:proud"></span><p class="bubble">Em đa dạng hóa rồi nhé: em có 5 mã, toàn ngân hàng!</p></div>
+      <div class="say owl right"><p class="bubble">5 cổ phiếu ngân hàng không phải là đa dạng hóa, vì chúng thường lên xuống cùng nhau. Con chỉ có 1 giỏ, đựng 5 quả trứng.</p><span class="char" data-char="owl:stern"></span></div>
+    </div>
+    <div class="panel toy">
+      <div class="toy-title"><h3>Máy soi danh mục</h3><span class="pill">Kéo thử</span></div>
+      <div class="tabs" role="group" aria-label="Danh mục mẫu" id="divPresets">
+        <button class="opt" type="button" data-p="0">Tất tay 1 mã</button>
+        <button class="opt" type="button" data-p="1">5 mã ngân hàng</button>
+        <button class="opt" type="button" data-p="2">Danh mục cân đối</button>
+        <button class="opt" type="button" data-p="3">Ôm 30 mã</button>
+      </div>
+      <div class="controls">
+        <div class="ctl"><label for="dvN">Số mã <output id="dvNOut"></output></label><input id="dvN" type="range" min="1" max="30" step="1" value="10"></div>
+        <div class="ctl"><label for="dvS">Số ngành <output id="dvSOut"></output></label><input id="dvS" type="range" min="1" max="10" step="1" value="4"></div>
+        <div class="ctl"><label for="dvMax">Ngành lớn nhất chiếm <output id="dvMaxOut"></output></label><input id="dvMax" type="range" min="10" max="100" step="5" value="30"></div>
+        <div class="ctl"><label for="dvCore">Phần "lõi" <output id="dvCoreOut"></output></label><input id="dvCore" type="range" min="0" max="100" step="5" value="60"></div>
+      </div>
+      <ul class="checks" id="dvChecks"></ul>
+      <div class="say owl"><span class="char" id="dvOwl"></span><p class="bubble" id="dvSay"></p></div>
+    </div>
+    <div class="panel">
+      <div class="cards">
+        <button class="flip" type="button"><span class="front">Số lượng mã</span><span class="back">5–15 mã là hợp lý cho nhà đầu tư cá nhân. Ít hơn 5 mã thì rủi ro tập trung; nhiều hơn 15–20 mã thì bạn không đủ thời gian theo dõi, và kết quả sẽ gần giống mua ETF.</span></button>
+        <button class="flip" type="button"><span class="front">Số ngành</span><span class="back">Ít nhất 3–4 ngành; không ngành nào vượt quá 30–40% danh mục.</span></button>
+        <button class="flip" type="button"><span class="front">Tương quan</span><span class="back">5 cổ phiếu ngân hàng không phải là đa dạng hóa, vì chúng thường lên xuống cùng nhau.</span></button>
+        <button class="flip" type="button"><span class="front">Lõi và vệ tinh</span><span class="back">50–70% danh mục là "lõi" (ETF, cổ phiếu đầu ngành nắm giữ dài hạn), 30–50% là "vệ tinh" (các cơ hội bạn tự phân tích).</span></button>
+      </div>
+    </div>
+  </section>
+
+  <!-- 8.3 -->
+  <section class="chapter" id="ty-trong">
+    <div class="chapter-head"><span class="tag">8.3</span><h2>Mua bao nhiêu cổ? Hỏi điểm cắt lỗ trước</h2></div>
+    <div class="strip">
+      <div class="panel">
+        <div class="talk">
+          <div class="say pig"><span class="char" data-char="pig:happy"></span><p class="bubble">Em thích mã này lắm, mua hết 200 triệu luôn nhé?</p></div>
+          <div class="say owl right"><p class="bubble">Không. Mỗi lệnh chỉ được phép làm con mất tối đa <b>1–2% tổng vốn</b> nếu chạm điểm cắt lỗ. Số cổ phiếu tính ngược từ con số đó.</p><span class="char" data-char="owl:talk"></span></div>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="chalk" aria-label="Công thức số cổ phiếu được mua">
+          <span>Quy tắc 1–2%:</span>
+          <span class="f">Số cổ phiếu được mua = (Tổng vốn × % rủi ro chấp nhận) / (Giá mua − Giá cắt lỗ)</span>
+          <small>Giới hạn thêm: mỗi mã không quá 15–20% danh mục, kể cả khi bạn rất tự tin.</small>
+        </div>
+      </div>
+    </div>
+    <div class="panel toy">
+      <div class="toy-title"><h3>Máy tính tỷ trọng lệnh</h3><span class="pill">Nhập thử</span></div>
+      <div class="controls">
+        <div class="ctl"><label for="psCap">Tổng vốn (triệu đồng)</label><input id="psCap" type="number" min="1" max="100000" value="200" inputmode="decimal"></div>
+        <div class="ctl"><label for="psRisk">Rủi ro chấp nhận mỗi lệnh <output id="psRiskOut"></output></label><input id="psRisk" type="range" min="0.5" max="5" step="0.5" value="1"></div>
+        <div class="ctl"><label for="psBuy">Giá mua (đ)</label><input id="psBuy" type="number" min="100" step="100" value="50000" inputmode="numeric"></div>
+        <div class="ctl"><label for="psStop">Giá cắt lỗ (đ)</label><input id="psStop" type="number" min="100" step="100" value="46000" inputmode="numeric"></div>
+      </div>
+      <div class="result">
+        <div class="stat"><div class="k">Tiền chấp nhận mất</div><div class="v" id="psRiskMoney"></div></div>
+        <div class="stat"><div class="k">Rủi ro mỗi cổ phiếu</div><div class="v" id="psPerShare"></div></div>
+        <div class="stat money" id="psSharesBox"><div class="k">Số cổ phiếu được mua</div><div class="v" id="psShares"></div></div>
+        <div class="stat" id="psPosBox"><div class="k">Giá trị lệnh (tỷ trọng)</div><div class="v" id="psPos"></div></div>
+      </div>
+      <div class="say owl"><span class="char" id="psOwl"></span><p class="bubble" id="psSay"></p></div>
+      <div class="controls">
+        <div class="ctl"><label for="psStreak">Nếu sai liên tục <output id="psStreakOut"></output></label><input id="psStreak" type="range" min="1" max="20" step="1" value="10"></div>
+      </div>
+      <div class="result">
+        <div class="stat money"><div class="k">Vốn còn lại sau chuỗi thua</div><div class="v" id="psLeft"></div></div>
+      </div>
+      <div class="callout"><strong>Ví dụ trong giáo trình</strong>
+        <ul class="plain">
+          <li>Tổng vốn: 200 triệu, chấp nhận rủi ro 1% mỗi lệnh = 2 triệu</li>
+          <li>Giá mua: 50.000 đ; giá cắt lỗ: 46.000 đ (−8%), tức rủi ro 4.000 đ/cổ phiếu</li>
+          <li>Số cổ phiếu = 2.000.000 / 4.000 = <b>500 cổ phiếu</b>, tương đương 25 triệu (12,5% danh mục)</li>
+        </ul>
+        <p>Nếu sai và cắt lỗ, bạn chỉ mất 2 triệu (1% vốn). Sai liên tục 10 lần, bạn vẫn còn khoảng 90% vốn để tiếp tục.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 8.4 -->
+  <section class="chapter" id="cat-lo">
+    <div class="chapter-head"><span class="tag">8.4</span><h2>Cắt lỗ: viết sẵn lối thoát trước khi vào</h2></div>
+    <div class="panel talk">
+      <div class="say pig"><span class="char" data-char="pig:worried"></span><p class="bubble">Mã em giảm 9% rồi, nhưng chắc mai nó hồi. Em mua thêm cho giá vốn thấp xuống nhé?</p></div>
+      <div class="say owl right"><p class="bubble">Đó là cảm xúc đang tìm lý do để không cắt. Vì thế phải <b>đặt điểm cắt lỗ trước khi mua</b> và ghi vào nhật ký.</p><span class="char" data-char="owl:stern"></span></div>
+    </div>
+    <div class="panel">
+      <ul class="plain">
+        <li><b>Đặt điểm cắt lỗ trước khi mua</b>, ghi vào nhật ký. Khi đã cầm cổ phiếu, cảm xúc sẽ làm bạn tìm mọi lý do để không cắt.</li>
+        <li><b>Cắt lỗ theo giá:</b> −7% đến −10% so với giá mua, hoặc dưới vùng hỗ trợ gần nhất.</li>
+        <li><b>Cắt lỗ theo luận điểm:</b> khi lý do bạn mua không còn đúng (lợi nhuận giảm liên tục, lãnh đạo vi phạm, mất hợp đồng lớn), hãy bán kể cả khi giá chưa giảm.</li>
+        <li><b>Không bao giờ bình quân giá xuống</b> với một cổ phiếu đang giảm mà luận điểm đã sai. Mua thêm chỉ hợp lý khi luận điểm vẫn đúng và bạn đã có kế hoạch từ trước.</li>
+      </ul>
+    </div>
+    <div class="panel toy">
+      <div class="toy-title"><h3>Tính điểm cắt lỗ theo giá</h3></div>
+      <div class="controls">
+        <div class="ctl"><label for="slBuy">Giá mua (đ)</label><input id="slBuy" type="number" min="100" step="100" value="50000" inputmode="numeric"></div>
+        <div class="ctl"><label for="slPct">Cắt lỗ ở mức <output id="slPctOut"></output></label><input id="slPct" type="range" min="7" max="10" step="0.5" value="8"></div>
+      </div>
+      <div class="result">
+        <div class="stat warn"><div class="k">Giá cắt lỗ ghi vào nhật ký</div><div class="v" id="slStop"></div></div>
+        <div class="stat money"><div class="k">Cần tăng để gỡ nếu bị cắt</div><div class="v" id="slNeed"></div></div>
+      </div>
+      <p class="note">Nếu vùng hỗ trợ gần nhất nằm cao hơn mức này một chút, có thể đặt cắt lỗ ngay dưới vùng hỗ trợ.</p>
+    </div>
+    <div class="panel toy">
+      <div class="toy-title"><h3>Heo nên làm gì?</h3><span class="pill">4 tình huống</span></div>
+      <p>Heo Đất mua ở 50.000 đ, đã ghi điểm cắt lỗ 46.000 đ (−8%) vào nhật ký. Chọn hành động đúng cho từng tình huống.</p>
+      <div class="scen">
+        <div class="mcq q" data-answer="0" data-right="Đúng. Giá đã thủng điểm cắt lỗ viết sẵn. Bán theo kế hoạch, không mặc cả với thị trường." data-wrong="Chưa đúng. 45.500 đ là −9%, đã dưới điểm cắt lỗ 46.000 đ ghi trong nhật ký. Kế hoạch viết trước để dùng đúng lúc này.">
+          <h3>1. Giá về 45.500 đ (−9%). Luận điểm chưa có gì mới.</h3>
+          <div class="opts"><button class="opt" type="button">Bán</button><button class="opt" type="button">Giữ, chờ hồi</button><button class="opt" type="button">Mua thêm</button></div>
+        </div>
+        <div class="mcq q" data-answer="0" data-right="Đúng. Đây là cắt lỗ theo luận điểm: lý do mua không còn đúng thì bán, kể cả khi giá chưa giảm." data-wrong="Chưa đúng. Giá chưa giảm không có nghĩa là an toàn. Lý do con mua đã không còn đúng.">
+          <h3>2. Giá vẫn 50.000 đ, nhưng lợi nhuận công ty giảm liên tục nhiều quý, lý do mua ban đầu không còn đúng.</h3>
+          <div class="opts"><button class="opt" type="button">Bán</button><button class="opt" type="button">Giữ, vì giá chưa giảm</button><button class="opt" type="button">Mua thêm</button></div>
+        </div>
+        <div class="mcq q" data-answer="0" data-right="Đúng. Không bao giờ bình quân giá xuống khi luận điểm đã sai. Lãnh đạo vi phạm là lý do cắt lỗ theo luận điểm." data-wrong="Chưa đúng. Luận điểm đã sai mà mua thêm là bình quân giá xuống, chỉ làm khoản lỗ to hơn.">
+          <h3>3. Lãnh đạo công ty vi phạm, giá đang giảm. Heo muốn mua thêm để "kéo giá vốn xuống".</h3>
+          <div class="opts"><button class="opt" type="button">Bán</button><button class="opt" type="button">Giữ nguyên</button><button class="opt" type="button">Mua thêm cho rẻ</button></div>
+        </div>
+        <div class="mcq q" data-answer="2" data-right="Hợp lý. Luận điểm vẫn đúng, kế hoạch mua thêm đã viết từ trước, và tỷ trọng mã vẫn trong giới hạn 15–20%." data-wrong="Ở tình huống này mua thêm là hợp lý: luận điểm vẫn đúng, kế hoạch đã có từ trước, giá chưa chạm điểm cắt lỗ.">
+          <h3>4. Giá về 48.000 đ (−4%), chưa chạm điểm cắt lỗ. Luận điểm vẫn đúng, kế hoạch mua thêm ở vùng này đã viết từ trước khi mua, tỷ trọng mã vẫn dưới giới hạn.</h3>
+          <div class="opts"><button class="opt" type="button">Bán</button><button class="opt" type="button">Giữ, không làm gì</button><button class="opt" type="button">Mua thêm theo kế hoạch</button></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 8.5 -->
+  <section class="chapter" id="margin">
+    <div class="chapter-head"><span class="tag">8.5</span><h2>Margin (vay ký quỹ): con dao sắc nhất</h2></div>
+    <div class="strip">
+      <div class="panel">
+        <div class="talk">
+          <div class="say pig"><span class="char" data-char="pig:wow"></span><p class="bubble">Công ty chứng khoán cho em vay thêm 100 triệu. Có tiền thì phải dùng chứ thầy!</p></div>
+          <div class="say owl right"><p class="bubble">Họ cho vay để mua thêm cổ phiếu, dùng chính cổ phiếu đó làm tài sản đảm bảo, lãi khoảng <b>10–14%/năm</b>. Giá giảm là họ đòi tiền.</p><span class="char" data-char="owl:stern"></span></div>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="chalk" aria-label="Công thức tỷ lệ ký quỹ thực tế">
+          <span class="f">Tỷ lệ ký quỹ thực tế = (Giá trị tài sản − Nợ vay) / Giá trị tài sản</span>
+          <small>Call margin: tỷ lệ chạm ngưỡng gọi ký quỹ, phải nộp thêm tiền hoặc bán bớt.<br>Force sell: tỷ lệ chạm ngưỡng thấp hơn, công ty chứng khoán bán giải chấp.</small>
+        </div>
+      </div>
+    </div>
+    <div class="panel toy">
+      <div class="toy-title"><h3>Máy mô phỏng margin</h3><span class="pill">Kéo thử</span></div>
+      <p>Vốn của bạn: <b>100 triệu</b>. Bấm các tình huống trong bảng giáo trình, hoặc tự kéo.</p>
+      <div class="tabs" role="group" aria-label="Tình huống mẫu" id="mgPresets">
+        <button class="opt" type="button" data-d="0">Ban đầu</button>
+        <button class="opt" type="button" data-d="10">Giảm 10%</button>
+        <button class="opt" type="button" data-d="call">Giảm tới ngưỡng call</button>
+        <button class="opt" type="button" data-d="force">Giảm tới ngưỡng bán giải chấp</button>
+      </div>
+      <div class="controls">
+        <div class="ctl"><label for="mgLoan">Vay thêm <output id="mgLoanOut"></output></label><input id="mgLoan" type="range" min="0" max="200" step="10" value="100"></div>
+        <div class="ctl"><label for="mgDrop">Thị trường giảm <output id="mgDropOut"></output></label><input id="mgDrop" type="range" min="0" max="60" step="any" value="10"></div>
+        <div class="ctl"><label for="mgCall">Ngưỡng call margin <output id="mgCallOut"></output></label><input id="mgCall" type="range" min="25" max="60" step="5" value="40"></div>
+        <div class="ctl"><label for="mgForce">Ngưỡng bán giải chấp <output id="mgForceOut"></output></label><input id="mgForce" type="range" min="15" max="50" step="5" value="30"></div>
+        <div class="ctl"><label for="mgRate">Lãi vay/năm <output id="mgRateOut"></output></label><input id="mgRate" type="range" min="10" max="14" step="0.5" value="12"></div>
+      </div>
+      <div class="result">
+        <div class="stat"><div class="k">Giá trị cổ phiếu</div><div class="v" id="mgValue"></div></div>
+        <div class="stat" id="mgEqBox"><div class="k">Vốn của bạn còn</div><div class="v" id="mgEq"></div></div>
+        <div class="stat" id="mgRatioBox"><div class="k">Tỷ lệ ký quỹ</div><div class="v" id="mgRatio"></div></div>
+      </div>
+      <div>
+        <div class="gauge" aria-hidden="true"><div class="fill" id="mgFill"></div><div class="mk" id="mgMkForce"></div><div class="mk" id="mgMkCall"></div></div>
+        <div class="gauge-lbl" aria-hidden="true"><span id="mgLblForce"></span><span id="mgLblCall"></span></div>
+      </div>
+      <div class="say pig"><span class="char" id="mgPig"></span><p class="bubble" id="mgSay"></p></div>
+      <div class="result">
+        <div class="stat"><div class="k">Không vay: vốn còn</div><div class="v" id="mgPlain"></div></div>
+        <div class="stat warn"><div class="k">Thị trường giảm bao nhiêu thì bị call</div><div class="v" id="mgDCall"></div></div>
+        <div class="stat warn"><div class="k">Giảm bao nhiêu thì bị bán giải chấp</div><div class="v" id="mgDForce"></div></div>
+        <div class="stat"><div class="k">Lãi vay phải trả mỗi năm</div><div class="v" id="mgInt"></div></div>
+      </div>
+      <div class="chart-box"><svg id="mgChart" viewBox="0 0 640 260" role="img" aria-label="Biểu đồ vốn còn lại theo mức giảm của thị trường, có và không có margin"></svg></div>
+      <div class="legend"><span><i style="background:var(--save)"></i>Không vay</span><span><i style="background:var(--warn)"></i>Có vay margin</span><span><i style="background:var(--gold)"></i>Ngưỡng call</span><span><i style="background:var(--border)"></i>Ngưỡng bán giải chấp</span></div>
+      <p class="note">Mô phỏng chưa tính lãi vay vào khoản lỗ và giả định bán được đúng giá; thực tế bán giải chấp thường ở giá sàn.</p>
+    </div>
+    <div class="panel stack">
+      <p><b>Ví dụ:</b> bạn có 100 triệu, vay thêm 100 triệu, mua 200 triệu cổ phiếu. Giả sử công ty chứng khoán gọi ký quỹ bổ sung (call margin) khi tỷ lệ còn 40%, và bán giải chấp (force sell) khi còn 30%.</p>
+      <div class="tbl-wrap">
+        <table class="tbl">
+          <thead><tr><th>Tình huống</th><th class="r">Giá trị cổ phiếu</th><th class="r">Vốn của bạn còn</th><th class="r">Tỷ lệ ký quỹ</th><th>Điều xảy ra</th></tr></thead>
+          <tbody>
+            <tr><td>Ban đầu</td><td class="r">200 triệu</td><td class="r">100 triệu</td><td class="r">50%</td><td>—</td></tr>
+            <tr><td>Thị trường giảm 10%</td><td class="r">180 triệu</td><td class="r">80 triệu (−20%)</td><td class="r">44%</td><td>Lỗ gấp đôi tốc độ thị trường</td></tr>
+            <tr><td>Giảm 16,7%</td><td class="r">166,7 triệu</td><td class="r">66,7 triệu (−33%)</td><td class="r">40%</td><td><b>Bị call margin</b>, phải nộp thêm tiền hoặc bán bớt</td></tr>
+            <tr><td>Giảm 28,6%</td><td class="r">142,9 triệu</td><td class="r">42,9 triệu (−57%)</td><td class="r">30%</td><td><b>Bị bán giải chấp</b>, thường ở giá sàn, đúng đáy</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>Thị trường chỉ giảm khoảng 29%, nhưng bạn mất 57% vốn, chưa tính lãi vay. Khi cả thị trường bị bán giải chấp cùng lúc, giá rơi liên tục nhiều phiên sàn và bạn không bán được. Đó là chuyện đã xảy ra ở Việt Nam các năm 2018, 2022 và nhiều lần khác.</p>
+      <div class="callout warn"><strong>Quy tắc cho người mới</strong><p>Không dùng margin. Nếu sau này dùng, không vay quá 20–30% vốn, và chỉ vay cho cổ phiếu cơ bản tốt, thanh khoản cao.</p></div>
+    </div>
+    <div class="panel quiz">
+      <div class="mcq q" data-answer="1" data-right="Đúng. Với tỷ lệ vay 1:1, vốn của con giảm nhanh gấp đôi thị trường: 200 triệu giảm 10% mất 20 triệu, toàn bộ trừ vào 100 triệu của con." data-wrong="Chưa đúng. Nợ vay không giảm theo giá. Toàn bộ 20 triệu mất đi (10% của 200 triệu) trừ thẳng vào 100 triệu vốn của con.">
+        <h3>Có 100 triệu, vay thêm 100 triệu, mua 200 triệu cổ phiếu. Thị trường giảm 10%. Vốn của bạn giảm bao nhiêu?</h3>
+        <div class="opts">
+          <button class="opt" type="button">−10%</button>
+          <button class="opt" type="button">−20%</button>
+          <button class="opt" type="button">−5%, vì một nửa là tiền vay</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 8.6 -->
+  <section class="chapter" id="thuoc-do">
+    <div class="chapter-head"><span class="tag">8.6</span><h2>Bộ thước đo rủi ro danh mục</h2></div>
+    <div class="panel talk">
+      <div class="say pig"><span class="char" data-char="pig:sad"></span><p class="bubble">Em chỉ thắng 4 trên 10 lệnh. Chắc em không hợp chứng khoán rồi.</p></div>
+      <div class="say owl right"><p class="bubble">Tỷ lệ thắng chưa nói hết. Thắng 40% mà lệnh thắng lời trung bình 20%, lệnh thua lỗ trung bình 7%, thì mỗi lệnh con vẫn được <b>+3,8%</b>.</p><span class="char" data-char="owl:smile"></span></div>
+    </div>
+    <div class="panel stack">
+      <div class="cards">
+        <button class="flip" type="button"><span class="front">Mức sụt giảm tối đa (max drawdown)</span><span class="back">Từ đỉnh cao nhất xuống đáy thấp nhất, danh mục của bạn đã giảm bao nhiêu %.</span></button>
+        <button class="flip" type="button"><span class="front">Beta</span><span class="back">Mức biến động của cổ phiếu so với thị trường. Beta 1,5 nghĩa là thị trường giảm 10% thì cổ phiếu thường giảm khoảng 15%.</span></button>
+        <button class="flip" type="button"><span class="front">Tỷ lệ thắng và tỷ lệ lời/lỗ</span><span class="back">Bạn thắng bao nhiêu % số lệnh; lệnh thắng trung bình lời gấp mấy lần lệnh thua trung bình lỗ.</span></button>
+        <button class="flip" type="button"><span class="front">So với chỉ số tham chiếu</span><span class="back">Danh mục của bạn có hơn VN-Index (hoặc quỹ ETF VN30) sau phí không? Nếu thua liên tục 2–3 năm, hãy mua ETF.</span></button>
+      </div>
+      <div class="tbl-wrap">
+        <table class="tbl">
+          <thead><tr><th>Thước đo</th><th>Ý nghĩa</th></tr></thead>
+          <tbody>
+            <tr><td>Mức sụt giảm tối đa (max drawdown)</td><td>Từ đỉnh cao nhất xuống đáy thấp nhất, danh mục của bạn đã giảm bao nhiêu %</td></tr>
+            <tr><td>Beta</td><td>Mức biến động của cổ phiếu so với thị trường. Beta 1,5 nghĩa là thị trường giảm 10% thì cổ phiếu thường giảm khoảng 15%</td></tr>
+            <tr><td>Tỷ lệ thắng và tỷ lệ lời/lỗ</td><td>Bạn thắng bao nhiêu % số lệnh; lệnh thắng trung bình lời gấp mấy lần lệnh thua trung bình lỗ</td></tr>
+            <tr><td>So với chỉ số tham chiếu</td><td>Danh mục của bạn có hơn VN-Index (hoặc quỹ ETF VN30) sau phí không? Nếu thua liên tục 2–3 năm, hãy mua ETF</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="panel toy">
+      <div class="toy-title"><h3>Kỳ vọng mỗi lệnh</h3><span class="pill">Kéo thử</span></div>
+      <div class="chalk" aria-label="Công thức kỳ vọng mỗi lệnh">
+        <span class="f">Kỳ vọng = tỷ lệ thắng × lời TB − tỷ lệ thua × lỗ TB</span>
+        <small>Ví dụ: 0,4 × 20% − 0,6 × 7% = +3,8% mỗi lệnh</small>
+      </div>
+      <div class="controls">
+        <div class="ctl"><label for="exWin">Tỷ lệ thắng <output id="exWinOut"></output></label><input id="exWin" type="range" min="10" max="90" step="5" value="40"></div>
+        <div class="ctl"><label for="exGain">Lệnh thắng lời trung bình <output id="exGainOut"></output></label><input id="exGain" type="range" min="1" max="50" step="1" value="20"></div>
+        <div class="ctl"><label for="exLoss">Lệnh thua lỗ trung bình <output id="exLossOut"></output></label><input id="exLoss" type="range" min="1" max="30" step="1" value="7"></div>
+      </div>
+      <div class="result">
+        <div class="stat" id="exBox"><div class="k">Kỳ vọng mỗi lệnh</div><div class="v" id="exVal"></div></div>
+        <div class="stat"><div class="k">Tỷ lệ lời/lỗ</div><div class="v" id="exRR"></div></div>
+        <div class="stat"><div class="k">Tỷ lệ thắng tối thiểu để hòa</div><div class="v" id="exBE"></div></div>
+      </div>
+      <div class="say pig"><span class="char" id="exPig"></span><p class="bubble" id="exSay"></p></div>
+    </div>
+    <div class="panel toy">
+      <div class="toy-title"><h3>Beta và mức sụt giảm tối đa</h3></div>
+      <div class="controls">
+        <div class="ctl"><label for="btB">Beta của cổ phiếu <output id="btBOut"></output></label><input id="btB" type="range" min="0" max="2.5" step="0.1" value="1.5"></div>
+        <div class="ctl"><label for="btM">Thị trường thay đổi <output id="btMOut"></output></label><input id="btM" type="range" min="-30" max="30" step="1" value="-10"></div>
+      </div>
+      <div class="result">
+        <div class="stat" id="btBox"><div class="k">Cổ phiếu thường thay đổi khoảng</div><div class="v" id="btOut"></div></div>
+      </div>
+      <p class="note">Beta là xu hướng trung bình trong quá khứ, không phải lời hứa cho từng phiên.</p>
+      <div class="controls">
+        <div class="ctl"><label for="ddPeak">Đỉnh cao nhất của danh mục (triệu)</label><input id="ddPeak" type="number" min="1" value="120" inputmode="decimal"></div>
+        <div class="ctl"><label for="ddLow">Đáy thấp nhất sau đỉnh đó (triệu)</label><input id="ddLow" type="number" min="0" value="90" inputmode="decimal"></div>
+      </div>
+      <div class="result">
+        <div class="stat warn"><div class="k">Mức sụt giảm tối đa</div><div class="v" id="ddOut"></div></div>
+        <div class="stat money"><div class="k">Cần tăng từ đáy để về đỉnh</div><div class="v" id="ddNeed"></div></div>
+      </div>
+      <p class="note">Số đỉnh và đáy mặc định chỉ là ví dụ minh họa; hãy nhập số của danh mục bạn.</p>
+    </div>
+    <div class="panel quiz">
+      <div class="mcq q" data-answer="2" data-right="Đúng. Nếu thua VN-Index (hoặc ETF VN30) sau phí liên tục 2–3 năm, mua ETF là lựa chọn tốt hơn." data-wrong="Chưa đúng. Giáo trình gợi ý một việc rất cụ thể khi thua chỉ số tham chiếu 2–3 năm liên tiếp.">
+        <h3>Sau phí, danh mục tự chọn của Heo thua VN-Index ba năm liền. Nên làm gì?</h3>
+        <div class="opts">
+          <button class="opt" type="button">Vay margin để gỡ nhanh</button>
+          <button class="opt" type="button">Tăng số mã lên 40</button>
+          <button class="opt" type="button">Cân nhắc mua ETF</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 8.7 -->
+  <section class="chapter" id="tai-can-bang">
+    <div class="chapter-head"><span class="tag">8.7</span><h2>Tái cân bằng: bán khi cao, mua khi thấp mà không cần đoán</h2></div>
+    <div class="panel talk">
+      <div class="say pig"><span class="char" data-char="pig:proud"></span><p class="bubble">Năm nay cổ phiếu tăng mạnh, giờ chiếm 75% tài sản của em. Để nguyên cho nó chạy!</p></div>
+      <div class="say owl right"><p class="bubble">Mục tiêu con chọn ở Module 1 là 60% cổ phiếu, 40% tiết kiệm. Bán bớt để về 60%. Định kỳ <b>6–12 tháng một lần</b>, đưa danh mục về tỷ lệ mục tiêu.</p><span class="char" data-char="owl:talk"></span></div>
+    </div>
+    <div class="panel toy">
+      <div class="toy-title"><h3>Máy tái cân bằng</h3><span class="pill">Kéo thử</span></div>
+      <div class="tabs" role="group" aria-label="Tình huống" id="rbPresets">
+        <button class="opt" type="button" data-c="75">Sau một năm tăng mạnh</button>
+        <button class="opt" type="button" data-c="45">Sau một năm giảm mạnh</button>
+      </div>
+      <div class="controls">
+        <div class="ctl"><label for="rbTotal">Tổng tài sản (triệu đồng)</label><input id="rbTotal" type="number" min="1" value="100" inputmode="decimal"></div>
+        <div class="ctl"><label for="rbTarget">Mục tiêu cổ phiếu <output id="rbTargetOut"></output></label><input id="rbTarget" type="range" min="0" max="100" step="5" value="60"></div>
+        <div class="ctl"><label for="rbNow">Cổ phiếu đang chiếm <output id="rbNowOut"></output></label><input id="rbNow" type="range" min="0" max="100" step="1" value="75"></div>
+      </div>
+      <div class="split">
+        <div class="split-row"><span>Hiện tại</span><div class="split-bar" id="rbBarNow"></div></div>
+        <div class="split-row"><span>Sau khi cân</span><div class="split-bar" id="rbBarAfter"></div></div>
+      </div>
+      <div class="legend"><span><i style="background:var(--money)"></i>Cổ phiếu</span><span><i style="background:var(--save)"></i>Tiết kiệm</span></div>
+      <div class="result">
+        <div class="stat" id="rbActBox"><div class="k" id="rbActK"></div><div class="v" id="rbAct"></div></div>
+      </div>
+      <div class="say owl"><span class="char" data-char="owl:smile"></span><p class="bubble" id="rbSay"></p></div>
+      <p class="note">Tổng tài sản 100 triệu chỉ là số minh họa. Tình huống "giảm mạnh" (45%) là giả định để thấy chiều ngược lại.</p>
+    </div>
+  </section>
+
+  <!-- 8.8 -->
+  <section class="chapter" id="nhat-ky">
+    <div class="chapter-head"><span class="tag">8.8</span><h2>Nhật ký đầu tư: tấm gương soi sai lầm</h2></div>
+    <div class="panel talk">
+      <div class="say pig"><span class="char" data-char="pig:worried"></span><p class="bubble">Em nhớ hết mà, cần gì ghi chép thầy?</p></div>
+      <div class="say owl right"><p class="bubble">Trí nhớ sẽ sửa lại câu chuyện cho con dễ chịu. Mỗi lệnh ghi vào <a href="nhat-ky-dau-tu.html">sổ nhật ký đầu tư</a>. Mỗi quý, đọc lại toàn bộ và tìm ra các sai lầm lặp lại.</p><span class="char" data-char="owl:talk"></span></div>
+    </div>
+    <div class="panel toy">
+      <div class="toy-title"><h3>Viết thử một dòng nhật ký</h3><span class="pill">Nhập thử</span></div>
+      <div class="callout"><strong>Mỗi lệnh ghi gồm</strong><p>Mã, ngày, giá, khối lượng, tỷ trọng, <b>lý do mua</b>, điểm cắt lỗ, mục tiêu, cảm xúc lúc đó. Khi bán, ghi lại kết quả và bài học.</p></div>
+      <div class="controls">
+        <div class="ctl"><label for="jCode">Mã</label><input id="jCode" type="text" maxlength="10" value="ABC"></div>
+        <div class="ctl"><label for="jDate">Ngày</label><input id="jDate" type="date"></div>
+        <div class="ctl"><label for="jPrice">Giá (đ)</label><input id="jPrice" type="number" min="0" step="100" value="50000" inputmode="numeric"></div>
+        <div class="ctl"><label for="jQty">Khối lượng (cổ)</label><input id="jQty" type="number" min="0" step="100" value="500" inputmode="numeric"></div>
+        <div class="ctl"><label for="jWeight">Tỷ trọng (%)</label><input id="jWeight" type="number" min="0" max="100" step="0.5" value="12.5" inputmode="decimal"></div>
+        <div class="ctl"><label for="jStop">Điểm cắt lỗ (đ)</label><input id="jStop" type="number" min="0" step="100" value="" placeholder="Bắt buộc" inputmode="numeric"></div>
+        <div class="ctl"><label for="jTarget">Mục tiêu (đ)</label><input id="jTarget" type="number" min="0" step="100" value="" inputmode="numeric"></div>
+        <div class="ctl"><label for="jMood">Cảm xúc lúc đó</label>
+          <select id="jMood"><option>Bình tĩnh, theo kế hoạch</option><option>Sợ lỡ tàu (FOMO)</option><option>Muốn gỡ lỗ</option><option>Nghe người khác mách</option></select>
+        </div>
+      </div>
+      <div class="ctl"><label for="jReason">Lý do mua</label><textarea id="jReason" rows="2" placeholder="Vì sao mã này, vì sao lúc này?"></textarea></div>
+      <div class="entry" id="jEntry"></div>
+      <div class="say owl"><span class="char" id="jOwl"></span><p class="bubble" id="jSay"></p></div>
+    </div>
+  </section>
+
+  <!-- BÀI TẬP -->
+  <section class="chapter" id="bai-tap">
+    <div class="chapter-head"><span class="tag">✓</span><h2>Bài tập: cho Heo ăn xu</h2></div>
+    <div class="panel toy">
+      <div class="feed">
+        <span class="char" id="feedPig"></span>
+        <div class="stack" style="gap:8px">
+          <strong id="feedText"></strong>
+          <div class="bar" aria-hidden="true"><div id="feedBar"></div></div>
+          <span class="note">Chỉ coi module là xong khi đã tick hết bài tập, không phải khi đọc xong. Tiến độ được lưu trên trình duyệt này.</span>
+        </div>
+      </div>
+      <ul class="tasks" id="tasks" data-module="09">
+        <li><label><input type="checkbox" id="t1"><span>Viết "chính sách rủi ro" cá nhân: % rủi ro tối đa mỗi lệnh, tỷ trọng tối đa mỗi mã, mỗi ngành, có dùng margin hay không</span></label></li>
+        <li><label><input type="checkbox" id="t2"><span>Tính số cổ phiếu được mua cho 3 lệnh giả định bằng công thức ở mục 8.3</span></label></li>
+        <li><label><input type="checkbox" id="t3"><span>Tự dựng bảng margin như mục 8.5 với tỷ lệ call và force sell thật của công ty chứng khoán bạn đang dùng</span></label></li>
+        <li><label><input type="checkbox" id="t4"><span>Xem lại tất cả các lệnh đã giao dịch (kể cả giao dịch giấy): tính tỷ lệ thắng, lời trung bình, lỗ trung bình</span></label></li>
+        <li><label><input type="checkbox" id="t5"><span>Đặt lịch tái cân bằng danh mục: chọn ngày cụ thể trong năm</span></label></li>
+      </ul>
+    </div>
+    <a class="panel next" href="10-tam-ly-va-chien-luoc.html">
+      <div class="stack" style="gap:4px">
+        <span class="eyebrow">Chương sau →</span>
+        <h3>Module 9: Tâm lý và chiến lược đầu tư</h3>
+        <span class="note">Có kế hoạch rồi, giờ học cách giữ cái đầu lạnh để làm đúng kế hoạch.</span>
+      </div>
+      <span class="char bob" data-char="owl:smile" style="width:72px"></span>
+    </a>
+    <p class="disclaimer">Giáo trình mang tính giáo dục, không phải khuyến nghị mua bán mã cổ phiếu nào. Các con số trong máy tính là minh họa; tỷ lệ call margin và bán giải chấp thực tế do từng công ty chứng khoán quy định.</p>
+  </section>
+</main>
+
+<script src="assets/truyen.js"></script>
+<script>
+(function () {
+  var T = Truyen, $ = T.$, money = T.money;
+  // T.trim(x, 0) cắt mất số 0 của số nguyên (20 → "2"), nên trang tự làm tròn khi không lấy chữ số thập phân
+  function trim(x, d) { return d === 0 ? Math.round(x).toLocaleString('vi-VN') : T.trim(x, d); }
+  function pct(x, d) { return trim(x, d == null ? 1 : d) + '%'; }
+
+  // ---------- biểu đồ đường dùng chung trong trang ----------
+  function lineChart(svg, o) {
+    var W = 640, H = 260, L = 64, R = 18, Tp = 22, B = 34;
+    var x = function (v) { return L + (W - L - R) * v / o.xMax; };
+    var y = function (v) { return Tp + (H - Tp - B) * (1 - Math.max(0, Math.min(o.yMax, v)) / o.yMax); };
+    var g = '';
+    for (var t = 0; t <= o.yMax + 1e-9; t += o.yStep) {
+      g += '<line x1="' + L + '" x2="' + (W - R) + '" y1="' + y(t) + '" y2="' + y(t) + '" stroke="var(--dot)" stroke-width="1.5"/>' +
+        '<text x="' + (L - 8) + '" y="' + (y(t) + 4) + '" text-anchor="end">' + o.yFmt(t) + '</text>';
+    }
+    for (var k = 0; k <= o.xMax + 1e-9; k += o.xStep) {
+      g += '<text x="' + x(k) + '" y="' + (H - 10) + '" text-anchor="middle">' + o.xFmt(k) + '</text>';
+    }
+    (o.vlines || []).forEach(function (v) {
+      if (!(v.x > 0 && v.x <= o.xMax)) return;
+      g += '<line x1="' + x(v.x) + '" x2="' + x(v.x) + '" y1="' + Tp + '" y2="' + (H - B) + '" stroke="' + v.color + '" stroke-width="3" stroke-dasharray="6 5"/>' +
+        '<text x="' + (x(v.x) + 5) + '" y="' + (Tp - 6) + '" style="fill:var(--ink);font-weight:700">' + v.label + '</text>';
+    });
+    o.series.forEach(function (s) {
+      var pts = [];
+      for (var i = 0; i <= 120; i++) { var xv = o.xMax * i / 120; pts.push(x(xv) + ',' + y(s.f(xv))); }
+      g += '<polyline points="' + pts.join(' ') + '" fill="none" stroke="' + s.color + '" stroke-width="' + (s.w || 4) + '"' + (s.dash ? ' stroke-dasharray="' + s.dash + '"' : '') + ' stroke-linejoin="round"/>';
+    });
+    (o.dots || []).forEach(function (d) {
+      g += '<circle cx="' + x(d.x) + '" cy="' + y(d.y) + '" r="7" fill="' + d.color + '" stroke="var(--border)" stroke-width="2.5"/>';
+    });
+    svg.innerHTML = g;
+  }
+  function signed(v, d) { return (v > 0 ? '+' : v < 0 ? '−' : '') + pct(Math.abs(v), d); }
+
+  // ---------- 8.1 toán học thua lỗ ----------
+  function need(l) { return (1 / (1 - l / 100) - 1) * 100; }
+  function renderLoss() {
+    var l = +$('loss').value, g = need(l);
+    $('lossOut').textContent = '−' + pct(l, 0);
+    $('lossLeft').textContent = money(100e6 * (1 - l / 100));
+    $('lossNeed').textContent = '+' + pct(g, 1);
+    $('lossRatio').textContent = '×' + trim(g / l, 2);
+    lineChart($('lossChart'), {
+      xMax: 90, xStep: 10, xFmt: function (v) { return '−' + v + '%'; },
+      yMax: 1000, yStep: 250, yFmt: function (v) { return v === 0 ? '0' : '+' + v.toLocaleString('vi-VN') + '%'; },
+      series: [
+        { f: function (v) { return v; }, color: 'var(--save)', dash: '8 6', w: 3 },
+        { f: need, color: 'var(--warn)' }
+      ],
+      dots: [{ x: l, y: g, color: 'var(--warn)' }]
+    });
+    $('lossPig').innerHTML = T.pig(l <= 10 ? 'happy' : l < 40 ? 'worried' : l < 70 ? 'sad' : 'wow');
+    $('lossSay').textContent = l <= 10
+      ? 'Lỗ ' + l + '% thì chỉ cần lãi ' + pct(g, 1) + ' là về bờ. Cắt sớm thì một lần thắng nhỏ là gỡ.'
+      : l < 40
+        ? 'Lỗ ' + l + '% mà cần tới ' + pct(g, 1) + ' mới hòa vốn. Hố đã sâu hơn em tưởng.'
+        : l < 70
+          ? 'Em mất ' + l + '% thì phải tăng ' + pct(g, 1) + ' mới về bờ. Có thể mất nhiều năm!'
+          : 'Lỗ ' + l + '% cần tăng ' + pct(g, 0) + '. Gần như không gỡ nổi nữa thầy ơi!';
+    document.querySelectorAll('#lossTbl tbody tr').forEach(function (tr) {
+      var on = +tr.dataset.l === l;
+      tr.classList.toggle('on', on);
+      tr.querySelector('.opt').setAttribute('aria-pressed', String(on));
+    });
+  }
+  $('loss').addEventListener('input', renderLoss);
+  document.querySelectorAll('#lossTbl tbody tr').forEach(function (tr) {
+    tr.querySelector('.opt').addEventListener('click', function () { $('loss').value = tr.dataset.l; renderLoss(); });
+  });
+  renderLoss();
+
+  // ---------- 8.2 đa dạng hóa ----------
+  var presets = [[1, 1, 100, 0], [5, 1, 100, 0], [10, 4, 30, 60], [30, 6, 25, 40]];
+  function renderDiv(fromPreset) {
+    var n = +$('dvN').value, s = +$('dvS').value, mx = +$('dvMax').value, core = +$('dvCore').value;
+    if (s > n) { s = n; $('dvS').value = s; }
+    var minMax = Math.ceil(100 / s / 5) * 5;
+    if (mx < minMax) { mx = minMax; $('dvMax').value = mx; }
+    if (s === 1) { mx = 100; $('dvMax').value = 100; }
+    $('dvNOut').textContent = n + ' mã';
+    $('dvSOut').textContent = s + ' ngành';
+    $('dvMaxOut').textContent = mx + '%';
+    $('dvCoreOut').textContent = core + '% lõi · ' + (100 - core) + '% vệ tinh';
+    if (!fromPreset) document.querySelectorAll('#divPresets .opt').forEach(function (b) { b.setAttribute('aria-pressed', 'false'); });
+
+    var rows = [];
+    rows.push(n < 5 ? ['bad', 'Ít hơn 5 mã: rủi ro tập trung. Một mã gặp chuyện là cả danh mục lao đao.']
+      : n <= 15 ? ['ok', n + ' mã: nằm trong khoảng 5–15 mã hợp lý cho nhà đầu tư cá nhân.']
+        : n <= 20 ? ['mid', n + ' mã: vượt 15, sát ngưỡng 15–20 mã. Bạn có đủ thời gian theo dõi từng mã không?']
+          : ['bad', n + ' mã: quá nhiều để theo dõi, kết quả sẽ gần giống mua ETF.']);
+    rows.push(s >= 4 ? ['ok', s + ' ngành: đạt mức ít nhất 3–4 ngành.']
+      : s === 3 ? ['mid', '3 ngành: vừa chạm mức tối thiểu 3–4 ngành.']
+        : ['bad', s + ' ngành: dưới mức 3–4 ngành. Các mã cùng ngành thường lên xuống cùng nhau.']);
+    rows.push(mx <= 30 ? ['ok', 'Ngành lớn nhất ' + mx + '%: không vượt 30–40% danh mục.']
+      : mx <= 40 ? ['mid', 'Ngành lớn nhất ' + mx + '%: đang ở mép trên của giới hạn 30–40%.']
+        : ['bad', 'Ngành lớn nhất ' + mx + '%: vượt giới hạn 30–40% danh mục.']);
+    rows.push(core >= 50 && core <= 70 ? ['ok', 'Lõi ' + core + '%, vệ tinh ' + (100 - core) + '%: đúng khung 50–70% lõi, 30–50% vệ tinh.']
+      : ['mid', 'Lõi ' + core + '%, vệ tinh ' + (100 - core) + '%: ngoài khung gợi ý 50–70% lõi (ETF, cổ phiếu đầu ngành nắm dài hạn), 30–50% vệ tinh.']);
+    var label = { ok: 'Ổn', mid: 'Chú ý', bad: 'Rủi ro' };
+    $('dvChecks').innerHTML = rows.map(function (r) {
+      return '<li><span class="badge ' + r[0] + '">' + label[r[0]] + '</span><span>' + r[1] + '</span></li>';
+    }).join('');
+    var bad = rows.filter(function (r) { return r[0] === 'bad'; }).length;
+    $('dvOwl').innerHTML = T.owl(bad ? 'stern' : 'smile');
+    $('dvSay').textContent = n >= 5 && s === 1
+      ? 'Nhiều mã mà chỉ một ngành thì vẫn là một giỏ. Chúng thường lên xuống cùng nhau.'
+      : bad >= 2 ? 'Danh mục này dễ vỡ. Sửa các dòng màu đỏ trước khi mua thêm bất cứ mã nào.'
+        : bad === 1 ? 'Gần ổn rồi, còn một điểm rủi ro cần sửa.'
+          : 'Danh mục cân đối. Giờ phần khó là giữ kỷ luật với nó.';
+  }
+  ['dvN', 'dvS', 'dvMax', 'dvCore'].forEach(function (id) { $(id).addEventListener('input', function () { renderDiv(false); }); });
+  document.querySelectorAll('#divPresets .opt').forEach(function (b) {
+    b.addEventListener('click', function () {
+      var p = presets[+b.dataset.p];
+      $('dvN').value = p[0]; $('dvS').value = p[1]; $('dvMax').value = p[2]; $('dvCore').value = p[3];
+      renderDiv(true);
+      document.querySelectorAll('#divPresets .opt').forEach(function (o) { o.setAttribute('aria-pressed', String(o === b)); });
+    });
+  });
+  renderDiv(false);
+
+  // ---------- 8.3 tỷ trọng mỗi lệnh ----------
+  function renderPS() {
+    var cap = parseFloat($('psCap').value) * 1e6, r = +$('psRisk').value, buy = parseFloat($('psBuy').value), stop = parseFloat($('psStop').value);
+    $('psRiskOut').textContent = pct(r);
+    var k = +$('psStreak').value;
+    $('psStreakOut').textContent = k + ' lần';
+    $('psLeft').textContent = pct(Math.pow(1 - r / 100, k) * 100, 1);
+    var owl = $('psOwl'), say = $('psSay');
+    if (!(cap > 0 && buy > 0 && stop > 0)) {
+      ['psRiskMoney', 'psPerShare', 'psShares', 'psPos'].forEach(function (id) { $(id).textContent = '—'; });
+      owl.innerHTML = T.owl('talk'); say.textContent = 'Nhập tổng vốn, giá mua và giá cắt lỗ.';
+      return;
+    }
+    var riskMoney = cap * r / 100;
+    $('psRiskMoney').textContent = money(riskMoney);
+    if (stop >= buy) {
+      $('psPerShare').textContent = '—'; $('psShares').textContent = '—'; $('psPos').textContent = '—';
+      owl.innerHTML = T.owl('stern'); say.textContent = 'Giá cắt lỗ phải thấp hơn giá mua. Chưa có điểm cắt lỗ thì chưa được mua.';
+      return;
+    }
+    var per = buy - stop, dist = per / buy * 100;
+    var shares = Math.floor(riskMoney / per), pos = shares * buy, w = pos / cap * 100;
+    $('psPerShare').textContent = Math.round(per).toLocaleString('vi-VN') + ' đ (−' + pct(dist, 1) + ')';
+    $('psShares').textContent = shares.toLocaleString('vi-VN') + ' cổ';
+    $('psPos').textContent = money(pos) + ' (' + pct(w, 1) + ')';
+    $('psPosBox').className = 'stat ' + (w > 20 ? 'warn' : w > 15 ? '' : 'money');
+    var maxShares = Math.floor(cap * 0.2 / buy);
+    var msg, mood = 'smile';
+    if (w > 100) {
+      mood = 'stern';
+      msg = 'Điểm cắt lỗ quá gần nên công thức đòi mua ' + money(pos) + ', nhiều hơn cả tổng vốn. Giới hạn 15–20% mỗi mã cho phép tối đa khoảng ' + maxShares.toLocaleString('vi-VN') + ' cổ.';
+    } else if (w > 20) {
+      mood = 'stern';
+      msg = 'Lệnh chiếm ' + pct(w, 1) + ' danh mục, vượt giới hạn 15–20% mỗi mã. Ở mức 20% con chỉ mua tối đa khoảng ' + maxShares.toLocaleString('vi-VN') + ' cổ, kể cả khi rất tự tin.';
+    } else if (w > 15) {
+      mood = 'talk';
+      msg = 'Lệnh chiếm ' + pct(w, 1) + ', đang ở mép trên giới hạn 15–20% mỗi mã. Cân nhắc kỹ.';
+    } else {
+      msg = 'Nếu sai và chạm giá cắt lỗ, con chỉ mất ' + money(riskMoney) + ' (' + pct(r) + ' vốn). Lệnh chiếm ' + pct(w, 1) + ' danh mục, dưới giới hạn 15–20%.';
+    }
+    if (r > 2) { mood = 'stern'; msg += ' Lưu ý: rủi ro ' + pct(r) + ' mỗi lệnh đã vượt quy tắc 1–2%.'; }
+    if (dist > 10) msg += ' Khoảng cắt lỗ −' + pct(dist, 1) + ' rộng hơn mức −7% đến −10% thường dùng.';
+    owl.innerHTML = T.owl(mood); say.textContent = msg;
+  }
+  ['psCap', 'psRisk', 'psBuy', 'psStop', 'psStreak'].forEach(function (id) { $(id).addEventListener('input', renderPS); });
+  renderPS();
+
+  // ---------- 8.4 cắt lỗ theo giá ----------
+  function renderSL() {
+    var b = parseFloat($('slBuy').value), p = +$('slPct').value;
+    $('slPctOut').textContent = '−' + pct(p);
+    if (!(b > 0)) { $('slStop').textContent = 'Nhập giá mua'; $('slNeed').textContent = '—'; return; }
+    $('slStop').textContent = Math.round(b * (1 - p / 100)).toLocaleString('vi-VN') + ' đ';
+    $('slNeed').textContent = '+' + pct(need(p), 1);
+  }
+  ['slBuy', 'slPct'].forEach(function (id) { $(id).addEventListener('input', renderSL); });
+  renderSL();
+
+  // ---------- 8.5 margin ----------
+  var E = 100e6;
+  function mgCalc(L, d) {
+    var V = (E + L) * (1 - d / 100), eq = V - L;
+    return { V: V, eq: eq, ratio: V > 0 ? eq / V * 100 : 0 };
+  }
+  function dropAt(L, th) { // mức giảm thị trường (%) làm tỷ lệ ký quỹ chạm ngưỡng th (%)
+    if (L <= 0) return null;
+    var V = L / (1 - th / 100);
+    var d = (1 - V / (E + L)) * 100;
+    return d >= 0 ? d : 0;
+  }
+  function renderMG() {
+    var L = +$('mgLoan').value * 1e6, d = +$('mgDrop').value, call = +$('mgCall').value, force = +$('mgForce').value, rate = +$('mgRate').value;
+    if (force >= call) { force = call - 5; $('mgForce').value = force; }
+    $('mgLoanOut').textContent = L ? money(L) : '0 (không vay)';
+    $('mgDropOut').textContent = '−' + pct(d);
+    $('mgCallOut').textContent = call + '%';
+    $('mgForceOut').textContent = force + '%';
+    $('mgRateOut').textContent = pct(rate);
+    var c = mgCalc(L, d), ch = (c.eq / E - 1) * 100;
+    $('mgValue').textContent = money(c.V);
+    $('mgEq').textContent = c.eq > 0 ? money(c.eq) + ' (' + signed(ch, 0) + ')' : 'Mất hết vốn';
+    $('mgRatio').textContent = L ? pct(Math.max(0, c.ratio), 0) : '100%';
+    var state = !L ? 'free' : c.ratio <= force + 1e-9 ? 'force' : c.ratio <= call + 1e-9 ? 'call' : 'ok';
+    $('mgEqBox').className = 'stat ' + (ch <= -20 ? 'warn' : '');
+    $('mgRatioBox').className = 'stat ' + (state === 'force' || state === 'call' ? 'warn' : 'money');
+    var fill = $('mgFill');
+    fill.style.width = Math.max(0, Math.min(100, L ? c.ratio : 100)) + '%';
+    fill.style.background = state === 'force' ? 'var(--warn)' : state === 'call' ? 'var(--gold)' : 'var(--money)';
+    $('mgMkForce').style.left = force + '%'; $('mgMkCall').style.left = call + '%';
+    $('mgLblForce').style.left = force + '%'; $('mgLblForce').textContent = 'bán ' + force + '%';
+    $('mgLblCall').style.left = call + '%'; $('mgLblCall').textContent = 'call ' + call + '%';
+
+    $('mgPlain').textContent = money(E * (1 - d / 100)) + ' (' + signed(-d, 1) + ')';
+    var dc = dropAt(L, call), df = dropAt(L, force);
+    $('mgDCall').textContent = dc === null ? 'Không bao giờ' : '−' + pct(dc, 1);
+    $('mgDForce').textContent = df === null ? 'Không bao giờ' : '−' + pct(df, 1);
+    $('mgInt').textContent = L ? money(L * rate / 100) : '0 đ';
+
+    var mood = { free: 'happy', ok: d > 0 ? 'worried' : 'wow', call: 'sad', force: 'sad' }[state], msg;
+    if (state === 'free') msg = 'Không vay thì thị trường giảm ' + pct(d) + ' em cũng chỉ lỗ ' + pct(d) + '. Không ai bán cổ phiếu của em lúc đáy.';
+    else if (state === 'force') msg = 'Bị bán giải chấp! Thị trường giảm ' + pct(d) + ' mà em mất ' + pct(-ch, 0) + ' vốn, chưa tính lãi vay. Lại thường bị bán ở giá sàn, đúng đáy.';
+    else if (state === 'call') msg = 'Bị call margin! Em phải nộp thêm tiền hoặc bán bớt. Thị trường mới giảm ' + pct(d) + ' mà vốn em đã ' + signed(ch, 0) + '.';
+    else if (d > 0) msg = 'Thị trường giảm ' + pct(d) + ' nhưng vốn em giảm ' + pct(-ch, 1) + ', nhanh gấp ' + trim(-ch / d, 1) + ' lần thị trường.';
+    else msg = 'Với ' + money(E + L) + ' cổ phiếu trong tay, em thấy mình giàu quá thầy ạ!';
+    if (L > 0.3 * E) msg += ' (Vay ' + pct(L / E * 100, 0) + ' vốn, vượt mức tối đa 20–30% kể cả với người đã có kinh nghiệm.)';
+    $('mgPig').innerHTML = T.pig(mood); $('mgSay').textContent = msg;
+
+    lineChart($('mgChart'), {
+      xMax: 60, xStep: 10, xFmt: function (v) { return '−' + v + '%'; },
+      yMax: 100, yStep: 25, yFmt: function (v) { return v + ' tr'; },
+      series: [
+        { f: function (v) { return 100 * (1 - v / 100); }, color: 'var(--save)' },
+        { f: function (v) { return mgCalc(L, v).eq / 1e6; }, color: 'var(--warn)' }
+      ],
+      vlines: [
+        { x: dc, color: 'var(--gold)', label: 'call' },
+        { x: df, color: 'var(--border)', label: 'bán' }
+      ],
+      dots: [{ x: d, y: Math.max(0, c.eq / 1e6), color: 'var(--warn)' }]
+    });
+  }
+  ['mgLoan', 'mgDrop', 'mgCall', 'mgForce', 'mgRate'].forEach(function (id) {
+    $(id).addEventListener('input', function () {
+      document.querySelectorAll('#mgPresets .opt').forEach(function (b) { b.setAttribute('aria-pressed', 'false'); });
+      renderMG();
+    });
+  });
+  document.querySelectorAll('#mgPresets .opt').forEach(function (b) {
+    b.setAttribute('aria-pressed', 'false');
+    b.addEventListener('click', function () {
+      // các tình huống trong bảng giáo trình: vay 100 triệu, call 40%, bán giải chấp 30%
+      $('mgLoan').value = 100; $('mgCall').value = 40; $('mgForce').value = 30;
+      var L = 100e6, k = b.dataset.d;
+      var d = k === 'call' ? dropAt(L, 40) : k === 'force' ? dropAt(L, 30) : +k;
+      $('mgDrop').value = d;
+      renderMG();
+      document.querySelectorAll('#mgPresets .opt').forEach(function (o) { o.setAttribute('aria-pressed', String(o === b)); });
+    });
+  });
+  renderMG();
+
+  // ---------- 8.6 thước đo ----------
+  function renderEx() {
+    var w = +$('exWin').value / 100, g = +$('exGain').value, l = +$('exLoss').value;
+    $('exWinOut').textContent = pct(w * 100, 0); $('exGainOut').textContent = '+' + g + '%'; $('exLossOut').textContent = '−' + l + '%';
+    var ev = w * g - (1 - w) * l, be = l / (g + l) * 100;
+    $('exVal').textContent = signed(ev, 2);
+    $('exBox').className = 'stat ' + (ev > 0 ? 'money' : ev < 0 ? 'warn' : '');
+    $('exRR').textContent = trim(g / l, 1) + ' lần';
+    $('exBE').textContent = pct(be, 1);
+    $('exPig').innerHTML = T.pig(ev > 0 ? (w < 0.5 ? 'wow' : 'happy') : 'sad');
+    $('exSay').textContent = ev > 0
+      ? (w < 0.5 ? 'Thua nhiều hơn thắng mà vẫn có lãi ' + signed(ev, 2) + ' mỗi lệnh, vì lệnh thắng lời gấp ' + trim(g / l, 1) + ' lần lệnh thua!' : 'Mỗi lệnh kỳ vọng ' + signed(ev, 2) + '. Giữ lỗ nhỏ để con số này dương.')
+      : 'Kỳ vọng âm: càng giao dịch càng mất tiền. Phải cắt lỗ nhỏ hơn hoặc để lệnh thắng chạy xa hơn.';
+  }
+  ['exWin', 'exGain', 'exLoss'].forEach(function (id) { $(id).addEventListener('input', renderEx); });
+  renderEx();
+
+  function renderBeta() {
+    var b = +$('btB').value, m = +$('btM').value, s = b * m;
+    $('btBOut').textContent = trim(b, 1); $('btMOut').textContent = signed(m, 0);
+    $('btOut').textContent = signed(s, 1);
+    $('btBox').className = 'stat ' + (s < 0 ? 'warn' : s > 0 ? 'money' : '');
+  }
+  ['btB', 'btM'].forEach(function (id) { $(id).addEventListener('input', renderBeta); });
+  renderBeta();
+
+  function renderDD() {
+    var p = parseFloat($('ddPeak').value), lo = parseFloat($('ddLow').value);
+    if (!(p > 0 && lo >= 0 && lo <= p)) { $('ddOut').textContent = 'Đáy phải ≤ đỉnh'; $('ddNeed').textContent = '—'; return; }
+    var dd = (1 - lo / p) * 100;
+    $('ddOut').textContent = '−' + pct(dd, 1);
+    $('ddNeed').textContent = lo > 0 ? '+' + pct(need(dd), 1) : 'Không thể';
+  }
+  ['ddPeak', 'ddLow'].forEach(function (id) { $(id).addEventListener('input', renderDD); });
+  renderDD();
+
+  // ---------- 8.7 tái cân bằng ----------
+  function bar(el, s) {
+    el.innerHTML = '<div class="s" style="width:' + s + '%">' + (s >= 12 ? trim(s, 0) + '%' : '') + '</div>' +
+      '<div class="c" style="width:' + (100 - s) + '%">' + (100 - s >= 12 ? trim(100 - s, 0) + '%' : '') + '</div>';
+  }
+  function renderRB() {
+    var tot = parseFloat($('rbTotal').value) * 1e6, tg = +$('rbTarget').value, now = +$('rbNow').value;
+    $('rbTargetOut').textContent = tg + '% cổ phiếu'; $('rbNowOut').textContent = now + '%';
+    bar($('rbBarNow'), now); bar($('rbBarAfter'), tg);
+    if (!(tot > 0)) { $('rbActK').textContent = 'Việc cần làm'; $('rbAct').textContent = 'Nhập tổng tài sản'; return; }
+    var diff = (now - tg) / 100 * tot;
+    if (Math.abs(diff) < 1) {
+      $('rbActK').textContent = 'Việc cần làm'; $('rbAct').textContent = 'Đã đúng tỷ lệ';
+      $('rbActBox').className = 'stat money';
+      $('rbSay').textContent = 'Danh mục đang đúng mục tiêu. Hẹn lần kiểm tra sau, 6–12 tháng nữa.';
+      return;
+    }
+    $('rbActBox').className = 'stat ' + (diff > 0 ? 'warn' : 'money');
+    $('rbActK').textContent = diff > 0 ? 'Bán bớt cổ phiếu, chuyển sang tiết kiệm' : 'Rút tiết kiệm, mua thêm cổ phiếu';
+    $('rbAct').textContent = money(Math.abs(diff));
+    $('rbSay').textContent = diff > 0
+      ? 'Cổ phiếu đã tăng vượt mục tiêu: bán ' + money(diff) + ' khi giá đang cao để về ' + tg + '%. Kỷ luật, không cần đoán đỉnh.'
+      : 'Cổ phiếu đã giảm dưới mục tiêu: dùng ' + money(-diff) + ' tiết kiệm mua thêm khi giá đang thấp để về ' + tg + '%.';
+  }
+  ['rbTotal', 'rbTarget', 'rbNow'].forEach(function (id) {
+    $(id).addEventListener('input', function () {
+      document.querySelectorAll('#rbPresets .opt').forEach(function (b) { b.setAttribute('aria-pressed', 'false'); });
+      renderRB();
+    });
+  });
+  document.querySelectorAll('#rbPresets .opt').forEach(function (b) {
+    b.setAttribute('aria-pressed', String(b.dataset.c === '75'));
+    b.addEventListener('click', function () {
+      $('rbNow').value = b.dataset.c; $('rbTarget').value = 60; renderRB();
+      document.querySelectorAll('#rbPresets .opt').forEach(function (o) { o.setAttribute('aria-pressed', String(o === b)); });
+    });
+  });
+  renderRB();
+
+  // ---------- 8.8 nhật ký ----------
+  try { $('jDate').valueAsDate = new Date(); } catch (e) {}
+  function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+  function renderJ() {
+    var code = $('jCode').value.trim().toUpperCase(), price = parseFloat($('jPrice').value), qty = parseFloat($('jQty').value),
+      w = parseFloat($('jWeight').value), stop = parseFloat($('jStop').value), tgt = parseFloat($('jTarget').value),
+      reason = $('jReason').value.trim(), mood = $('jMood').value, date = $('jDate').value;
+    var nf = function (v) { return v > 0 ? Math.round(v).toLocaleString('vi-VN') + ' đ' : '<i>chưa ghi</i>'; };
+    var risk = price > 0 && stop > 0 && stop < price && qty > 0 ? (price - stop) * qty : 0;
+    $('jEntry').innerHTML = '<strong>' + (code ? esc(code) : 'Mã ?') + ' · ' + (date ? esc(date.split('-').reverse().join('/')) : 'chưa có ngày') + '</strong><dl>' +
+      '<dt>Giá × khối lượng</dt><dd>' + nf(price) + ' × ' + (qty > 0 ? qty.toLocaleString('vi-VN') : '?') + (price > 0 && qty > 0 ? ' = ' + money(price * qty) : '') + '</dd>' +
+      '<dt>Tỷ trọng</dt><dd>' + (w >= 0 ? trim(w, 1) + '%' : '<i>chưa ghi</i>') + '</dd>' +
+      '<dt>Lý do mua</dt><dd>' + (reason ? esc(reason) : '<i>chưa ghi</i>') + '</dd>' +
+      '<dt>Điểm cắt lỗ</dt><dd>' + nf(stop) + (risk ? ' (mất tối đa ' + money(risk) + ')' : '') + '</dd>' +
+      '<dt>Mục tiêu</dt><dd>' + nf(tgt) + '</dd>' +
+      '<dt>Cảm xúc</dt><dd>' + esc(mood) + '</dd>' +
+      '<dt>Kết quả, bài học</dt><dd><i>ghi khi bán</i></dd></dl>';
+    var msg, m = 'stern';
+    if (!(stop > 0)) msg = 'Chưa có điểm cắt lỗ thì chưa được bấm mua. Viết nó ra ngay bây giờ, khi con còn tỉnh táo.';
+    else if (stop >= price) msg = 'Điểm cắt lỗ phải thấp hơn giá mua.';
+    else if (!reason) msg = 'Thiếu lý do mua. Không có lý do thì sau này con không biết khi nào luận điểm đã sai để cắt lỗ theo luận điểm.';
+    else if (w > 20) msg = 'Tỷ trọng ' + trim(w, 1) + '% vượt giới hạn 15–20% mỗi mã.';
+    else if (mood !== 'Bình tĩnh, theo kế hoạch') msg = 'Dòng nhật ký đủ rồi. Nhưng cảm xúc "' + mood + '" là tín hiệu nên chờ thêm một ngày rồi đọc lại.';
+    else { m = 'smile'; msg = 'Một dòng nhật ký chuẩn. Khi bán nhớ ghi kết quả và bài học; mỗi quý đọc lại toàn bộ để tìm sai lầm lặp lại.'; }
+    $('jOwl').innerHTML = T.owl(m); $('jSay').textContent = msg;
+  }
+  ['jCode', 'jDate', 'jPrice', 'jQty', 'jWeight', 'jStop', 'jTarget', 'jReason', 'jMood'].forEach(function (id) {
+    $(id).addEventListener('input', renderJ);
+    $(id).addEventListener('change', renderJ);
+  });
+  renderJ();
+})();
+</script>
+</body>
+</html>

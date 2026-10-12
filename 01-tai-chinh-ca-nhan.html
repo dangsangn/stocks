@@ -1,0 +1,449 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Heo Đất học giữ tiền</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;800&family=Be+Vietnam+Pro:wght@400;600;700&family=Patrick+Hand&display=swap">
+<link rel="stylesheet" href="assets/truyen.css">
+<style>
+/* Riêng Module 1: cầu thang 4 bậc, bánh phân bổ */
+.stairs { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; align-items: end; }
+.step {
+  font: inherit; color: var(--ink); cursor: pointer; text-align: left;
+  border: 3px solid var(--border); border-radius: 8px 8px 2px 2px; background: var(--chip);
+  padding: 8px 10px; display: flex; flex-direction: column; justify-content: flex-end; gap: 2px; position: relative;
+  transition: transform .15s ease, background .15s ease;
+}
+.step:hover { transform: translateY(-3px); }
+.step[aria-pressed="true"] { background: var(--bubble-pig); box-shadow: 4px 4px 0 var(--hard); }
+.step .n { font-family: var(--f-display); font-weight: 800; font-size: 1.6rem; line-height: 1; }
+.step .t { font-weight: 700; font-size: .88rem; line-height: 1.25; }
+.step:nth-child(1) { min-height: 90px; } .step:nth-child(2) { min-height: 130px; }
+.step:nth-child(3) { min-height: 170px; } .step:nth-child(4) { min-height: 210px; }
+.step .rider { position: absolute; top: -58px; left: 50%; width: 70px; transform: translateX(-50%); pointer-events: none; }
+.stairs-wrap { padding-top: 60px; }
+@media (max-width: 520px) { .step .t { font-size: .76rem; } .step .rider { width: 54px; top: -46px; } .stairs-wrap { padding-top: 48px; } }
+
+.alloc { display: grid; grid-template-columns: 220px minmax(0, 1fr); gap: 20px; align-items: center; }
+@media (max-width: 600px) { .alloc { grid-template-columns: 1fr; justify-items: center; } .alloc > * { width: 100%; } .donut { max-width: 220px; } }
+.donut svg { width: 100%; height: auto; display: block; }
+.donut text { fill: var(--ink); font-family: var(--f-display); font-weight: 800; }
+.alloc-table { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+.alloc-table td { padding: 8px 4px; border-bottom: 2px dashed var(--dot); }
+.alloc-table td:last-child { text-align: right; font-weight: 700; }
+.sw { width: 12px; height: 12px; border-radius: 3px; display: inline-block; margin-right: 8px; border: 2px solid var(--border); vertical-align: -1px; }
+</style>
+</head>
+<body>
+<main class="book">
+
+  <nav class="topnav"><a href="index.html">← Mục lục</a><span class="note">Module 1 / 9</span></nav>
+
+  <!-- MỞ ĐẦU -->
+  <header class="hero">
+    <div class="hero-title">
+      <span class="eyebrow">Module 1 · Tuần 1–2</span>
+      <h1>Heo Đất học giữ tiền</h1>
+      <p class="sub">Nền tảng tài chính cá nhân, kể bằng truyện tranh. Kéo thanh trượt, bấm chọn đáp án, rồi tick bài tập ở cuối trang.</p>
+    </div>
+    <div class="strip">
+      <div class="panel">
+        <div class="say pig"><span class="char" data-char="pig:wow"></span><p class="bubble">Em vừa nhận lương! Mua cổ phiếu luôn được không thầy?</p></div>
+      </div>
+      <div class="panel">
+        <div class="say owl right"><p class="bubble">Khoan. Số tiền này, 3 đến 5 năm tới con có cần dùng không?</p><span class="char" data-char="owl:stern"></span></div>
+      </div>
+      <div class="panel">
+        <div class="say pig"><span class="char" data-char="pig:worried"></span><p class="bubble">Ơ… tháng sau em định mua xe máy.</p></div>
+      </div>
+      <div class="panel">
+        <div class="say owl right"><p class="bubble">Vậy đó chưa phải tiền để đầu tư. Chỉ đầu tư bằng tiền con không cần trong ít nhất 3–5 năm.</p><span class="char" data-char="owl:talk"></span></div>
+      </div>
+      <div class="panel wide">
+        <div class="say owl"><span class="char" data-char="owl:talk"></span><p class="bubble">Năm 2022, VN-Index rơi từ khoảng <b>1.500</b> điểm (đầu năm) xuống dưới <b>900</b> điểm (cuối năm), mất hơn 40% trong chưa đầy một năm. Ai cần tiền gấp lúc đó buộc phải bán ở đáy. Quy tắc này quan trọng hơn mọi kỹ thuật phân tích.</p></div>
+      </div>
+    </div>
+  </header>
+
+  <!-- 1.1 -->
+  <section class="chapter" id="thu-tu">
+    <div class="chapter-head"><span class="tag">1.1</span><h2>Leo 4 bậc trước khi đầu tư</h2></div>
+    <div class="panel toy">
+      <p>Bấm vào từng bậc. Heo Đất chỉ được lên bậc trên khi đã đứng vững ở bậc dưới.</p>
+      <div class="stairs-wrap">
+        <div class="stairs" role="group" aria-label="Bốn bậc ưu tiên">
+          <button class="step" type="button" data-step="0" aria-pressed="true"><span class="n">1</span><span class="t">Quỹ dự phòng</span></button>
+          <button class="step" type="button" data-step="1" aria-pressed="false"><span class="n">2</span><span class="t">Trả nợ lãi cao</span></button>
+          <button class="step" type="button" data-step="2" aria-pressed="false"><span class="n">3</span><span class="t">Bảo hiểm</span></button>
+          <button class="step" type="button" data-step="3" aria-pressed="false"><span class="n">4</span><span class="t">Rồi mới đầu tư</span></button>
+        </div>
+      </div>
+      <div class="stack" id="stepDetail"></div>
+    </div>
+  </section>
+
+  <!-- 1.2 -->
+  <section class="chapter" id="lai-kep">
+    <div class="chapter-head"><span class="tag">1.2</span><h2>Lãi kép: quả cầu tuyết biết đẻ</h2></div>
+    <div class="strip">
+      <div class="panel">
+        <div class="talk">
+          <div class="say pig"><span class="char" data-char="pig:happy"></span><p class="bubble">Em ít vốn lắm, đợi giàu rồi mới đầu tư cho đáng.</p></div>
+          <div class="say owl right"><p class="bubble">Sai rồi. Với lãi kép, <b>thời gian</b> quan trọng hơn số vốn. Tiền lãi được tái đầu tư và tiếp tục đẻ ra lãi.</p><span class="char" data-char="owl:talk"></span></div>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="chalk" aria-label="Công thức lãi kép">
+          <span>Bỏ vào một lần:</span>
+          <span class="f">FV = PV × (1 + r)<sup>n</sup></span>
+          <small>FV: giá trị tương lai · PV: tiền ban đầu<br>r: lợi suất mỗi kỳ · n: số kỳ</small>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel toy">
+      <div class="toy-title"><h3>Máy lãi kép của Heo Đất</h3><span class="pill">Kéo thử</span></div>
+      <div class="controls">
+        <div class="ctl"><label for="fvMonthly">Mỗi tháng bỏ vào <output id="fvMonthlyOut"></output></label><input id="fvMonthly" type="range" min="1" max="30" step="1" value="5"></div>
+        <div class="ctl"><label for="fvRate">Lợi suất trung bình/năm <output id="fvRateOut"></output></label><input id="fvRate" type="range" min="0" max="15" step="0.5" value="10"></div>
+        <div class="ctl"><label for="fvYears">Số năm <output id="fvYearsOut"></output></label><input id="fvYears" type="range" min="1" max="40" step="1" value="20"></div>
+      </div>
+      <div class="result">
+        <div class="stat"><div class="k">Tổng tiền bạn bỏ ra</div><div class="v" id="fvPaid"></div></div>
+        <div class="stat money"><div class="k">Giá trị cuối kỳ</div><div class="v" id="fvTotal"></div></div>
+        <div class="stat"><div class="k">Phần do lãi kép tạo ra</div><div class="v" id="fvInterest"></div></div>
+      </div>
+      <div class="chart-box"><svg id="fvChart" viewBox="0 0 640 260" role="img" aria-label="Biểu đồ tiền bỏ ra và giá trị tích lũy theo năm"></svg></div>
+      <div class="legend"><span><i style="background:var(--save)"></i>Tiền bạn bỏ ra</span><span><i style="background:var(--money)"></i>Phần lãi kép</span></div>
+      <div class="say owl"><span class="char" data-char="owl:talk"></span><p class="bubble" id="fvCompare"></p></div>
+    </div>
+
+    <div class="panel toy">
+      <div class="toy-title"><h3>Quy tắc 72</h3></div>
+      <p>Lấy 72 chia cho lợi suất %/năm, bạn ra số năm để tiền tăng gấp đôi.</p>
+      <div class="ctl" style="max-width:420px"><label for="r72">Lợi suất/năm <output id="r72Out"></output></label><input id="r72" type="range" min="1" max="24" step="1" value="12"></div>
+      <div class="result">
+        <div class="stat money"><div class="k">Thời gian để gấp đôi</div><div class="v" id="r72Years"></div></div>
+      </div>
+      <div class="chips" id="r72Chips" aria-label="Các lần nhân đôi trong 36 năm"></div>
+      <p class="note">Mỗi ô là một lần nhân đôi trong 36 năm. Đây là phép tính nhẩm gần đúng.</p>
+    </div>
+  </section>
+
+  <!-- 1.3 -->
+  <section class="chapter" id="lam-phat">
+    <div class="chapter-head"><span class="tag">1.3</span><h2>Lạm phát: con mọt ăn tiền</h2></div>
+    <div class="panel talk">
+      <div class="say pig"><span class="char" data-char="pig:happy"></span><p class="bubble">Em gửi tiết kiệm 5%/năm, chắc ăn rồi!</p></div>
+      <div class="say owl right"><p class="bubble">Chắc ăn thì có, nhưng nếu lạm phát 3,5% thì sức mua của con chỉ tăng khoảng 1,5%/năm.<br><b>Lợi nhuận thực ≈ lợi nhuận danh nghĩa − lạm phát.</b></p><span class="char" data-char="owl:stern"></span></div>
+    </div>
+    <div class="panel toy">
+      <div class="toy-title"><h3>100 triệu sau 10 năm còn mua được bao nhiêu?</h3></div>
+      <div class="controls">
+        <div class="ctl"><label for="nom">Lãi suất danh nghĩa/năm <output id="nomOut"></output></label><input id="nom" type="range" min="0" max="15" step="0.5" value="5"></div>
+        <div class="ctl"><label for="inf">Lạm phát/năm <output id="infOut"></output></label><input id="inf" type="range" min="0" max="10" step="0.5" value="3.5"></div>
+      </div>
+      <div class="result">
+        <div class="stat"><div class="k">Số dư trong sổ</div><div class="v" id="infNominal"></div></div>
+        <div class="stat" id="infRealBox"><div class="k">Sức mua theo giá hôm nay</div><div class="v" id="infReal"></div></div>
+        <div class="stat" id="infRateBox"><div class="k">Lợi nhuận thực/năm (xấp xỉ)</div><div class="v" id="infRate"></div></div>
+      </div>
+      <div class="say pig"><span class="char" id="infPig"></span><p class="bubble" id="infSay"></p></div>
+      <p class="note">Vì vậy cần để một phần tài sản ở kênh có lợi nhuận kỳ vọng cao hơn như cổ phiếu, và chấp nhận rủi ro cao hơn.</p>
+    </div>
+  </section>
+
+  <!-- 1.4 -->
+  <section class="chapter" id="khau-vi">
+    <div class="chapter-head"><span class="tag">1.4</span><h2>Bạn là heo gan hay heo nhát?</h2></div>
+    <div class="panel quiz">
+      <p>Trả lời trung thực ba câu. Không có đáp án đúng hay sai, chỉ có đáp án đúng với <em>bạn</em>.</p>
+      <div class="q" data-q="horizon">
+        <h3>1. Bao lâu nữa bạn cần dùng số tiền này?</h3>
+        <div class="opts">
+          <button class="opt" type="button" data-v="-1">Dưới 2 năm</button>
+          <button class="opt" type="button" data-v="1">2–5 năm</button>
+          <button class="opt" type="button" data-v="2">Trên 5 năm</button>
+        </div>
+      </div>
+      <div class="q" data-q="drop">
+        <h3>2. 100 triệu của bạn còn 65 triệu sau 6 tháng. Bạn làm gì?</h3>
+        <div class="opts">
+          <button class="opt" type="button" data-v="0">Bán hết cho xong</button>
+          <button class="opt" type="button" data-v="1">Giữ nguyên, chờ</button>
+          <button class="opt" type="button" data-v="2">Mua thêm khi rẻ</button>
+        </div>
+      </div>
+      <div class="q" data-q="income">
+        <h3>3. Thu nhập của bạn ổn định đến đâu?</h3>
+        <div class="opts">
+          <button class="opt" type="button" data-v="0">Bấp bênh</button>
+          <button class="opt" type="button" data-v="1">Khá ổn định</button>
+          <button class="opt" type="button" data-v="2">Rất ổn định</button>
+        </div>
+      </div>
+      <div class="verdict" id="verdict"></div>
+    </div>
+  </section>
+
+  <!-- 1.5 -->
+  <section class="chapter" id="phan-bo">
+    <div class="chapter-head"><span class="tag">1.5</span><h2>Chia bánh tài sản</h2></div>
+    <div class="panel talk">
+      <div class="say owl"><span class="char" data-char="owl:talk"></span><p class="bubble">Cách chia tiền giữa các kênh quyết định phần lớn kết quả dài hạn, nhiều hơn việc chọn mã nào. Chỉ chia sau khi đã có quỹ dự phòng nhé.</p></div>
+    </div>
+    <div class="panel toy">
+      <div class="tabs" role="group" aria-label="Chọn khẩu vị" id="allocTabs">
+        <button class="opt" type="button" data-p="0">Thận trọng</button>
+        <button class="opt" type="button" data-p="1" aria-pressed="true">Cân bằng</button>
+        <button class="opt" type="button" data-p="2">Tăng trưởng</button>
+      </div>
+      <div class="alloc">
+        <div class="donut"><svg id="donut" viewBox="0 0 200 200" role="img" aria-label="Biểu đồ phân bổ tài sản"></svg></div>
+        <div class="stack">
+          <table class="alloc-table" id="allocTable"></table>
+          <p class="note">Biểu đồ vẽ theo điểm giữa của mỗi khoảng.</p>
+        </div>
+      </div>
+    </div>
+    <div class="panel toy">
+      <div class="toy-title"><h3>Quy tắc ngón tay cái: 100 trừ tuổi</h3></div>
+      <div class="controls">
+        <div class="ctl"><label for="age">Tuổi của bạn</label><input id="age" type="number" min="18" max="90" value="30" inputmode="numeric"></div>
+      </div>
+      <div class="result">
+        <div class="stat money"><div class="k">Tỷ trọng cổ phiếu gợi ý</div><div class="v" id="ageOut"></div></div>
+      </div>
+      <p class="note">Mức cao hơn (110 trừ tuổi) chỉ dành cho người chịu rủi ro tốt. Khẩu vị ở mục 1.4 luôn được ưu tiên hơn con số này.</p>
+    </div>
+  </section>
+
+  <!-- BÀI TẬP -->
+  <section class="chapter" id="bai-tap">
+    <div class="chapter-head"><span class="tag">✓</span><h2>Bài tập: cho Heo ăn xu</h2></div>
+    <div class="panel toy">
+      <div class="feed">
+        <span class="char" id="feedPig"></span>
+        <div class="stack" style="gap:8px">
+          <strong id="feedText"></strong>
+          <div class="bar" aria-hidden="true"><div id="feedBar"></div></div>
+          <span class="note">Chỉ coi module là xong khi đã tick hết bài tập, không phải khi đọc xong. Tiến độ được lưu trên trình duyệt này.</span>
+        </div>
+      </div>
+      <ul class="tasks" id="tasks" data-module="01">
+        <li><label><input type="checkbox" id="t1"><span>Liệt kê chi tiêu trung bình 3 tháng gần nhất và tính số tiền quỹ dự phòng cần có</span></label></li>
+        <li><label><input type="checkbox" id="t2"><span>Liệt kê mọi khoản nợ kèm lãi suất, lập kế hoạch trả khoản lãi cao nhất trước</span></label></li>
+        <li><label><input type="checkbox" id="t3"><span>Dùng hàm <code>FV</code> trong Excel tính: đầu tư X triệu/tháng với lợi suất 8%, 10%, 12%/năm trong 10, 20, 30 năm thì cuối kỳ có bao nhiêu</span></label></li>
+        <li><label><input type="checkbox" id="t4"><span>Trả lời 3 câu hỏi khẩu vị rủi ro và chọn một tỷ lệ phân bổ cho bản thân</span></label></li>
+        <li><label><input type="checkbox" id="t5"><span>Viết ra mục tiêu đầu tư cụ thể: số tiền, thời hạn, mục đích (ví dụ: 1 tỷ trong 10 năm để mua nhà)</span></label></li>
+      </ul>
+    </div>
+    <a class="panel next" href="02-thi-truong-chung-khoan.html">
+      <div class="stack" style="gap:4px">
+        <span class="eyebrow">Chương sau →</span>
+        <h3>Module 2: Thị trường chứng khoán vận hành ra sao</h3>
+        <span class="note">Ngắn hạn thị trường là cái máy bỏ phiếu, dài hạn nó là cái cân.</span>
+      </div>
+      <span class="char bob" data-char="owl:smile" style="width:72px"></span>
+    </a>
+    <p class="disclaimer">Giáo trình mang tính giáo dục, không phải khuyến nghị mua bán mã cổ phiếu nào. Các con số trong máy tính là minh họa, giả định lợi suất đều mỗi năm; thực tế thị trường lên xuống thất thường.</p>
+  </section>
+</main>
+
+<script src="assets/truyen.js"></script>
+<script>
+(function () {
+  var T = Truyen, $ = T.$, money = T.money, pct = T.pct, trim = T.trim;
+
+  // ---------- 1.1 cầu thang ----------
+  var steps = [
+    { h: 'Bậc 1: Quỹ dự phòng 3–6 tháng chi tiêu', body: 'Để ở tiết kiệm hoặc quỹ tiền tệ, rút được trong 1–2 ngày. Không có quỹ này, một lần ốm hay mất việc sẽ buộc bạn bán cổ phiếu đúng lúc thị trường ở đáy.', calc: true },
+    { h: 'Bậc 2: Trả hết nợ lãi cao', body: 'Thẻ tín dụng và vay tiêu dùng thường có lãi 20–40%/năm. Trả hết khoản nợ này giống như một khoản lợi nhuận chắc chắn, cao hơn mức hầu hết nhà đầu tư chuyên nghiệp kiếm được.' },
+    { h: 'Bậc 3: Bảo hiểm cơ bản', body: 'Bảo hiểm y tế và tai nạn cho bản thân và người phụ thuộc. Một tai nạn không được bảo hiểm có thể xóa sạch nhiều năm tích lũy.' },
+    { h: 'Bậc 4: Rồi mới đến đầu tư', body: 'Bắt đầu bằng một khoản tiền đều đặn hằng tháng thay vì bỏ vào một cục lớn. Mục 1.2 cho thấy vì sao làm đều đặn lại hiệu quả.' }
+  ];
+  var moods = ['worried', 'happy', 'happy', 'proud'];
+  var rider = document.createElement('span');
+  rider.className = 'rider char';
+  var spend = 15;
+  function renderStep(i) {
+    document.querySelectorAll('.step').forEach(function (b, j) { b.setAttribute('aria-pressed', String(i === j)); });
+    rider.innerHTML = T.pig(moods[i]);
+    document.querySelector('.step[data-step="' + i + '"]').appendChild(rider);
+    var s = steps[i];
+    var html = '<h3>' + s.h + '</h3><p>' + s.body + '</p>';
+    if (s.calc) {
+      html += '<div class="controls"><div class="ctl"><label for="spend">Chi tiêu mỗi tháng (triệu đồng)</label><input id="spend" type="number" min="1" max="500" value="' + spend + '" inputmode="decimal"></div></div>' +
+        '<div class="result"><div class="stat money"><div class="k">Quỹ dự phòng cần có</div><div class="v" id="ef"></div></div></div>';
+    }
+    $('stepDetail').innerHTML = html;
+    if (s.calc) {
+      var inp = $('spend');
+      var upd = function () {
+        var v = parseFloat(inp.value);
+        if (!(v > 0)) { $('ef').textContent = 'Nhập số tiền'; return; }
+        spend = v;
+        $('ef').textContent = money(v * 3e6) + ' – ' + money(v * 6e6);
+      };
+      inp.addEventListener('input', upd); upd();
+    }
+  }
+  document.querySelectorAll('.step').forEach(function (b) {
+    b.addEventListener('click', function () { renderStep(+b.dataset.step); });
+  });
+  renderStep(0);
+
+  // ---------- 1.2 lãi kép ----------
+  function fvAt(m, a, years) {
+    var r = a / 100 / 12, n = years * 12;
+    return r === 0 ? m * n : m * (Math.pow(1 + r, n) - 1) / r;
+  }
+  function renderFV() {
+    var m = +$('fvMonthly').value * 1e6, a = +$('fvRate').value, n = +$('fvYears').value;
+    $('fvMonthlyOut').textContent = money(m);
+    $('fvRateOut').textContent = pct(a);
+    $('fvYearsOut').textContent = n + ' năm';
+    var total = fvAt(m, a, n), paid = m * 12 * n;
+    $('fvPaid').textContent = money(paid);
+    $('fvTotal').textContent = money(total);
+    $('fvInterest').textContent = money(Math.max(0, total - paid));
+
+    var W = 640, H = 260, L = 64, R = 16, Tp = 14, B = 34;
+    var step = T.niceStep(total), top = Math.ceil(total / step) * step;
+    var x = function (y) { return L + (W - L - R) * y / n; };
+    var y = function (v) { return Tp + (H - Tp - B) * (1 - v / top); };
+    var g = '';
+    for (var t = 0; t <= top + 1; t += step) {
+      g += '<line x1="' + L + '" x2="' + (W - R) + '" y1="' + y(t) + '" y2="' + y(t) + '" stroke="var(--dot)" stroke-width="1.5"/>' +
+        '<text x="' + (L - 8) + '" y="' + (y(t) + 4) + '" text-anchor="end">' + (t === 0 ? '0' : money(t)) + '</text>';
+    }
+    var xs = n <= 10 ? 1 : n <= 20 ? 5 : 10;
+    for (var k = 0; k <= n; k += xs) g += '<text x="' + x(k) + '" y="' + (H - 10) + '" text-anchor="middle">năm ' + k + '</text>';
+    var pts = 60, top1 = [], top2 = [];
+    for (var i = 0; i <= pts; i++) {
+      var yr = n * i / pts;
+      top1.push(x(yr) + ',' + y(fvAt(m, a, yr)));
+      top2.push(x(yr) + ',' + y(m * 12 * yr));
+    }
+    var base = x(n) + ',' + y(0) + ' ' + x(0) + ',' + y(0);
+    g += '<polygon points="' + top1.join(' ') + ' ' + base + '" fill="var(--money)" opacity=".85"/>';
+    g += '<polygon points="' + top2.join(' ') + ' ' + base + '" fill="var(--save)"/>';
+    g += '<polyline points="' + top1.join(' ') + '" fill="none" stroke="var(--border)" stroke-width="2.5"/>';
+    g += '<circle cx="' + x(n) + '" cy="' + y(total) + '" r="6" fill="var(--money)" stroke="var(--border)" stroke-width="2.5"/>';
+    $('fvChart').innerHTML = g;
+
+    if (n >= 2) {
+      var half = Math.floor(n / 2), fh = fvAt(m, a, half);
+      $('fvCompare').innerHTML = 'Nếu chỉ đầu tư ' + half + ' năm, con có khoảng <b>' + money(fh) + '</b>. Thời gian gấp đôi nhưng kết quả gấp <b>' + trim(total / fh, 1) + ' lần</b>. Đó là sức mạnh của thời gian.';
+    } else {
+      $('fvCompare').textContent = 'Kéo số năm lên xem. Càng để lâu, phần màu xanh càng phình to.';
+    }
+  }
+  ['fvMonthly', 'fvRate', 'fvYears'].forEach(function (id) { $(id).addEventListener('input', renderFV); });
+  renderFV();
+
+  function render72() {
+    var r = +$('r72').value, yrs = 72 / r;
+    $('r72Out').textContent = r + '%';
+    $('r72Years').textContent = '≈ ' + trim(yrs, 1) + ' năm';
+    var k = Math.floor(36 / yrs), html = '<span class="chip">×1</span>', shown = Math.min(k, 8);
+    for (var i = 1; i <= shown; i++) html += '<span class="arrow">→</span><span class="chip">×' + Math.pow(2, i).toLocaleString('vi-VN') + '</span>';
+    if (k > shown) html += '<span class="arrow">… ×' + Math.pow(2, k).toLocaleString('vi-VN') + '</span>';
+    $('r72Chips').innerHTML = html;
+  }
+  $('r72').addEventListener('input', render72); render72();
+
+  // ---------- 1.3 lạm phát ----------
+  function renderInf() {
+    var nm = +$('nom').value, inf = +$('inf').value;
+    $('nomOut').textContent = pct(nm); $('infOut').textContent = pct(inf);
+    var nominal = 100e6 * Math.pow(1 + nm / 100, 10);
+    var real = 100e6 * Math.pow((1 + nm / 100) / (1 + inf / 100), 10);
+    var rr = nm - inf, bad = rr < 0;
+    $('infNominal').textContent = money(nominal);
+    $('infReal').textContent = money(real);
+    $('infRate').textContent = (rr > 0 ? '+' : '') + pct(rr);
+    $('infRealBox').className = 'stat ' + (bad ? 'warn' : 'money');
+    $('infRateBox').className = 'stat ' + (bad ? 'warn' : rr === 0 ? '' : 'money');
+    $('infPig').innerHTML = T.pig(bad ? 'sad' : rr < 2 ? 'wow' : 'happy');
+    $('infSay').textContent = bad
+      ? 'Ối! Số dư tăng lên mà mua được ít đồ hơn hôm nay. Tiền đang bị mọt gặm.'
+      : rr < 2
+        ? 'Sổ ghi ' + money(nominal) + ' nhưng sức mua chỉ như ' + money(real) + ' bây giờ. Tăng chậm quá!'
+        : 'Lợi nhuận thực dương rõ ràng. Nhưng lãi cao thường đi kèm rủi ro cao, nhớ đấy.';
+  }
+  ['nom', 'inf'].forEach(function (id) { $(id).addEventListener('input', renderInf); });
+  renderInf();
+
+  // ---------- 1.4 trắc nghiệm ----------
+  var answers = { horizon: null, drop: null, income: null };
+  var profiles = [
+    { name: 'Thận trọng', rows: [['Tiền gửi, trái phiếu, quỹ trái phiếu', '60–70%', 65], ['Cổ phiếu và quỹ cổ phiếu', '20–30%', 25], ['Vàng, tài sản khác', '10%', 10]] },
+    { name: 'Cân bằng', rows: [['Tiền gửi, trái phiếu, quỹ trái phiếu', '40–50%', 45], ['Cổ phiếu và quỹ cổ phiếu', '40–50%', 45], ['Vàng, tài sản khác', '10%', 10]] },
+    { name: 'Tăng trưởng', rows: [['Tiền gửi, trái phiếu, quỹ trái phiếu', '20–30%', 25], ['Cổ phiếu và quỹ cổ phiếu', '60–70%', 65], ['Vàng, tài sản khác', '10%', 10]] }
+  ];
+  function renderVerdict() {
+    var v = $('verdict'), a = answers;
+    if (a.horizon === null || a.drop === null || a.income === null) {
+      v.innerHTML = '<span class="char">' + T.owl('talk') + '</span><div><h3>Chờ bạn trả lời…</h3><p>Chọn đủ ba câu, Cú Già sẽ cho bạn biết mình thuộc kiểu heo nào.</p></div>';
+      return;
+    }
+    if (a.horizon < 0) {
+      v.innerHTML = '<span class="char">' + T.pig('worried') + '</span><div><h3>Chưa nên mua cổ phiếu</h3><p>Cần tiền trong vòng 2 năm thì đừng để nó trong cổ phiếu. Hãy gửi tiết kiệm hoặc quỹ tiền tệ, quay lại khi có tiền nhàn rỗi dài hạn.</p></div>';
+      return;
+    }
+    var score = a.horizon + a.drop + a.income, p = score <= 2 ? 0 : score <= 4 ? 1 : 2;
+    var text = [
+      'Bạn có khẩu vị rủi ro thấp, và điều đó không có gì xấu. Sai lầm là người khẩu vị thấp lại nắm nhiều cổ phiếu, rồi bán tháo đúng đáy. Hãy giữ tỷ trọng cổ phiếu nhỏ.',
+      'Bạn chịu được biến động ở mức vừa phải. Chia đôi giữa an toàn và tăng trưởng là điểm khởi đầu hợp lý.',
+      'Bạn có thời gian dài và giữ được bình tĩnh khi thị trường giảm. Bạn có thể nắm tỷ trọng cổ phiếu cao hơn, miễn là đã leo đủ 3 bậc đầu ở mục 1.1.'
+    ][p];
+    v.innerHTML = '<span class="char">' + T.pig(['worried', 'happy', 'proud'][p]) + '</span><div><span class="eyebrow">Kết quả · ' + score + '/6 điểm</span><h3>Heo ' + profiles[p].name.toLowerCase() + '</h3><p>' + text + ' Biểu đồ ở mục 1.5 đã chuyển sang kiểu này.</p></div>';
+    renderAlloc(p);
+  }
+  document.querySelectorAll('.q').forEach(function (q) {
+    q.querySelectorAll('.opt').forEach(function (b) {
+      b.setAttribute('aria-pressed', 'false');
+      b.addEventListener('click', function () {
+        q.querySelectorAll('.opt').forEach(function (o) { o.setAttribute('aria-pressed', String(o === b)); });
+        answers[q.dataset.q] = +b.dataset.v;
+        renderVerdict();
+      });
+    });
+  });
+  renderVerdict();
+
+  // ---------- 1.5 phân bổ ----------
+  var colors = ['var(--save)', 'var(--money)', 'var(--gold)'];
+  function renderAlloc(p) {
+    document.querySelectorAll('#allocTabs .opt').forEach(function (b) { b.setAttribute('aria-pressed', String(+b.dataset.p === p)); });
+    var pr = profiles[p], C = 2 * Math.PI * 70, off = 0, g = '<circle cx="100" cy="100" r="70" fill="none" stroke="var(--border)" stroke-width="40"/>';
+    pr.rows.forEach(function (r, i) {
+      var len = C * r[2] / 100;
+      g += '<circle cx="100" cy="100" r="70" fill="none" stroke="' + colors[i] + '" stroke-width="34" stroke-dasharray="' + len + ' ' + (C - len) + '" stroke-dashoffset="' + (-off) + '" transform="rotate(-90 100 100)"/>';
+      off += len;
+    });
+    g += '<text x="100" y="98" text-anchor="middle" font-size="18">' + pr.name + '</text><text x="100" y="122" text-anchor="middle" font-size="15" fill="var(--muted)">' + pr.rows[1][1] + ' cổ phiếu</text>';
+    $('donut').innerHTML = g;
+    $('allocTable').innerHTML = pr.rows.map(function (r, i) {
+      return '<tr><td><span class="sw" style="background:' + colors[i] + '"></span>' + r[0] + '</td><td>' + r[1] + '</td></tr>';
+    }).join('');
+  }
+  document.querySelectorAll('#allocTabs .opt').forEach(function (b) {
+    b.addEventListener('click', function () { renderAlloc(+b.dataset.p); });
+  });
+  renderAlloc(1);
+
+  function renderAge() {
+    var a = parseInt($('age').value, 10);
+    if (!(a >= 18 && a <= 90)) { $('ageOut').textContent = 'Nhập tuổi 18–90'; return; }
+    $('ageOut').textContent = Math.max(0, 100 - a) + '–' + Math.max(0, Math.min(100, 110 - a)) + '%';
+  }
+  $('age').addEventListener('input', renderAge); renderAge();
+})();
+</script>
+</body>
+</html>

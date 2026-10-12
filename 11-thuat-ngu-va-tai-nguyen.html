@@ -1,0 +1,503 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Túi bảo bối Heo Đất</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;800&family=Be+Vietnam+Pro:wght@400;600;700&family=Patrick+Hand&display=swap">
+<link rel="stylesheet" href="assets/truyen.css">
+<style>
+/* Riêng trang Tra cứu: ô tìm thuật ngữ, chế độ đố nhanh, kệ sách */
+.finder { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 10px; align-items: end; }
+@media (max-width: 520px) { .finder { grid-template-columns: 1fr; } }
+.finder .count { font-weight: 700; color: var(--muted); font-size: .92rem; white-space: nowrap; }
+.mode-tabs .opt { font-family: var(--f-display); font-weight: 800; }
+.flip .grp { font-size: .72rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+.flip[aria-pressed="true"] .grp { display: none; }
+.empty { display: grid; grid-template-columns: 72px minmax(0, 1fr); gap: 12px; align-items: center; }
+mark { background: var(--gold); color: #1D2140; border-radius: 3px; padding: 0 2px; }
+
+.drill { display: grid; gap: 14px; }
+.drill .clue { font-size: 1.05rem; }
+.drill .opts .opt { flex: 1 1 200px; }
+.score-row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; justify-content: space-between; }
+.btn-main {
+  font: inherit; font-weight: 700; cursor: pointer; color: #1D2140; background: var(--gold);
+  border: 2.5px solid var(--border); border-radius: 999px; padding: 6px 16px; box-shadow: 3px 3px 0 var(--hard);
+}
+.btn-main:hover { transform: translateY(-2px); }
+
+.shelf { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 14px; }
+.bk {
+  display: grid; grid-template-columns: 44px minmax(0, 1fr); gap: 12px; align-items: start;
+  border: 2.5px solid var(--border); border-radius: 10px; background: var(--panel); padding: 12px; box-shadow: 3px 3px 0 var(--hard);
+}
+.bk .spine {
+  font-family: var(--f-display); font-weight: 800; font-size: 1.5rem; text-align: center; line-height: 1;
+  background: var(--pig); color: #1D2140; border: 2.5px solid var(--border); border-radius: 4px; padding: 14px 0;
+}
+.bk:nth-child(3n+2) .spine { background: var(--owl); }
+.bk:nth-child(3n) .spine { background: var(--save); }
+.bk h3 { font-size: 1.12rem; }
+.bk .orig { font-style: italic; color: var(--muted); font-size: .9rem; }
+.bk .by { font-weight: 700; font-size: .92rem; }
+.bk .topic { justify-self: start; font-size: .72rem; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; background: var(--chip); border: 2px solid var(--border); border-radius: 999px; padding: 0 8px; }
+.bk .read-btn { justify-self: start; font-size: .85rem; padding: 3px 12px; }
+.bk.done { background: var(--money-soft); }
+.bk.done h3 { text-decoration: line-through; text-decoration-color: var(--money); }
+.shelf-head { display: grid; grid-template-columns: 72px minmax(0, 1fr); gap: 12px; align-items: center; }
+
+.legal { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+</style>
+</head>
+<body>
+<main class="book">
+
+  <nav class="topnav"><a href="index.html">← Mục lục</a><span class="note">Tra cứu</span></nav>
+
+  <!-- MỞ ĐẦU -->
+  <header class="hero">
+    <div class="hero-title">
+      <span class="eyebrow">Tra cứu khi cần</span>
+      <h1>Túi bảo bối của Heo Đất</h1>
+      <p class="sub">Thuật ngữ, sách nên đọc, công cụ và nguồn dữ liệu, gom vào một chỗ. Gõ để tìm thuật ngữ, bật chế độ đố nhanh, rồi đánh dấu sách đã đọc.</p>
+    </div>
+    <div class="strip">
+      <div class="panel">
+        <div class="say pig"><span class="char" data-char="pig:worried"></span><p class="bubble">Thầy ơi, trên diễn đàn ai cũng nói "room ngoại", "GDKHQ", "call margin"… em không hiểu gì cả.</p></div>
+      </div>
+      <div class="panel">
+        <div class="say owl right"><p class="bubble">Không sao. Không ai thuộc hết ngay. Quan trọng là biết tra ở đâu và tra cho đúng.</p><span class="char" data-char="owl:smile"></span></div>
+      </div>
+      <div class="panel">
+        <div class="say pig"><span class="char" data-char="pig:wow"></span><p class="bubble">Vậy em cần đọc sách gì, xem số liệu ở trang nào?</p></div>
+      </div>
+      <div class="panel">
+        <div class="say owl right"><p class="bubble">Thầy để sẵn cả trong túi này: 23 thẻ thuật ngữ, 7 cuốn sách theo thứ tự, và bảng nguồn dữ liệu.</p><span class="char" data-char="owl:talk"></span></div>
+      </div>
+      <div class="panel wide">
+        <div class="say owl"><span class="char" data-char="owl:stern"></span><p class="bubble">Một điều nữa: luôn đọc số liệu ở <b>nguồn gốc</b> (báo cáo của doanh nghiệp, sở giao dịch), đừng tin lời "phím hàng" trên mạng. Mục cuối trang nói rõ vì sao.</p></div>
+      </div>
+    </div>
+  </header>
+
+  <!-- A. THUẬT NGỮ -->
+  <section class="chapter" id="thuat-ngu">
+    <div class="chapter-head"><span class="tag">A</span><h2>Từ điển bỏ túi: 23 thuật ngữ thường gặp</h2></div>
+    <div class="panel talk">
+      <div class="say pig"><span class="char" data-char="pig:happy"></span><p class="bubble">Em học thuộc lòng cả bảng luôn cho nhanh!</p></div>
+      <div class="say owl right"><p class="bubble">Học thuộc thì mau quên. Con lật thẻ, tự đoán nghĩa trước, rồi bật <b>đố nhanh</b> để kiểm tra. Nhớ được mới dùng được.</p><span class="char" data-char="owl:talk"></span></div>
+    </div>
+
+    <div class="panel toy">
+      <div class="toy-title"><h3>Hộp thẻ thuật ngữ</h3><span class="pill">Gõ để tìm</span></div>
+      <div class="tabs mode-tabs" role="group" aria-label="Chế độ">
+        <button class="opt" type="button" data-mode="cards" aria-pressed="true">Lật thẻ</button>
+        <button class="opt" type="button" data-mode="drill" aria-pressed="false">Đố nhanh</button>
+      </div>
+
+      <div class="stack" id="cardsView" style="gap:14px">
+        <div class="finder">
+          <div class="ctl"><label for="q">Tìm thuật ngữ hoặc nghĩa (gõ có dấu hay không dấu đều được)</label><input id="q" type="text" autocomplete="off" spellcheck="false" placeholder="ví dụ: room, quy, margin, ngan hang"></div>
+          <span class="count" id="qCount" aria-live="polite"></span>
+        </div>
+        <div class="tabs" role="group" aria-label="Lọc theo nhóm" id="grpTabs">
+          <button class="opt" type="button" data-g="" aria-pressed="true">Tất cả</button>
+          <button class="opt" type="button" data-g="tt" aria-pressed="false">Thị trường</button>
+          <button class="opt" type="button" data-g="sk" aria-pressed="false">Sự kiện doanh nghiệp</button>
+          <button class="opt" type="button" data-g="mg" aria-pressed="false">Ký quỹ (margin)</button>
+          <button class="opt" type="button" data-g="xh" aria-pressed="false">Xu hướng giá</button>
+          <button class="opt" type="button" data-g="cs" aria-pressed="false">Chỉ số, phương pháp</button>
+        </div>
+        <div class="chips">
+          <button class="opt" type="button" id="openAll">Lật hết</button>
+          <button class="opt" type="button" id="closeAll">Úp hết</button>
+        </div>
+        <div class="cards" id="glossary">
+          <button class="flip" type="button" data-g="tt"><span class="grp">Thị trường</span><span class="front">Vốn hóa</span><span class="back">Giá cổ phiếu × số cổ phiếu lưu hành; là giá trị thị trường của cả công ty</span></button>
+          <button class="flip" type="button" data-g="tt"><span class="grp">Thị trường</span><span class="front">Free-float</span><span class="back">Tỷ lệ cổ phiếu tự do giao dịch, không bị cổ đông chiến lược hay nhà nước nắm giữ</span></button>
+          <button class="flip" type="button" data-g="tt"><span class="grp">Thị trường</span><span class="front">Thanh khoản</span><span class="back">Mức độ dễ dàng mua bán một cổ phiếu mà không làm giá biến động mạnh</span></button>
+          <button class="flip" type="button" data-g="tt"><span class="grp">Thị trường</span><span class="front">Blue-chip</span><span class="back">Cổ phiếu của doanh nghiệp lớn, đầu ngành, uy tín (thường nằm trong VN30)</span></button>
+          <button class="flip" type="button" data-g="tt"><span class="grp">Thị trường</span><span class="front">Penny</span><span class="back">Cổ phiếu giá thấp, vốn hóa nhỏ, thường biến động mạnh và rủi ro cao</span></button>
+          <button class="flip" type="button" data-g="tt"><span class="grp">Thị trường</span><span class="front">Khối ngoại</span><span class="back">Nhà đầu tư nước ngoài</span></button>
+          <button class="flip" type="button" data-g="tt"><span class="grp">Thị trường</span><span class="front">Room ngoại</span><span class="back">Tỷ lệ sở hữu tối đa cho phép của nhà đầu tư nước ngoài</span></button>
+          <button class="flip" type="button" data-g="sk"><span class="grp">Sự kiện doanh nghiệp</span><span class="front">GDKHQ</span><span class="back">Ngày giao dịch không hưởng quyền</span></button>
+          <button class="flip" type="button" data-g="sk"><span class="grp">Sự kiện doanh nghiệp</span><span class="front">ESOP</span><span class="back">Cổ phiếu phát hành cho người lao động, thường với giá ưu đãi</span></button>
+          <button class="flip" type="button" data-g="sk"><span class="grp">Sự kiện doanh nghiệp</span><span class="front">Cổ phiếu quỹ</span><span class="back">Cổ phiếu do chính công ty mua lại</span></button>
+          <button class="flip" type="button" data-g="sk"><span class="grp">Sự kiện doanh nghiệp</span><span class="front">Pha loãng</span><span class="back">Tỷ lệ sở hữu và EPS giảm do công ty phát hành thêm cổ phiếu</span></button>
+          <button class="flip" type="button" data-g="mg"><span class="grp">Ký quỹ (margin)</span><span class="front">Call margin</span><span class="back">Yêu cầu nộp thêm tiền khi tỷ lệ ký quỹ xuống dưới ngưỡng</span></button>
+          <button class="flip" type="button" data-g="mg"><span class="grp">Ký quỹ (margin)</span><span class="front">Force sell (bán giải chấp)</span><span class="back">Công ty chứng khoán tự bán cổ phiếu của bạn để thu hồi nợ vay</span></button>
+          <button class="flip" type="button" data-g="xh"><span class="grp">Xu hướng giá</span><span class="front">Bull / Bear market</span><span class="back">Thị trường giá lên / thị trường giá xuống (thường quy ước giảm từ 20% trở lên)</span></button>
+          <button class="flip" type="button" data-g="xh"><span class="grp">Xu hướng giá</span><span class="front">Bull trap / Bear trap</span><span class="back">Tín hiệu tăng giả / tín hiệu giảm giả</span></button>
+          <button class="flip" type="button" data-g="xh"><span class="grp">Xu hướng giá</span><span class="front">Breakout</span><span class="back">Giá vượt khỏi vùng kháng cự hoặc vùng tích lũy</span></button>
+          <button class="flip" type="button" data-g="xh"><span class="grp">Xu hướng giá</span><span class="front">Điều chỉnh (correction)</span><span class="back">Giảm 10–20% trong một xu hướng lớn</span></button>
+          <button class="flip" type="button" data-g="cs" data-quiz="no"><span class="grp">Chỉ số, phương pháp</span><span class="front">EPS, P/E, P/B, ROE, ROA</span><span class="back">Xem Module 4</span></button>
+          <button class="flip" type="button" data-g="cs" data-quiz="no"><span class="grp">Chỉ số, phương pháp</span><span class="front">CFO, FCF, capex</span><span class="back">Xem Module 3</span></button>
+          <button class="flip" type="button" data-g="cs" data-quiz="no"><span class="grp">Chỉ số, phương pháp</span><span class="front">WACC, DCF, biên an toàn</span><span class="back">Xem Module 4</span></button>
+          <button class="flip" type="button" data-g="cs"><span class="grp">Chỉ số, phương pháp</span><span class="front">NIM, NPL, CASA, CAR</span><span class="back">Chỉ số ngành ngân hàng, xem Module 4, mục 4.8</span></button>
+          <button class="flip" type="button" data-g="cs"><span class="grp">Chỉ số, phương pháp</span><span class="front">DCA</span><span class="back">Đầu tư định kỳ một số tiền cố định, xem Module 9</span></button>
+          <button class="flip" type="button" data-g="tt"><span class="grp">Thị trường</span><span class="front">ETF</span><span class="back">Quỹ hoán đổi danh mục, mô phỏng một chỉ số và giao dịch như cổ phiếu</span></button>
+        </div>
+        <div class="empty" id="qEmpty" hidden>
+          <span class="char" data-char="pig:worried"></span>
+          <p>Heo lục cả túi mà không thấy thẻ nào khớp. Thử gõ ngắn hơn, hoặc chọn lại nhóm "Tất cả".</p>
+        </div>
+      </div>
+
+      <div class="drill" id="drillView" hidden>
+        <div class="score-row">
+          <div class="result" style="flex:1 1 320px">
+            <div class="stat money"><div class="k">Trả lời đúng</div><div class="v" id="dScore">0/0</div></div>
+            <div class="stat"><div class="k">Chuỗi đúng liên tiếp</div><div class="v" id="dStreak">0</div></div>
+          </div>
+        </div>
+        <div class="say owl"><span class="char" data-char="owl:talk"></span><p class="bubble clue" id="dClue"></p></div>
+        <div class="opts" id="dOpts" role="group" aria-label="Chọn thuật ngữ"></div>
+        <div class="mcq-fb" id="dFb" aria-live="polite"></div>
+        <div class="chips">
+          <button class="btn-main" type="button" id="dNext">Câu khác →</button>
+          <button class="opt" type="button" id="dReset">Làm lại từ đầu</button>
+        </div>
+        <p class="note">Đố nhanh lấy ngẫu nhiên từ 20 thẻ có định nghĩa riêng; ba thẻ chỉ ghi "Xem Module…" không được đưa vào.</p>
+      </div>
+    </div>
+
+    <div class="panel quiz">
+      <div class="mcq q" data-answer="2" data-right="Đúng. Công ty phát hành thêm cổ phiếu thì mỗi cổ phần chiếm phần nhỏ hơn, EPS cũng giảm theo. Đó là pha loãng." data-wrong="Chưa đúng. Cổ phiếu quỹ là cổ phiếu công ty mua lại, còn call margin là chuyện vay ký quỹ. Thứ làm tỷ lệ sở hữu và EPS giảm là gì?">
+        <h3>Công ty phát hành thêm cổ phiếu, phần sở hữu và EPS của Heo bị giảm. Hiện tượng này gọi là gì?</h3>
+        <div class="opts">
+          <button class="opt" type="button">Cổ phiếu quỹ</button>
+          <button class="opt" type="button">Call margin</button>
+          <button class="opt" type="button">Pha loãng</button>
+          <button class="opt" type="button">Breakout</button>
+        </div>
+      </div>
+      <div class="mcq q" data-answer="1" data-right="Chính xác. Force sell (bán giải chấp) là công ty chứng khoán tự bán cổ phiếu của bạn để thu hồi nợ vay. Call margin là bước cảnh báo trước đó." data-wrong="Chưa đúng. Call margin chỉ là yêu cầu nộp thêm tiền. Khi công ty chứng khoán tự tay bán cổ phiếu để thu nợ thì gọi là gì?">
+        <h3>Heo vay margin, giá giảm sâu, công ty chứng khoán tự bán cổ phiếu của Heo để thu hồi nợ. Đó là:</h3>
+        <div class="opts">
+          <button class="opt" type="button">Call margin</button>
+          <button class="opt" type="button">Force sell (bán giải chấp)</button>
+          <button class="opt" type="button">Bear trap</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- B. SÁCH -->
+  <section class="chapter" id="sach">
+    <div class="chapter-head"><span class="tag">B</span><h2>Kệ sách của Cú Già</h2></div>
+    <div class="panel talk">
+      <div class="say pig"><span class="char" data-char="pig:wow"></span><p class="bubble">Em đọc cuốn phân tích kỹ thuật dày nhất trước cho oách!</p></div>
+      <div class="say owl right"><p class="bubble">Đọc theo thứ tự gợi ý. Tư duy về tiền trước, cách chọn doanh nghiệp sau, kỹ thuật để cuối. Cuốn của Graham thì đọc chậm, nhất là <b>chương 8 và 20</b>.</p><span class="char" data-char="owl:stern"></span></div>
+    </div>
+    <div class="panel toy">
+      <div class="shelf-head">
+        <span class="char" id="shelfPig"></span>
+        <div class="stack" style="gap:8px">
+          <strong id="shelfText"></strong>
+          <div class="bar" aria-hidden="true"><div id="shelfBar"></div></div>
+          <span class="note">Bấm "Đã đọc" trên từng cuốn. Đánh dấu được lưu trên trình duyệt này.</span>
+        </div>
+      </div>
+      <ol class="shelf" id="shelf">
+        <li class="bk" data-id="b1"><span class="spine">1</span><div class="stack" style="gap:6px">
+          <span class="topic">Tư duy về tiền</span>
+          <h3>Tâm lý học về tiền</h3>
+          <span class="orig">The Psychology of Money</span>
+          <span class="by">Morgan Housel</span>
+          <p>Dễ đọc, nền tảng tư duy về tiền bạc.</p>
+          <button class="opt read-btn" type="button" aria-pressed="false">Đã đọc</button></div></li>
+        <li class="bk" data-id="b2"><span class="spine">2</span><div class="stack" style="gap:6px">
+          <span class="topic">Chọn cổ phiếu</span>
+          <h3>Trên đỉnh phố Wall</h3>
+          <span class="orig">One Up on Wall Street</span>
+          <span class="by">Peter Lynch</span>
+          <p>Cách nhà đầu tư cá nhân tìm cổ phiếu tốt từ đời sống hằng ngày.</p>
+          <button class="opt read-btn" type="button" aria-pressed="false">Đã đọc</button></div></li>
+        <li class="bk" data-id="b3"><span class="spine">3</span><div class="stack" style="gap:6px">
+          <span class="topic">Đầu tư giá trị</span>
+          <h3>Nhà đầu tư thông minh</h3>
+          <span class="orig">The Intelligent Investor</span>
+          <span class="by">Benjamin Graham</span>
+          <p>Kinh thánh của đầu tư giá trị; đọc chậm, đặc biệt các chương 8 và 20.</p>
+          <button class="opt read-btn" type="button" aria-pressed="false">Đã đọc</button></div></li>
+        <li class="bk" data-id="b4"><span class="spine">4</span><div class="stack" style="gap:6px">
+          <span class="topic">Doanh nghiệp tăng trưởng</span>
+          <h3>Cổ phiếu thường, lợi nhuận phi thường</h3>
+          <span class="orig">Common Stocks and Uncommon Profits</span>
+          <span class="by">Philip Fisher</span>
+          <p>Cách đánh giá doanh nghiệp tăng trưởng.</p>
+          <button class="opt read-btn" type="button" aria-pressed="false">Đã đọc</button></div></li>
+        <li class="bk" data-id="b5"><span class="spine">5</span><div class="stack" style="gap:6px">
+          <span class="topic">Miễn phí</span>
+          <h3>Bức thư gửi cổ đông</h3>
+          <span class="by">Warren Buffett</span>
+          <p>Đọc miễn phí trên website Berkshire Hathaway.</p>
+          <button class="opt read-btn" type="button" aria-pressed="false">Đã đọc</button></div></li>
+        <li class="bk" data-id="b6"><span class="spine">6</span><div class="stack" style="gap:6px">
+          <span class="topic">Cơ bản + kỹ thuật</span>
+          <h3>Làm giàu từ chứng khoán</h3>
+          <span class="orig">How to Make Money in Stocks</span>
+          <span class="by">William O'Neil</span>
+          <p>Phương pháp CANSLIM, kết hợp cơ bản và kỹ thuật.</p>
+          <button class="opt read-btn" type="button" aria-pressed="false">Đã đọc</button></div></li>
+        <li class="bk" data-id="b7"><span class="spine">7</span><div class="stack" style="gap:6px">
+          <span class="topic">Phân tích kỹ thuật</span>
+          <h3>Phân tích kỹ thuật thị trường tài chính</h3>
+          <span class="orig">Technical Analysis of the Financial Markets</span>
+          <span class="by">John Murphy</span>
+          <p>Sách tham khảo đầy đủ về phân tích kỹ thuật.</p>
+          <button class="opt read-btn" type="button" aria-pressed="false">Đã đọc</button></div></li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- C. CÔNG CỤ -->
+  <section class="chapter" id="cong-cu">
+    <div class="chapter-head"><span class="tag">C</span><h2>Hộp đồ nghề: công cụ và nguồn dữ liệu</h2></div>
+    <div class="panel talk">
+      <div class="say pig"><span class="char" data-char="pig:happy"></span><p class="bubble">Em đọc tin trên mạng thấy lãi quý này tăng gấp đôi, mua luôn nhé thầy?</p></div>
+      <div class="say owl right"><p class="bubble">Mở <b>báo cáo tài chính gốc</b> ra kiểm tra trước đã. Trang tổng hợp tiện để xem nhanh, nhưng số liệu gốc nằm ở website doanh nghiệp và sở giao dịch.</p><span class="char" data-char="owl:talk"></span></div>
+    </div>
+    <div class="panel toy">
+      <div class="toy-title"><h3>Con cần gì? Bấm để xem tìm ở đâu</h3><span class="pill">Bấm chọn</span></div>
+      <div class="tabs" role="group" aria-label="Chọn mục đích" id="toolTabs"></div>
+      <div class="callout good" id="toolPick" aria-live="polite"></div>
+      <div class="tbl-wrap">
+        <table class="tbl">
+          <thead><tr><th>Mục đích</th><th>Công cụ / nguồn</th></tr></thead>
+          <tbody id="toolTable"></tbody>
+        </table>
+      </div>
+    </div>
+    <div class="panel quiz">
+      <div class="mcq q" data-answer="0" data-right="Đúng. Báo cáo tài chính gốc và công bố thông tin nằm ở website doanh nghiệp (mục Quan hệ cổ đông), HOSE, HNX và UBCKNN." data-wrong="Chưa đúng. Trang đó có thể tiện, nhưng không phải nơi đăng bản gốc. Con tìm nguồn do chính doanh nghiệp và cơ quan quản lý công bố.">
+        <h3>Heo muốn đọc báo cáo tài chính bản gốc. Nơi nào đúng nhất?</h3>
+        <div class="opts">
+          <button class="opt" type="button">Website doanh nghiệp (Quan hệ cổ đông), HOSE, HNX, UBCKNN</button>
+          <button class="opt" type="button">Một hội nhóm chat chia sẻ ảnh chụp báo cáo</button>
+          <button class="opt" type="button">TradingView</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- D. LƯU Ý -->
+  <section class="chapter" id="luu-y">
+    <div class="chapter-head"><span class="tag">D</span><h2>Biển báo trước khi ra khơi</h2></div>
+    <div class="panel talk">
+      <div class="say pig"><span class="char" data-char="pig:wow"></span><p class="bubble">Có nhóm hứa cho em lãi cao, chỉ cần gửi tiền cho họ đánh hộ. Ngon quá!</p></div>
+      <div class="say owl right"><p class="bubble">Dừng lại. Hứa lợi nhuận cao, nhận ủy thác không có giấy phép: đó là dấu hiệu lừa đảo. Thao túng giá và lừa đảo đầu tư là vi phạm pháp luật.</p><span class="char" data-char="owl:stern"></span></div>
+    </div>
+    <div class="panel toy">
+      <div class="toy-title"><h3>Lưu ý pháp lý và rủi ro</h3></div>
+      <ul class="legal">
+        <li class="callout"><strong>Giáo dục, không phải khuyến nghị</strong><span>Giáo trình này mang tính giáo dục, không phải khuyến nghị mua bán bất kỳ chứng khoán nào.</span></li>
+        <li class="callout"><strong>Ví dụ Vinamilk là minh họa</strong><span>Ví dụ về Vinamilk chỉ dùng để minh họa cách phân tích; giá cổ phiếu trong ví dụ là giả định.</span></li>
+        <li class="callout"><strong>Quy định có thể thay đổi</strong><span>Quy định về giao dịch, phí, thuế có thể thay đổi. Luôn kiểm tra với công ty chứng khoán và văn bản pháp luật mới nhất.</span></li>
+        <li class="callout warn"><strong>Cảnh giác "phím hàng"</strong><span>Cảnh giác với các hội nhóm "phím hàng", hứa hẹn lợi nhuận cao hay nhận ủy thác đầu tư không có giấy phép. Thao túng giá và lừa đảo đầu tư là vi phạm pháp luật.</span></li>
+      </ul>
+    </div>
+    <div class="panel quiz">
+      <div class="mcq q" data-answer="2" data-right="Đúng. Nhóm hứa lợi nhuận cao và nhận ủy thác không giấy phép là dấu hiệu lừa đảo. Rời nhóm, không chuyển tiền." data-wrong="Chưa ổn. Lời hứa lãi cao kèm nhận tiền đánh hộ mà không có giấy phép là biển báo đỏ, dù họ khoe lãi đẹp đến đâu.">
+        <h3>Một nhóm chat mời Heo gửi tiền để "đội ngũ chuyên gia" đánh hộ, cam kết lãi cao mỗi tháng. Heo nên làm gì?</h3>
+        <div class="opts">
+          <button class="opt" type="button">Gửi thử một ít, lãi thì gửi thêm</button>
+          <button class="opt" type="button">Hỏi xin ảnh chụp tài khoản lãi để kiểm chứng</button>
+          <button class="opt" type="button">Không gửi: nhận ủy thác không giấy phép, hứa lãi cao là dấu hiệu lừa đảo</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CUỐI TRANG -->
+  <section class="chapter" id="het">
+    <a class="panel next" href="nhat-ky-dau-tu.html">
+      <div class="stack" style="gap:4px">
+        <span class="eyebrow">Chương sau →</span>
+        <h3>Nhật ký đầu tư</h3>
+        <span class="note">Ghi lại vì sao mua, vì sao bán. Cuốn sổ đó dạy con nhiều hơn mọi cuốn sách.</span>
+      </div>
+      <span class="char bob" data-char="owl:smile" style="width:72px"></span>
+    </a>
+    <p class="disclaimer">Giáo trình mang tính giáo dục, không phải khuyến nghị mua bán mã cổ phiếu nào. Tên sách, công cụ và nguồn dữ liệu chỉ để tham khảo, không phải quảng cáo. Quy định về giao dịch, phí, thuế có thể thay đổi; luôn kiểm tra với công ty chứng khoán và văn bản pháp luật mới nhất.</p>
+  </section>
+</main>
+
+<script src="assets/truyen.js"></script>
+<script>
+(function () {
+  var T = Truyen, $ = T.$;
+
+  function fold(s) {
+    return String(s).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/đ/g, 'd').replace(/\s+/g, ' ').trim();
+  }
+  function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+
+  // ---------- A. thẻ thuật ngữ: tìm + lọc nhóm ----------
+  var cards = Array.prototype.slice.call(document.querySelectorAll('#glossary .flip'));
+  var terms = cards.map(function (c) {
+    var f = c.querySelector('.front'), b = c.querySelector('.back');
+    return { el: c, term: f.textContent, def: b.textContent, f: f, b: b, g: c.dataset.g, quiz: c.dataset.quiz !== 'no', key: fold(f.textContent + ' ' + b.textContent) };
+  });
+  var group = '';
+
+  // tô đậm phần khớp trên chuỗi gốc (có dấu) bằng cách dò vị trí trên chuỗi đã bỏ dấu
+  function highlight(text, needle) {
+    if (!needle) return esc(text);
+    var chars = Array.prototype.slice.call(text), folded = chars.map(function (ch) { return fold(ch) || ch; });
+    var joined = folded.join('').toLowerCase();
+    // fold() của từng ký tự cho ra đúng 1 ký tự với chữ Việt, nên vị trí khớp trùng chỉ số ký tự
+    if (joined.length !== chars.length) return esc(text);
+    var out = '', i = 0, at;
+    while ((at = joined.indexOf(needle, i)) !== -1 && needle.length) {
+      out += esc(chars.slice(i, at).join('')) + '<mark>' + esc(chars.slice(at, at + needle.length).join('')) + '</mark>';
+      i = at + needle.length;
+    }
+    return out + esc(chars.slice(i).join(''));
+  }
+
+  function applyFilter() {
+    var needle = fold($('q').value), shown = 0;
+    terms.forEach(function (t) {
+      var ok = (!group || t.g === group) && (!needle || t.key.indexOf(needle) !== -1);
+      t.el.hidden = !ok;
+      if (ok) shown++;
+      t.f.innerHTML = highlight(t.term, needle);
+      t.b.innerHTML = highlight(t.def, needle);
+    });
+    $('qCount').textContent = 'Đang hiện ' + shown + '/' + terms.length + ' thẻ';
+    $('qEmpty').hidden = shown > 0;
+  }
+  $('q').addEventListener('input', applyFilter);
+  document.querySelectorAll('#grpTabs .opt').forEach(function (b) {
+    b.addEventListener('click', function () {
+      group = b.dataset.g;
+      document.querySelectorAll('#grpTabs .opt').forEach(function (o) { o.setAttribute('aria-pressed', String(o === b)); });
+      applyFilter();
+    });
+  });
+  function flipAll(open) {
+    terms.forEach(function (t) { if (!t.el.hidden) t.el.setAttribute('aria-pressed', String(open)); });
+  }
+  $('openAll').addEventListener('click', function () { flipAll(true); });
+  $('closeAll').addEventListener('click', function () { flipAll(false); });
+  applyFilter();
+
+  // ---------- A. chế độ đố nhanh ----------
+  var pool = terms.filter(function (t) { return t.quiz; });
+  var score = 0, asked = 0, streak = 0, current = null, answered = false, last = -1;
+  function shuffle(a) {
+    for (var i = a.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)), x = a[i]; a[i] = a[j]; a[j] = x; }
+    return a;
+  }
+  function renderScore() {
+    $('dScore').textContent = score + '/' + asked;
+    $('dStreak').textContent = streak;
+  }
+  function nextQuestion() {
+    var idx;
+    do { idx = Math.floor(Math.random() * pool.length); } while (idx === last && pool.length > 1);
+    last = idx; current = pool[idx]; answered = false;
+    var others = shuffle(pool.filter(function (t) { return t !== current; })).slice(0, 3);
+    var opts = shuffle(others.concat([current]));
+    $('dClue').innerHTML = 'Thuật ngữ nào có nghĩa là: <b>“' + esc(current.def) + '”</b>?';
+    $('dFb').innerHTML = '';
+    $('dOpts').innerHTML = '';
+    opts.forEach(function (t) {
+      var b = document.createElement('button');
+      b.type = 'button'; b.className = 'opt'; b.textContent = t.term;
+      b.addEventListener('click', function () { choose(b, t); });
+      $('dOpts').appendChild(b);
+    });
+  }
+  function choose(btn, t) {
+    var ok = t === current;
+    if (!answered) {
+      answered = true; asked++;
+      if (ok) { score++; streak++; } else { streak = 0; }
+      renderScore();
+    }
+    $('dOpts').querySelectorAll('.opt').forEach(function (o) {
+      o.classList.remove('right', 'wrong');
+      if (o.textContent === current.term) o.classList.add('right');
+    });
+    if (!ok) btn.classList.add('wrong');
+    var msg = ok
+      ? (streak >= 3 ? 'Chuỗi ' + streak + ' câu đúng liền! Heo sắp thành từ điển sống rồi.' : 'Chính xác: <b>' + esc(current.term) + '</b>.')
+      : 'Chưa đúng. Đáp án là <b>' + esc(current.term) + '</b>. Còn <b>' + esc(t.term) + '</b> nghĩa là: ' + esc(t.def) + '.';
+    $('dFb').innerHTML = '<span class="char">' + (ok ? T.pig('proud') : T.owl('stern')) + '</span><p>' + msg + '</p>';
+  }
+  $('dNext').addEventListener('click', nextQuestion);
+  $('dReset').addEventListener('click', function () { score = 0; asked = 0; streak = 0; renderScore(); nextQuestion(); });
+  renderScore(); nextQuestion();
+
+  document.querySelectorAll('.mode-tabs .opt').forEach(function (b) {
+    b.addEventListener('click', function () {
+      var drill = b.dataset.mode === 'drill';
+      document.querySelectorAll('.mode-tabs .opt').forEach(function (o) { o.setAttribute('aria-pressed', String(o === b)); });
+      $('cardsView').hidden = drill;
+      $('drillView').hidden = !drill;
+    });
+  });
+
+  // ---------- B. kệ sách ----------
+  var BKEY = 'heo-dat:books';
+  var read = T.store(BKEY) || {};
+  var books = document.querySelectorAll('#shelf .bk');
+  function renderShelf() {
+    var done = 0;
+    books.forEach(function (bk) {
+      var on = !!read[bk.dataset.id];
+      if (on) done++;
+      bk.classList.toggle('done', on);
+      var btn = bk.querySelector('.read-btn');
+      btn.setAttribute('aria-pressed', String(on));
+      btn.textContent = on ? 'Đã đọc ✓' : 'Đánh dấu đã đọc';
+    });
+    var n = books.length;
+    $('shelfBar').style.width = (done / n * 100) + '%';
+    $('shelfPig').innerHTML = T.pig(done === n ? 'proud' : done === 0 ? 'worried' : done * 2 >= n ? 'happy' : 'wow');
+    $('shelfText').textContent = done === n ? 'Đọc hết cả kệ! Giờ đọc lại cuốn số 3 lần nữa nhé.' : 'Heo đã đọc ' + done + '/' + n + ' cuốn';
+  }
+  books.forEach(function (bk) {
+    bk.querySelector('.read-btn').addEventListener('click', function () {
+      read[bk.dataset.id] = !read[bk.dataset.id];
+      T.store(BKEY, read);
+      renderShelf();
+    });
+  });
+  renderShelf();
+
+  // ---------- C. công cụ và nguồn dữ liệu ----------
+  var tools = [
+    ['BCTC gốc, công bố thông tin', 'Website doanh nghiệp (mục Quan hệ cổ đông), HOSE, HNX, UBCKNN'],
+    ['Dữ liệu tổng hợp, BCTC, tin tức', 'CafeF, Vietstock, FireAnt, Simplize'],
+    ['Biểu đồ kỹ thuật', 'TradingView, app của công ty chứng khoán'],
+    ['Báo cáo phân tích miễn phí', 'Trang báo cáo phân tích của các công ty chứng khoán (SSI, VNDirect, VCSC, HSC, MBS...)'],
+    ['Dữ liệu vĩ mô', 'Tổng cục Thống kê (GSO), Ngân hàng Nhà nước, S&P Global (PMI)'],
+    ['Tính toán, theo dõi danh mục', 'Excel / Google Sheets']
+  ];
+  $('toolTable').innerHTML = tools.map(function (r, i) {
+    return '<tr data-i="' + i + '"><td><b>' + esc(r[0]) + '</b></td><td>' + esc(r[1]) + '</td></tr>';
+  }).join('');
+  tools.forEach(function (r, i) {
+    var b = document.createElement('button');
+    b.type = 'button'; b.className = 'opt'; b.textContent = r[0];
+    b.addEventListener('click', function () { pickTool(i); });
+    $('toolTabs').appendChild(b);
+  });
+  function pickTool(i) {
+    $('toolTabs').querySelectorAll('.opt').forEach(function (o, j) { o.setAttribute('aria-pressed', String(i === j)); });
+    document.querySelectorAll('#toolTable tr').forEach(function (tr) {
+      tr.style.background = +tr.dataset.i === i ? 'var(--money-soft)' : '';
+    });
+    $('toolPick').innerHTML = '<strong>' + esc(tools[i][0]) + '</strong><span>Tìm ở: ' + esc(tools[i][1]) + '</span>';
+  }
+  pickTool(0);
+})();
+</script>
+</body>
+</html>

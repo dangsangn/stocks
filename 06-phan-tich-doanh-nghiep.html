@@ -1,0 +1,849 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Heo Đất soi doanh nghiệp</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;800&family=Be+Vietnam+Pro:wght@400;600;700&family=Patrick+Hand&display=swap">
+<link rel="stylesheet" href="assets/truyen.css">
+<style>
+/* Riêng Module 5: bàn phân loại thẻ, đồng hồ 2 phút, mạng nhện Porter, chấm điểm lãnh đạo, vòng đời ngành */
+.bm-q { display: grid; gap: 4px; }
+.bm-q label { font-weight: 600; font-size: .95rem; }
+.bm-q textarea { min-height: 64px; resize: vertical; }
+.bm-q .cnt { font-size: .82rem; font-weight: 700; color: var(--muted); }
+.bm-q .cnt.over { color: var(--warn); }
+.bm-q .cnt.ok { color: var(--money); }
+.timer { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+.timer .clock { font-family: var(--f-display); font-weight: 800; font-size: 2.2rem; font-variant-numeric: tabular-nums; min-width: 4.5ch; }
+.timer .clock.late { color: var(--warn); }
+
+.sorter { display: grid; gap: 14px; }
+.sort-card {
+  border: 3px solid var(--border); border-radius: 12px; background: var(--bubble-owl); box-shadow: 4px 4px 0 var(--hard);
+  padding: 14px 18px; display: grid; gap: 4px; max-width: 520px; transform: rotate(-.6deg);
+}
+.sort-card strong { font-family: var(--f-display); font-size: 1.3rem; line-height: 1.25; }
+.sort-head { display: flex; justify-content: space-between; gap: 10px; flex-wrap: wrap; align-items: baseline; }
+.bins { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 8px; }
+.bins .opt { border-radius: 10px; text-align: center; padding: 10px 8px; }
+.sort-fb { display: grid; grid-template-columns: 56px minmax(0, 1fr); gap: 10px; align-items: center; min-height: 56px; }
+.sort-fb .acts { grid-column: 1 / -1; }
+
+.radar-wrap { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px; align-items: center; }
+@media (max-width: 680px) { .radar-wrap { grid-template-columns: 1fr; } }
+.radar-wrap .ctl small { color: var(--muted); font-size: .82rem; }
+
+.mg-row { display: grid; gap: 6px; padding-bottom: 12px; border-bottom: 2px dashed var(--dot); }
+.mg-row:last-child { border-bottom: 0; padding-bottom: 0; }
+.mg-row h3 { font-family: var(--f-body); font-size: 1rem; }
+.mg-row .opt[data-v="2"][aria-pressed="true"] { background: var(--money-soft); border-color: var(--money); }
+.mg-row .opt[data-v="0"][aria-pressed="true"] { background: var(--warn-soft); border-color: var(--warn); }
+.mg-row .opt[data-v="1"][aria-pressed="true"] { background: var(--chip); }
+
+.years { display: grid; grid-template-columns: repeat(auto-fill, minmax(86px, 1fr)); gap: 8px; }
+.yr { border: 2.5px solid var(--border); border-radius: 10px; padding: 6px 8px; display: grid; gap: 4px; background: var(--chip); }
+.yr b { font-family: var(--f-display); font-size: .95rem; }
+.yr label { font-size: .75rem; color: var(--muted); font-weight: 600; display: grid; gap: 2px; }
+.yr input[type=number] { padding: 4px 6px; font-size: .95rem; }
+
+.prom { display: grid; gap: 8px; }
+.prom-row { display: grid; grid-template-columns: 64px minmax(0, 1fr) 72px; gap: 10px; align-items: center; font-variant-numeric: tabular-nums; }
+.prom-row .track { height: 18px; border: 2.5px solid var(--border); border-radius: 999px; background: var(--chip); position: relative; overflow: hidden; }
+.prom-row .track i { position: absolute; inset: 0 auto 0 0; background: var(--money); }
+.prom-row .track i.miss { background: var(--warn); }
+.prom-row .track s { position: absolute; top: 0; bottom: 0; width: 0; border-left: 2.5px dashed var(--border); }
+.prom-row span:last-child { text-align: right; font-weight: 700; }
+
+.life-btns .opt { flex: 1 1 120px; text-align: center; }
+.chart-box .lbl { fill: var(--ink); font-weight: 700; paint-order: stroke; stroke: var(--panel); stroke-width: 4px; stroke-linejoin: round; }
+
+.check15 .num { font-family: var(--f-display); font-weight: 800; color: var(--muted); }
+</style>
+</head>
+<body>
+<main class="book">
+
+  <nav class="topnav"><a href="index.html">← Mục lục</a><span class="note">Module 5 / 9</span></nav>
+
+  <!-- MỞ ĐẦU -->
+  <header class="hero">
+    <div class="hero-title">
+      <span class="eyebrow">Module 5 · Tuần 19–22</span>
+      <h1>Heo Đất soi doanh nghiệp</h1>
+      <p class="sub">Phân tích định tính: nhìn xuyên qua con số để đoán công ty còn kiếm tiền giỏi được bao lâu. Phân loại thẻ, kéo thanh trượt, chấm điểm lãnh đạo, rồi tick bài tập ở cuối trang.</p>
+    </div>
+    <div class="strip">
+      <div class="panel">
+        <div class="say pig"><span class="char" data-char="pig:wow"></span><p class="bubble">Thầy ơi, công ty này ROE 25% suốt 5 năm! Mua ngay thôi!</p></div>
+      </div>
+      <div class="panel">
+        <div class="say owl right"><p class="bubble">Con số cho biết <b>quá khứ</b>. Phân tích định tính giúp con đoán <b>tương lai</b>.</p><span class="char" data-char="owl:stern"></span></div>
+      </div>
+      <div class="panel">
+        <div class="say pig"><span class="char" data-char="pig:worried"></span><p class="bubble">Nhưng 25% suốt 5 năm thì làm sao mà hỏng được ạ?</p></div>
+      </div>
+      <div class="panel">
+        <div class="say owl right"><p class="bubble">Một công ty ROE 25% suốt 5 năm vẫn có thể sụp đổ nếu mất lợi thế cạnh tranh.</p><span class="char" data-char="owl:talk"></span></div>
+      </div>
+      <div class="panel wide">
+        <div class="say owl"><span class="char" data-char="owl:talk"></span><p class="bubble">Cả module này xoay quanh một câu hỏi: <b>"Vì sao công ty này kiếm được nhiều tiền, và điều đó có kéo dài được 5–10 năm nữa không?"</b></p></div>
+      </div>
+    </div>
+  </header>
+
+  <!-- 5.1 -->
+  <section class="chapter" id="mo-hinh">
+    <div class="chapter-head"><span class="tag">5.1</span><h2>Kể cho đứa trẻ 10 tuổi nghe</h2></div>
+    <div class="panel talk">
+      <div class="say pig"><span class="char" data-char="pig:happy"></span><p class="bubble">Em biết công ty này mà, nó… làm nhiều thứ lắm, kiểu tập đoàn ấy.</p></div>
+      <div class="say owl right"><p class="bubble">"Nhiều thứ" là chưa hiểu. Con phải trả lời được 5 câu hỏi bằng lời của chính mình, <b>mỗi câu không quá 2 câu trả lời</b>.</p><span class="char" data-char="owl:stern"></span></div>
+      <div class="callout">
+        <strong>Quy tắc của Peter Lynch</strong>
+        <p>Nếu bạn không giải thích được công ty kiếm tiền bằng cách nào cho một đứa trẻ 10 tuổi trong 2 phút, đừng mua cổ phiếu đó.</p>
+      </div>
+    </div>
+    <div class="panel toy">
+      <div class="toy-title"><h3>Bàn viết mô hình kinh doanh</h3><span class="pill">Viết thử</span></div>
+      <p>Chọn một công ty, bấm giờ 2 phút và trả lời 5 câu. Ô đếm câu sẽ đỏ lên nếu bạn viết quá 2 câu. Bản nháp được lưu trên trình duyệt này.</p>
+      <div class="controls">
+        <div class="ctl"><label for="bmName">Tên công ty</label><input id="bmName" type="text" placeholder="Ví dụ: công ty bạn đang quan tâm"></div>
+      </div>
+      <div class="timer">
+        <span class="clock" id="bmClock">2:00</span>
+        <button class="opt" type="button" id="bmStart">Bắt đầu 2 phút</button>
+        <button class="opt" type="button" id="bmReset">Đặt lại</button>
+      </div>
+      <div class="stack" id="bmQs"></div>
+      <div class="say owl"><span class="char" id="bmOwl"></span><p class="bubble" id="bmSay"></p></div>
+    </div>
+    <div class="panel quiz">
+      <div class="mcq q" data-answer="1" data-right="Đúng. Không giải thích được trong 2 phút nghĩa là bạn chưa thật hiểu công ty, và sẽ không biết khi nào nó gặp chuyện." data-wrong="Chưa đúng. Quy tắc của Peter Lynch nói về việc bạn có hiểu công ty kiếm tiền thế nào hay không.">
+        <h3>Theo quy tắc của Peter Lynch, khi nào bạn nên bỏ qua một cổ phiếu?</h3>
+        <div class="opts">
+          <button class="opt" type="button">Khi công ty không trả cổ tức</button>
+          <button class="opt" type="button">Khi không giải thích được công ty kiếm tiền thế nào cho đứa trẻ 10 tuổi trong 2 phút</button>
+          <button class="opt" type="button">Khi công ty có quá nhiều khách hàng</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5.2 -->
+  <section class="chapter" id="moat">
+    <div class="chapter-head"><span class="tag">5.2</span><h2>Con hào quanh lâu đài</h2></div>
+    <div class="panel talk">
+      <div class="say pig"><span class="char" data-char="pig:wow"></span><p class="bubble">Công ty lãi to thế, sao không ai nhảy vào tranh phần ạ?</p></div>
+      <div class="say owl right"><p class="bubble">Có chứ, trừ khi họ có <b>lợi thế cạnh tranh bền vững</b>. Warren Buffett ví nó như con hào bao quanh lâu đài: hào càng rộng thì đối thủ càng khó tấn công.</p><span class="char" data-char="owl:talk"></span></div>
+    </div>
+    <div class="tbl-wrap">
+      <table class="tbl">
+        <thead><tr><th>Loại lợi thế</th><th>Bản chất</th><th>Ví dụ điển hình</th><th>Dấu hiệu trên BCTC</th></tr></thead>
+        <tbody>
+          <tr><td><b>Thương hiệu</b></td><td>Khách hàng sẵn lòng trả giá cao hơn</td><td>Hàng tiêu dùng nổi tiếng</td><td>Biên lợi nhuận gộp cao và ổn định</td></tr>
+          <tr><td><b>Chi phí chuyển đổi</b></td><td>Khách hàng ngại đổi nhà cung cấp vì tốn kém, phiền phức</td><td>Phần mềm doanh nghiệp, tài khoản ngân hàng</td><td>Tỷ lệ khách hàng ở lại cao, doanh thu định kỳ</td></tr>
+          <tr><td><b>Hiệu ứng mạng lưới</b></td><td>Càng nhiều người dùng thì sản phẩm càng giá trị</td><td>Sàn thương mại điện tử, mạng thanh toán</td><td>Tăng trưởng doanh thu nhanh, biên lợi nhuận tăng dần</td></tr>
+          <tr><td><b>Lợi thế chi phí</b></td><td>Sản xuất rẻ hơn đối thủ nhờ quy mô, vị trí, công nghệ</td><td>Nhà sản xuất lớn nhất ngành, cảng biển vị trí tốt</td><td>Biên lợi nhuận cao hơn đối thủ cùng ngành</td></tr>
+          <tr><td><b>Tài sản vô hình, giấy phép</b></td><td>Có thứ đối thủ không thể có</td><td>Giấy phép khai thác, mỏ, sân bay</td><td>Lợi nhuận ổn định bất kể cạnh tranh</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="panel toy">
+      <div class="toy-title"><h3>Đoán loại hào</h3><span class="pill">Phân loại</span></div>
+      <p>Mỗi thẻ là một bản chất, một ví dụ hoặc một dấu hiệu trên BCTC lấy từ bảng trên. Bấm vào loại hào mà thẻ thuộc về.</p>
+      <div class="sorter" id="moatSort"></div>
+    </div>
+
+    <div class="panel talk">
+      <div class="say pig"><span class="char" data-char="pig:worried"></span><p class="bubble">Nhưng công ty nào cũng tự nhận có thương hiệu. Sao em biết hào là thật?</p></div>
+      <div class="say owl right"><p class="bubble">Kiểm tra bằng số. Hào thật để lại dấu vết trong nhiều năm, không phải một năm đẹp trời.</p><span class="char" data-char="owl:smile"></span></div>
+      <div class="chalk" aria-label="Cách kiểm tra moat bằng số">
+        <span>Kiểm tra moat bằng số:</span>
+        <span class="f">ROE hoặc ROIC &gt; 15% liên tục ít nhất 5–10 năm</span>
+        <small>và biên lợi nhuận gộp ổn định. Không có moat thì lợi nhuận cao sẽ hút đối thủ vào và kéo biên lợi nhuận xuống.</small>
+      </div>
+    </div>
+    <div class="panel toy">
+      <div class="toy-title"><h3>Máy soi hào 10 năm</h3><span class="pill">Nhập số</span></div>
+      <p>Chọn một công ty giả định, hoặc gõ ROE và biên lợi nhuận gộp của công ty bạn quan tâm vào 10 ô năm (năm 10 là năm gần nhất).</p>
+      <div class="tabs" role="group" aria-label="Chọn công ty giả định" id="moatTabs">
+        <button class="opt" type="button" data-s="0" aria-pressed="true">A: Hào rộng</button>
+        <button class="opt" type="button" data-s="1">B: Hút đối thủ vào</button>
+        <button class="opt" type="button" data-s="2">C: Lên xuống giật cục</button>
+      </div>
+      <div class="years" id="moatYears"></div>
+      <div class="result">
+        <div class="stat" id="mtStreakBox"><div class="k">Số năm gần nhất liên tục ROE &gt; 15%</div><div class="v" id="mtStreak"></div></div>
+        <div class="stat" id="mtGmBox"><div class="k">Biên gộp dao động (cao nhất − thấp nhất)</div><div class="v" id="mtGm"></div></div>
+      </div>
+      <div class="chart-box"><svg id="moatChart" viewBox="0 0 640 260" role="img" aria-label="Biểu đồ ROE và biên lợi nhuận gộp 10 năm"></svg></div>
+      <div class="legend"><span><i style="background:var(--money)"></i>ROE trên 15%</span><span><i style="background:var(--save)"></i>ROE từ 15% trở xuống</span><span><i style="background:var(--owl-deep)"></i>Biên lợi nhuận gộp</span></div>
+      <div class="verdict" id="moatVerdict"></div>
+      <p class="note">Ba công ty A, B, C là số liệu giả định để luyện mắt, không phải công ty thật. "Ổn định" ở đây quy ước là biên gộp dao động không quá 5 điểm % trong cả giai đoạn.</p>
+    </div>
+    <div class="panel quiz">
+      <div class="mcq q" data-answer="2" data-right="Chính xác. Một năm đẹp chưa nói lên gì; hào thật phải giữ ROE/ROIC trên 15% nhiều năm liền và biên gộp không bị bào mòn." data-wrong="Chưa đúng. Một năm hay tăng trưởng nóng chưa chứng minh được hào. Cần nhìn chuỗi nhiều năm.">
+        <h3>Dấu hiệu bằng số nào cho thấy công ty có moat thật?</h3>
+        <div class="opts">
+          <button class="opt" type="button">ROE năm gần nhất đạt 30%</button>
+          <button class="opt" type="button">Doanh thu năm nay tăng gấp đôi</button>
+          <button class="opt" type="button">ROE hoặc ROIC trên 15% liên tục ít nhất 5–10 năm, biên gộp ổn định</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5.3 -->
+  <section class="chapter" id="porter">
+    <div class="chapter-head"><span class="tag">5.3</span><h2>Năm cơn gió thổi vào ngành</h2></div>
+    <div class="panel talk">
+      <div class="say pig"><span class="char" data-char="pig:happy"></span><p class="bubble">Công ty tốt thì ngành nào chẳng được hả thầy?</p></div>
+      <div class="say owl right"><p class="bubble">Đứng trong ngành gió to thì công ty giỏi cũng mệt. Mô hình <b>5 áp lực cạnh tranh của Porter</b> dùng để đánh giá <b>sức hấp dẫn của cả ngành</b>.</p><span class="char" data-char="owl:talk"></span></div>
+    </div>
+    <div class="tbl-wrap">
+      <table class="tbl">
+        <thead><tr><th>Áp lực</th><th>Câu hỏi</th><th>Ngành hấp dẫn khi</th></tr></thead>
+        <tbody>
+          <tr><td><b>Đối thủ hiện tại</b></td><td>Có bao nhiêu đối thủ, cạnh tranh bằng giá hay bằng chất lượng?</td><td>Ít đối thủ, không cạnh tranh bằng giá</td></tr>
+          <tr><td><b>Đối thủ tiềm năng</b></td><td>Gia nhập ngành có dễ không?</td><td>Rào cản gia nhập cao (vốn lớn, giấy phép, thương hiệu)</td></tr>
+          <tr><td><b>Sản phẩm thay thế</b></td><td>Có sản phẩm khác đáp ứng cùng nhu cầu không?</td><td>Ít sản phẩm thay thế</td></tr>
+          <tr><td><b>Quyền lực nhà cung cấp</b></td><td>Nhà cung cấp có ép giá được không?</td><td>Nhiều nhà cung cấp, dễ thay thế</td></tr>
+          <tr><td><b>Quyền lực khách hàng</b></td><td>Khách hàng có ép giá được không?</td><td>Khách hàng nhỏ lẻ, phân tán</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="panel toy">
+      <div class="toy-title"><h3>Mạng nhện 5 áp lực</h3><span class="pill">Kéo thử</span></div>
+      <p>Nghĩ về một ngành bạn quan tâm. Với mỗi áp lực, kéo từ 1 (rất yếu) đến 5 (rất mạnh). Hình đỏ càng nhỏ, càng sát hình xanh nét đứt, ngành càng hấp dẫn.</p>
+      <div class="radar-wrap">
+        <div class="chart-box"><svg id="radar" viewBox="0 0 420 330" role="img" aria-label="Biểu đồ mạng nhện 5 áp lực cạnh tranh"></svg></div>
+        <div class="stack" id="porterCtl"></div>
+      </div>
+      <div class="result">
+        <div class="stat" id="poSumBox"><div class="k">Tổng áp lực (5 đến 25)</div><div class="v" id="poSum"></div></div>
+        <div class="stat"><div class="k">Cơn gió mạnh nhất</div><div class="v" id="poMax" style="font-size:1.2rem"></div></div>
+      </div>
+      <div class="say owl"><span class="char" id="poOwl"></span><p class="bubble" id="poSay"></p></div>
+      <p class="note">Ngưỡng chấm (tổng ≤ 11 hấp dẫn, 12–18 trung bình, ≥ 19 kém hấp dẫn) là quy ước của đồ chơi này để bạn so sánh các ngành với nhau, không phải chuẩn của Porter.</p>
+    </div>
+    <div class="panel quiz">
+      <div class="mcq q" data-answer="0" data-right="Đúng. Cả ba điều đều làm áp lực yếu đi: ít đối thủ giành khách, khó có người mới nhảy vào, khách lẻ không ép giá được." data-wrong="Chưa đúng. Hãy đối chiếu cột &quot;Ngành hấp dẫn khi&quot; trong bảng.">
+        <h3>Ngành nào hấp dẫn hơn theo mô hình 5 áp lực?</h3>
+        <div class="opts">
+          <button class="opt" type="button">Ít đối thủ, rào cản gia nhập cao, khách hàng nhỏ lẻ</button>
+          <button class="opt" type="button">Nhiều đối thủ đua giảm giá, ai cũng mở công ty được</button>
+          <button class="opt" type="button">Chỉ có một nhà cung cấp nguyên liệu và vài khách hàng rất lớn</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5.4 -->
+  <section class="chapter" id="lanh-dao">
+    <div class="chapter-head"><span class="tag">5.4</span><h2>Ai đang cầm lái?</h2></div>
+    <div class="panel talk">
+      <div class="say pig"><span class="char" data-char="pig:happy"></span><p class="bubble">Doanh nghiệp tốt rồi thì ai làm sếp cũng được ạ.</p></div>
+      <div class="say owl right"><p class="bubble">Lãnh đạo giỏi có thể biến một doanh nghiệp bình thường thành xuất sắc; lãnh đạo kém có thể phá hủy một doanh nghiệp tốt.</p><span class="char" data-char="owl:stern"></span></div>
+    </div>
+    <div class="panel">
+      <ul class="plain">
+        <li><b>Uy tín và lịch sử:</b> đọc kế hoạch Đại hội cổ đông 5 năm trước. Họ có làm đúng những gì đã hứa không?</li>
+        <li><b>Lợi ích có gắn với cổ đông không:</b> lãnh đạo có nắm nhiều cổ phiếu không? Họ đang mua vào hay bán ra?</li>
+        <li><b>Phân bổ vốn:</b> tiền lợi nhuận được dùng làm gì — tái đầu tư có hiệu quả, trả cổ tức, hay đầu tư lan man ngoài ngành?</li>
+        <li><b>Đối xử với cổ đông nhỏ:</b> phát hành cổ phiếu ưu đãi giá rẻ cho nội bộ (ESOP) quá nhiều, giao dịch với bên liên quan, công bố thông tin chậm và thiếu là dấu hiệu xấu.</li>
+        <li><b>Thông điệp của chủ tịch</b> trong báo cáo thường niên: thẳng thắn nói cả cái xấu, hay chỉ toàn khoe thành tích?</li>
+      </ul>
+    </div>
+    <div class="panel toy">
+      <div class="toy-title"><h3>Phiếu chấm ban lãnh đạo</h3><span class="pill">Chấm điểm</span></div>
+      <p>Với công ty bạn đang tìm hiểu, chọn điều bạn thấy được ở mỗi tiêu chí. Tốt được 2 điểm, chưa rõ 1 điểm, xấu 0 điểm và bị gắn cờ đỏ.</p>
+      <div class="stack" id="mgRows"></div>
+      <div class="result">
+        <div class="stat" id="mgScoreBox"><div class="k">Điểm ban lãnh đạo</div><div class="v" id="mgScore"></div></div>
+        <div class="stat" id="mgFlagBox"><div class="k">Cờ đỏ</div><div class="v" id="mgFlags"></div></div>
+      </div>
+      <div class="verdict" id="mgVerdict"></div>
+    </div>
+    <div class="panel toy">
+      <div class="toy-title"><h3>Sổ đối chiếu lời hứa</h3><span class="pill">Nhập số</span></div>
+      <p>Lấy kế hoạch lợi nhuận sau thuế mà Đại hội cổ đông thông qua mỗi năm và kết quả thực tế trong báo cáo thường niên. Số mặc định là ví dụ giả định (tỷ đồng).</p>
+      <div class="years" id="promYears"></div>
+      <div class="prom" id="promBars"></div>
+      <div class="result">
+        <div class="stat" id="promBox"><div class="k">Số năm đạt hoặc vượt kế hoạch</div><div class="v" id="promHit"></div></div>
+        <div class="stat"><div class="k">Tổng thực tế / tổng kế hoạch</div><div class="v" id="promAll"></div></div>
+      </div>
+      <div class="say owl"><span class="char" id="promOwl"></span><p class="bubble" id="promSay"></p></div>
+    </div>
+    <div class="panel quiz">
+      <div class="mcq q" data-answer="1" data-right="Đúng. Phát hành ESOP giá rẻ quá nhiều làm loãng phần của cổ đông nhỏ để chuyển giá trị cho nội bộ." data-wrong="Chưa đúng. Điều đó là dấu hiệu tốt hoặc bình thường. Hãy tìm hành động có lợi cho nội bộ mà thiệt cho cổ đông nhỏ.">
+        <h3>Dấu hiệu nào cho thấy lãnh đạo đối xử không tốt với cổ đông nhỏ?</h3>
+        <div class="opts">
+          <button class="opt" type="button">Thư chủ tịch nói thẳng cả những mảng làm ăn kém</button>
+          <button class="opt" type="button">Năm nào cũng phát hành rất nhiều cổ phiếu ESOP giá rẻ cho nội bộ</button>
+          <button class="opt" type="button">Lãnh đạo dùng tiền riêng mua thêm cổ phiếu công ty</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5.5 -->
+  <section class="chapter" id="chu-ky">
+    <div class="chapter-head"><span class="tag">5.5</span><h2>Ngành nào theo mùa, ngành nào quanh năm</h2></div>
+    <div class="panel talk">
+      <div class="say pig"><span class="char" data-char="pig:proud"></span><p class="bubble">Công ty thép năm nay lãi kỷ lục! Đúng lúc vào rồi thầy!</p></div>
+      <div class="say owl right"><p class="bubble">Thép là ngành <b>chu kỳ</b>. Lúc lãi kỷ lục thường là lúc ngành đang hưng phấn, chưa chắc là lúc nên mua.</p><span class="char" data-char="owl:stern"></span></div>
+    </div>
+    <div class="tbl-wrap">
+      <table class="tbl">
+        <thead><tr><th>Loại ngành</th><th>Ví dụ</th><th>Đặc điểm</th><th>Lưu ý khi đầu tư</th></tr></thead>
+        <tbody>
+          <tr><td><b>Phòng thủ</b></td><td>Thực phẩm, đồ uống, dược phẩm, điện nước</td><td>Doanh thu ổn định bất kể kinh tế</td><td>Phù hợp nắm giữ dài hạn, tăng trưởng chậm</td></tr>
+          <tr><td><b>Chu kỳ</b></td><td>Thép, xi măng, hóa chất, chứng khoán, bất động sản, vận tải biển</td><td>Lợi nhuận tăng vọt hay sụt mạnh theo kinh tế và giá hàng hóa</td><td>Mua lúc ngành ảm đạm, bán lúc ngành hưng phấn</td></tr>
+          <tr><td><b>Tăng trưởng</b></td><td>Công nghệ, bán lẻ hiện đại, y tế tư nhân</td><td>Doanh thu tăng nhanh hơn kinh tế</td><td>Định giá cao, nhạy với lãi suất</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="panel toy">
+      <div class="toy-title"><h3>Xếp ngành vào ba ngăn</h3><span class="pill">Phân loại</span></div>
+      <div class="sorter" id="cycleSort"></div>
+    </div>
+    <div class="panel toy">
+      <div class="toy-title"><h3>Vòng đời của ngành</h3><span class="pill">Bấm chọn</span></div>
+      <p>Mỗi ngành đều có vòng đời: khởi đầu → tăng trưởng nhanh → trưởng thành → suy thoái. Biết ngành đang ở giai đoạn nào giúp bạn đặt kỳ vọng tăng trưởng hợp lý.</p>
+      <div class="tabs life-btns" role="group" aria-label="Giai đoạn vòng đời ngành" id="lifeTabs">
+        <button class="opt" type="button" data-l="0">Khởi đầu</button>
+        <button class="opt" type="button" data-l="1">Tăng trưởng nhanh</button>
+        <button class="opt" type="button" data-l="2" aria-pressed="true">Trưởng thành</button>
+        <button class="opt" type="button" data-l="3">Suy thoái</button>
+      </div>
+      <div class="chart-box"><svg id="lifeChart" viewBox="0 0 640 220" role="img" aria-label="Đường vòng đời ngành, doanh thu ngành theo thời gian"></svg></div>
+      <div class="say pig"><span class="char" id="lifePig"></span><p class="bubble" id="lifeSay"></p></div>
+      <p class="note">Đường cong là hình dạng minh họa, không vẽ theo số liệu của ngành cụ thể nào.</p>
+    </div>
+    <div class="panel quiz">
+      <div class="mcq q" data-answer="2" data-right="Đúng. Với ngành chu kỳ: mua lúc ngành ảm đạm, bán lúc ngành hưng phấn. Lúc lãi kỷ lục, giá cổ phiếu thường đã phản ánh đỉnh chu kỳ." data-wrong="Chưa đúng. Lợi nhuận ngành chu kỳ tăng vọt rồi sụt mạnh theo kinh tế và giá hàng hóa. Hãy xem cột &quot;Lưu ý khi đầu tư&quot;.">
+        <h3>Với một cổ phiếu ngành chu kỳ như thép, lúc nào thường hợp lý để mua?</h3>
+        <div class="opts">
+          <button class="opt" type="button">Khi công ty vừa báo lãi kỷ lục</button>
+          <button class="opt" type="button">Khi cả thị trường đang bàn về ngành đó</button>
+          <button class="opt" type="button">Khi ngành đang ảm đạm</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5.6 -->
+  <section class="chapter" id="rui-ro">
+    <div class="chapter-head"><span class="tag">5.6</span><h2>Năm cái bẫy cần ghi ra giấy</h2></div>
+    <div class="panel talk">
+      <div class="say pig"><span class="char" data-char="pig:happy"></span><p class="bubble">Công ty tốt, ngành tốt, lãnh đạo tốt. Hết rủi ro rồi ạ!</p></div>
+      <div class="say owl right"><p class="bubble">Công ty nào cũng có rủi ro riêng của nó. Con phải liệt kê ra, theo ít nhất năm nhóm này.</p><span class="char" data-char="owl:stern"></span></div>
+    </div>
+    <div class="cards">
+      <button class="flip" type="button"><span class="front">Pháp lý</span><span class="back">Dự án chưa đủ giấy phép, thay đổi chính sách.</span></button>
+      <button class="flip" type="button"><span class="front">Tập trung</span><span class="back">Phụ thuộc vào một khách hàng, một nhà cung cấp, một sản phẩm.</span></button>
+      <button class="flip" type="button"><span class="front">Tỷ giá, nguyên liệu</span><span class="back">Nhập nguyên liệu bằng USD và bán bằng VND.</span></button>
+      <button class="flip" type="button"><span class="front">Công nghệ</span><span class="back">Sản phẩm có thể bị thay thế bởi công nghệ mới.</span></button>
+      <button class="flip" type="button"><span class="front">Quản trị</span><span class="back">Người chủ chốt ra đi, tranh chấp giữa các cổ đông.</span></button>
+    </div>
+    <div class="panel toy">
+      <div class="toy-title"><h3>Tin này thuộc rủi ro nào?</h3><span class="pill">Phân loại</span></div>
+      <p>Các mẩu tin dưới đây là tình huống giả định. Xếp mỗi tin vào đúng nhóm rủi ro.</p>
+      <div class="sorter" id="riskSort"></div>
+    </div>
+  </section>
+
+  <!-- 5.7 -->
+  <section class="chapter" id="checklist">
+    <div class="chapter-head"><span class="tag">5.7</span><h2>15 câu trước khi xuống tiền</h2></div>
+    <div class="panel talk">
+      <div class="say pig"><span class="char" data-char="pig:wow"></span><p class="bubble">Nhiều thứ phải nhớ quá, em sợ quên mất.</p></div>
+      <div class="say owl right"><p class="bubble">Phi công còn dùng checklist trước khi cất cánh. Trước khi mua một cổ phiếu, con chạy đủ 15 câu này. Thiếu câu nào là biết mình còn phải làm bài.</p><span class="char" data-char="owl:smile"></span></div>
+    </div>
+    <div class="panel toy check15">
+      <div class="toy-title"><h3>Checklist 15 câu</h3><span class="pill">Tick thử</span></div>
+      <div class="controls">
+        <div class="ctl"><label for="ckName">Cổ phiếu đang xét</label><input id="ckName" type="text" placeholder="Ví dụ: mã bạn đang cân nhắc"></div>
+      </div>
+      <ul class="tasks" id="check15"></ul>
+      <div class="result">
+        <div class="stat" id="ckBox"><div class="k">Số câu đã đạt</div><div class="v" id="ckCount"></div></div>
+      </div>
+      <div class="verdict" id="ckVerdict"></div>
+      <div><button class="opt" type="button" id="ckReset">Xóa để xét cổ phiếu khác</button></div>
+    </div>
+  </section>
+
+  <!-- BÀI TẬP -->
+  <section class="chapter" id="bai-tap">
+    <div class="chapter-head"><span class="tag">✓</span><h2>Bài tập: cho Heo ăn xu</h2></div>
+    <div class="panel toy">
+      <div class="feed">
+        <span class="char" id="feedPig"></span>
+        <div class="stack" style="gap:8px">
+          <strong id="feedText"></strong>
+          <div class="bar" aria-hidden="true"><div id="feedBar"></div></div>
+          <span class="note">Chỉ coi module là xong khi đã tick hết bài tập, không phải khi đọc xong. Tiến độ được lưu trên trình duyệt này.</span>
+        </div>
+      </div>
+      <ul class="tasks" id="tasks" data-module="06">
+        <li><label><input type="checkbox" id="t1"><span>Viết mô hình kinh doanh của 3 công ty bạn quan tâm, mỗi công ty 5 câu</span></label></li>
+        <li><label><input type="checkbox" id="t2"><span>Chấm moat cho 3 công ty đó (mạnh / yếu / không có), kèm bằng chứng số liệu</span></label></li>
+        <li><label><input type="checkbox" id="t3"><span>Áp dụng mô hình 5 áp lực cho 1 ngành bạn quan tâm</span></label></li>
+        <li><label><input type="checkbox" id="t4"><span>Đọc báo cáo thường niên 3 năm liên tiếp của 1 công ty, so sánh kế hoạch với kết quả thực tế</span></label></li>
+        <li><label><input type="checkbox" id="t5"><span>Chạy checklist 15 câu cho Vinamilk (dùng kết quả từ case study)</span></label></li>
+      </ul>
+    </div>
+    <a class="panel next" href="07-kinh-te-vi-mo.html">
+      <div class="stack" style="gap:4px">
+        <span class="eyebrow">Chương sau →</span>
+        <h3>Module 6: Kinh tế vĩ mô</h3>
+        <span class="note">Công ty tốt vẫn chịu chung thời tiết: lãi suất, lạm phát, tỷ giá.</span>
+      </div>
+      <span class="char bob" data-char="owl:smile" style="width:72px"></span>
+    </a>
+    <p class="disclaimer">Giáo trình mang tính giáo dục, không phải khuyến nghị mua bán mã cổ phiếu nào. Các công ty A, B, C, kế hoạch lợi nhuận và các mẩu tin trong đồ chơi là số liệu, tình huống giả định để luyện tập.</p>
+  </section>
+</main>
+
+<script src="assets/truyen.js"></script>
+<script>
+(function () {
+  var T = Truyen, $ = T.$, trim = T.trim, pct = T.pct;
+  function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+
+  // ---------- bàn phân loại thẻ dùng chung cho 5.2, 5.5, 5.6 ----------
+  function sorter(root, bins, items, doneMsg) {
+    var order, i, right, answered;
+    function shuffle() {
+      order = items.map(function (_, k) { return k; });
+      for (var k = order.length - 1; k > 0; k--) { var j = Math.floor(Math.random() * (k + 1)), t = order[k]; order[k] = order[j]; order[j] = t; }
+      i = 0; right = 0; answered = false;
+    }
+    function render() {
+      if (i >= order.length) {
+        var all = right === order.length;
+        root.innerHTML = '<div class="verdict"><span class="char">' + T.pig(all ? 'proud' : right * 2 >= order.length ? 'happy' : 'worried') + '</span><div><span class="eyebrow">Xong ' + order.length + ' thẻ</span><h3>Đúng ' + right + '/' + order.length + '</h3><p>' + doneMsg + '</p></div></div>' +
+          '<div><button class="opt" type="button" data-again>Chơi lại (xáo thẻ)</button></div>';
+        root.querySelector('[data-again]').addEventListener('click', function () { shuffle(); render(); });
+        return;
+      }
+      var it = items[order[i]];
+      root.innerHTML = '<div class="sort-head"><span class="eyebrow">Thẻ ' + (i + 1) + '/' + order.length + '</span><span class="note">Đúng ' + right + '</span></div>' +
+        '<div class="sort-card"><span class="eyebrow">' + it.k + '</span><strong>' + it.t + '</strong></div>' +
+        '<div class="bins">' + bins.map(function (b, k) { return '<button class="opt" type="button" data-b="' + k + '">' + b + '</button>'; }).join('') + '</div>' +
+        '<div class="sort-fb" aria-live="polite"></div>';
+      answered = false;
+      root.querySelectorAll('.bins .opt').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          if (answered) return;
+          answered = true;
+          var b = +btn.dataset.b, ok = b === it.a;
+          if (ok) right++;
+          btn.classList.add(ok ? 'right' : 'wrong');
+          if (!ok) root.querySelector('.bins .opt[data-b="' + it.a + '"]').classList.add('right');
+          var fb = root.querySelector('.sort-fb');
+          fb.innerHTML = '<span class="char">' + (ok ? T.pig('proud') : T.owl('stern')) + '</span><p>' + (ok ? '<b>Đúng!</b> ' : 'Chưa đúng, đây là <b>' + bins[it.a] + '</b>. ') + it.why + '</p>' +
+            '<div class="acts"><button class="opt" type="button" data-next>' + (i + 1 < order.length ? 'Thẻ tiếp →' : 'Xem kết quả') + '</button></div>';
+          var nx = fb.querySelector('[data-next]');
+          nx.addEventListener('click', function () { i++; render(); });
+          nx.focus();
+        });
+      });
+    }
+    shuffle(); render();
+  }
+
+  // ---------- 5.1 mô hình kinh doanh ----------
+  var bmQs = [
+    'Công ty bán gì, cho ai?',
+    'Vì sao khách hàng chọn họ mà không chọn đối thủ?',
+    'Tiền đến từ đâu (bán sản phẩm, phí dịch vụ, lãi cho vay...) và đến lúc nào (trả trước, trả sau)?',
+    'Chi phí lớn nhất là gì? Công ty có kiểm soát được nó không?',
+    'Nếu ngày mai công ty biến mất, khách hàng có thấy khó chịu không?'
+  ];
+  var BM_KEY = 'heo-dat:m06:mo-hinh';
+  var draft = T.store(BM_KEY) || {};
+  $('bmName').value = draft.name || '';
+  $('bmQs').innerHTML = bmQs.map(function (q, k) {
+    return '<div class="bm-q"><label for="bm' + k + '">' + (k + 1) + '. ' + q + '</label><textarea id="bm' + k + '" rows="2"></textarea><span class="cnt" id="bmc' + k + '"></span></div>';
+  }).join('');
+  function sentences(s) { return s.split(/[.!?…]+/).filter(function (x) { return x.trim().length > 0; }).length; }
+  function renderBM(save) {
+    var filled = 0, over = 0, d = { name: $('bmName').value, a: [] };
+    bmQs.forEach(function (_, k) {
+      var v = $('bm' + k).value, n = sentences(v), c = $('bmc' + k);
+      d.a.push(v);
+      if (n > 0) filled++;
+      if (n > 2) over++;
+      c.className = 'cnt ' + (n > 2 ? 'over' : n > 0 ? 'ok' : '');
+      c.textContent = n === 0 ? 'Chưa viết' : n + ' câu' + (n > 2 ? ' · quá 2 câu, rút gọn lại' : ' · gọn');
+    });
+    if (save) T.store(BM_KEY, d);
+    var nm = d.name.trim() ? esc(d.name.trim()) : 'công ty này';
+    $('bmOwl').innerHTML = T.owl(over ? 'stern' : filled === 5 ? 'smile' : 'talk');
+    $('bmSay').innerHTML = filled === 0
+      ? 'Bấm giờ rồi viết thử. Nếu kẹt ở câu nào, đó chính là chỗ con chưa hiểu ' + nm + '.'
+      : over
+        ? 'Có ' + over + ' câu trả lời dài quá 2 câu. Dài dòng thường là dấu hiệu chưa hiểu rõ.'
+        : filled < 5
+          ? 'Con đã trả lời ' + filled + '/5 câu về ' + nm + '. Câu còn trống là bài tập về nhà.'
+          : 'Đủ 5 câu, câu nào cũng gọn. Giờ thử đọc to cho một đứa trẻ 10 tuổi nghe xem nó có hiểu không.';
+  }
+  bmQs.forEach(function (_, k) { $('bm' + k).value = (draft.a && draft.a[k]) || ''; $('bm' + k).addEventListener('input', function () { renderBM(true); }); });
+  $('bmName').addEventListener('input', function () { renderBM(true); });
+  renderBM(false);
+
+  var left = 120, tick = null;
+  function showClock() {
+    $('bmClock').textContent = Math.floor(left / 60) + ':' + String(left % 60).padStart(2, '0');
+    $('bmClock').className = 'clock' + (left <= 20 ? ' late' : '');
+  }
+  function stopClock() { clearInterval(tick); tick = null; $('bmStart').textContent = left > 0 ? 'Chạy tiếp' : 'Hết giờ'; }
+  $('bmStart').addEventListener('click', function () {
+    if (tick) { stopClock(); return; }
+    if (left <= 0) return;
+    $('bmStart').textContent = 'Tạm dừng';
+    tick = setInterval(function () {
+      left--; showClock();
+      if (left <= 0) {
+        stopClock();
+        $('bmOwl').innerHTML = T.owl('stern');
+        $('bmSay').textContent = 'Hết 2 phút! Câu nào còn trống thì theo Peter Lynch, con chưa nên mua cổ phiếu này.';
+      }
+    }, 1000);
+  });
+  $('bmReset').addEventListener('click', function () { clearInterval(tick); tick = null; left = 120; showClock(); $('bmStart').textContent = 'Bắt đầu 2 phút'; renderBM(false); });
+  showClock();
+
+  // ---------- 5.2 đoán loại hào ----------
+  var moatBins = ['Thương hiệu', 'Chi phí chuyển đổi', 'Hiệu ứng mạng lưới', 'Lợi thế chi phí', 'Tài sản vô hình, giấy phép'];
+  var moatWhy = [
+    'Thương hiệu: khách hàng sẵn lòng trả giá cao hơn, nên biên lợi nhuận gộp cao và ổn định.',
+    'Chi phí chuyển đổi: khách ngại đổi nhà cung cấp vì tốn kém, phiền phức, nên tỷ lệ ở lại cao và doanh thu định kỳ.',
+    'Hiệu ứng mạng lưới: càng nhiều người dùng thì sản phẩm càng giá trị, doanh thu tăng nhanh, biên lợi nhuận tăng dần.',
+    'Lợi thế chi phí: sản xuất rẻ hơn đối thủ nhờ quy mô, vị trí, công nghệ, nên biên lợi nhuận cao hơn đối thủ cùng ngành.',
+    'Tài sản vô hình, giấy phép: có thứ đối thủ không thể có, nên lợi nhuận ổn định bất kể cạnh tranh.'
+  ];
+  var moatItems = [
+    ['Ví dụ', 'Hàng tiêu dùng nổi tiếng', 0], ['Bản chất', 'Khách hàng sẵn lòng trả giá cao hơn', 0], ['Dấu hiệu trên BCTC', 'Biên lợi nhuận gộp cao và ổn định', 0],
+    ['Ví dụ', 'Phần mềm doanh nghiệp', 1], ['Ví dụ', 'Tài khoản ngân hàng', 1], ['Dấu hiệu trên BCTC', 'Tỷ lệ khách hàng ở lại cao, doanh thu định kỳ', 1],
+    ['Ví dụ', 'Sàn thương mại điện tử', 2], ['Ví dụ', 'Mạng thanh toán', 2], ['Bản chất', 'Càng nhiều người dùng thì sản phẩm càng giá trị', 2],
+    ['Ví dụ', 'Nhà sản xuất lớn nhất ngành', 3], ['Ví dụ', 'Cảng biển vị trí tốt', 3], ['Dấu hiệu trên BCTC', 'Biên lợi nhuận cao hơn đối thủ cùng ngành', 3],
+    ['Ví dụ', 'Giấy phép khai thác, mỏ, sân bay', 4], ['Bản chất', 'Có thứ đối thủ không thể có', 4], ['Dấu hiệu trên BCTC', 'Lợi nhuận ổn định bất kể cạnh tranh', 4]
+  ].map(function (r) { return { k: r[0], t: r[1], a: r[2], why: moatWhy[r[2]] }; });
+  sorter($('moatSort'), moatBins, moatItems, 'Một công ty có thể có nhiều loại hào cùng lúc. Khi chấm moat ở bài tập, nhớ kèm dấu hiệu trên BCTC làm bằng chứng.');
+
+  // ---------- 5.2 máy soi hào 10 năm ----------
+  var moatScen = [
+    { roe: [22, 24, 23, 25, 24, 26, 25, 24, 25, 26], gm: [40, 41, 40, 42, 41, 41, 42, 41, 40, 41] },
+    { roe: [28, 30, 27, 22, 18, 15, 12, 10, 9, 8], gm: [35, 36, 33, 29, 26, 24, 22, 20, 19, 18] },
+    { roe: [5, 18, 32, 10, -2, 8, 25, 30, 6, 12], gm: [12, 20, 28, 15, 8, 14, 24, 26, 12, 16] }
+  ];
+  var mroe = moatScen[0].roe.slice(), mgm = moatScen[0].gm.slice();
+  function buildMoatYears() {
+    $('moatYears').innerHTML = mroe.map(function (_, k) {
+      return '<div class="yr"><b>Năm ' + (k + 1) + '</b>' +
+        '<label>ROE %<input type="number" step="0.1" data-roe="' + k + '" value="' + mroe[k] + '"></label>' +
+        '<label>Biên gộp %<input type="number" step="0.1" data-gm="' + k + '" value="' + mgm[k] + '"></label></div>';
+    }).join('');
+    $('moatYears').querySelectorAll('input').forEach(function (inp) {
+      inp.addEventListener('input', function () {
+        var v = parseFloat(inp.value);
+        if (isNaN(v)) return;
+        if (inp.dataset.roe != null) mroe[+inp.dataset.roe] = v; else mgm[+inp.dataset.gm] = v;
+        document.querySelectorAll('#moatTabs .opt').forEach(function (b) { b.setAttribute('aria-pressed', 'false'); });
+        renderMoat();
+      });
+    });
+  }
+  function moatStreak(roe) { var s = 0; for (var k = roe.length - 1; k >= 0 && roe[k] > 15; k--) s++; return s; }
+  function renderMoat() {
+    var streak = moatStreak(mroe);
+    var gmRange = Math.max.apply(null, mgm) - Math.min.apply(null, mgm);
+    var stable = gmRange <= 5;
+    $('mtStreak').textContent = streak + '/10 năm';
+    $('mtStreakBox').className = 'stat ' + (streak >= 5 ? 'money' : 'warn');
+    $('mtGm').textContent = trim(gmRange, 1) + ' điểm %';
+    $('mtGmBox').className = 'stat ' + (stable ? 'money' : 'warn');
+
+    var W = 640, H = 260, L = 44, R = 16, Tp = 14, B = 30;
+    var all = mroe.concat(mgm), hi = Math.max(20, Math.max.apply(null, all)), lo = Math.min(0, Math.min.apply(null, all));
+    var step = T.niceStep(hi - lo), top = Math.ceil(hi / step) * step, bot = Math.floor(lo / step) * step;
+    var slot = (W - L - R) / 10;
+    var y = function (v) { return Tp + (H - Tp - B) * (top - v) / (top - bot); };
+    var xc = function (k) { return L + slot * (k + .5); };
+    var g = '';
+    for (var t = bot; t <= top + 1e-9; t += step) {
+      g += '<line x1="' + L + '" x2="' + (W - R) + '" y1="' + y(t) + '" y2="' + y(t) + '" stroke="var(--dot)" stroke-width="1.5"/>' +
+        '<text x="' + (L - 6) + '" y="' + (y(t) + 4) + '" text-anchor="end">' + trim(t, 1) + '%</text>';
+    }
+    mroe.forEach(function (v, k) {
+      var y0 = y(0), y1 = y(v), bw = slot * .56;
+      g += '<rect x="' + (xc(k) - bw / 2) + '" y="' + Math.min(y0, y1) + '" width="' + bw + '" height="' + Math.max(1, Math.abs(y1 - y0)) + '" fill="' + (v > 15 ? 'var(--money)' : 'var(--save)') + '" stroke="var(--border)" stroke-width="2" rx="2"/>' +
+        '<text x="' + xc(k) + '" y="' + (H - 10) + '" text-anchor="middle">N' + (k + 1) + '</text>';
+    });
+    g += '<line x1="' + L + '" x2="' + (W - R) + '" y1="' + y(15) + '" y2="' + y(15) + '" stroke="var(--warn)" stroke-width="2.5" stroke-dasharray="7 5"/>' +
+      '<text class="lbl" x="' + (W - R - 4) + '" y="' + (y(15) - 6) + '" text-anchor="end">ngưỡng ROE 15%</text>';
+    g += '<polyline points="' + mgm.map(function (v, k) { return xc(k) + ',' + y(v); }).join(' ') + '" fill="none" stroke="var(--owl-deep)" stroke-width="3"/>';
+    mgm.forEach(function (v, k) { g += '<circle cx="' + xc(k) + '" cy="' + y(v) + '" r="4.5" fill="var(--owl-deep)" stroke="var(--border)" stroke-width="1.5"/>'; });
+    $('moatChart').innerHTML = g;
+
+    var falling = mgm[9] < mgm[0] - 5 && mroe[9] < mroe[0];
+    var h, p, mood;
+    if (streak >= 5 && stable) { mood = 'proud'; h = streak >= 10 ? 'Hào rộng, giữ được cả 10 năm' : 'Qua bài kiểm tra moat bằng số'; p = 'ROE trên 15% liên tục ' + streak + ' năm gần nhất, biên gộp chỉ dao động ' + trim(gmRange, 1) + ' điểm %. Bước tiếp theo: gọi tên được hào đó thuộc loại nào ở bảng trên.'; }
+    else if (falling) { mood = 'sad'; h = 'Hào đang bị lấp'; p = 'ROE đi từ ' + trim(mroe[0], 1) + '% xuống ' + trim(mroe[9], 1) + '%, biên gộp từ ' + trim(mgm[0], 1) + '% xuống ' + trim(mgm[9], 1) + '%. Lợi nhuận cao đã hút đối thủ vào và kéo biên lợi nhuận xuống, đúng như khi không có moat.'; }
+    else if (streak >= 5) { mood = 'happy'; h = 'ROE đạt, biên gộp chưa ổn định'; p = 'ROE vượt 15% liên tục ' + streak + ' năm, nhưng biên gộp dao động tới ' + trim(gmRange, 1) + ' điểm %. Cần tìm hiểu vì sao biên lợi nhuận lên xuống như vậy.'; }
+    else { mood = 'worried'; h = 'Chưa thấy dấu hiệu moat'; p = 'Chỉ ' + streak + ' năm gần nhất có ROE trên 15% liên tục, chưa đủ 5 năm. ' + (stable ? '' : 'Biên gộp dao động ' + trim(gmRange, 1) + ' điểm %, lợi nhuận giật cục kiểu này hay gặp ở ngành chu kỳ (mục 5.5).'); }
+    $('moatVerdict').innerHTML = '<span class="char">' + T.pig(mood) + '</span><div><h3>' + h + '</h3><p>' + p + '</p></div>';
+  }
+  document.querySelectorAll('#moatTabs .opt').forEach(function (b) {
+    b.addEventListener('click', function () {
+      document.querySelectorAll('#moatTabs .opt').forEach(function (o) { o.setAttribute('aria-pressed', String(o === b)); });
+      var s = moatScen[+b.dataset.s]; mroe = s.roe.slice(); mgm = s.gm.slice();
+      buildMoatYears(); renderMoat();
+    });
+  });
+  buildMoatYears(); renderMoat();
+
+  // ---------- 5.3 mạng nhện Porter ----------
+  var forces = [
+    { n: 'Đối thủ hiện tại', l: ['Đối thủ', 'hiện tại'], good: 'Ít đối thủ, không cạnh tranh bằng giá', v: 4 },
+    { n: 'Đối thủ tiềm năng', l: ['Đối thủ', 'tiềm năng'], good: 'Rào cản gia nhập cao (vốn lớn, giấy phép, thương hiệu)', v: 2 },
+    { n: 'Sản phẩm thay thế', l: ['Sản phẩm', 'thay thế'], good: 'Ít sản phẩm thay thế', v: 2 },
+    { n: 'Quyền lực nhà cung cấp', l: ['Nhà', 'cung cấp'], good: 'Nhiều nhà cung cấp, dễ thay thế', v: 3 },
+    { n: 'Quyền lực khách hàng', l: ['Khách', 'hàng'], good: 'Khách hàng nhỏ lẻ, phân tán', v: 2 }
+  ];
+  var lvName = ['', 'rất yếu', 'yếu', 'vừa', 'mạnh', 'rất mạnh'];
+  $('porterCtl').innerHTML = forces.map(function (f, k) {
+    return '<div class="ctl"><label for="pf' + k + '">' + f.n + ' <output id="pf' + k + 'Out"></output></label><input id="pf' + k + '" type="range" min="1" max="5" step="1" value="' + f.v + '"><small>Hấp dẫn khi: ' + f.good + '</small></div>';
+  }).join('');
+  var CX = 210, CY = 168, RR = 110;
+  function pt(k, r) { var a = (-90 + 72 * k) * Math.PI / 180; return [CX + r * Math.cos(a), CY + r * Math.sin(a)]; }
+  function shape(vals) { return vals.map(function (v, k) { var p = pt(k, RR * v / 5); return p[0].toFixed(1) + ',' + p[1].toFixed(1); }).join(' '); }
+  function renderPorter() {
+    var vals = forces.map(function (f, k) { var v = +$('pf' + k).value; $('pf' + k + 'Out').textContent = v + ' · ' + lvName[v]; return v; });
+    var g = '';
+    for (var r = 1; r <= 5; r++) g += '<polygon points="' + shape([r, r, r, r, r]) + '" fill="none" stroke="var(--dot)" stroke-width="1.5"/>';
+    forces.forEach(function (f, k) {
+      var e = pt(k, RR), lp = pt(k, RR + 26), c = Math.cos((-90 + 72 * k) * Math.PI / 180);
+      var anchor = Math.abs(c) < .2 ? 'middle' : c > 0 ? 'start' : 'end';
+      var y0 = k === 0 ? lp[1] - 18 : lp[1] - 4;
+      g += '<line x1="' + CX + '" y1="' + CY + '" x2="' + e[0] + '" y2="' + e[1] + '" stroke="var(--dot)" stroke-width="1.5"/>' +
+        '<text class="lbl" text-anchor="' + anchor + '" x="' + lp[0] + '" y="' + y0 + '">' + f.l[0] + '<tspan x="' + lp[0] + '" dy="14">' + f.l[1] + '</tspan></text>';
+    });
+    g += '<polygon points="' + shape([1, 1, 1, 1, 1]) + '" fill="var(--money-soft)" stroke="var(--money)" stroke-width="2.5" stroke-dasharray="6 4"/>';
+    g += '<polygon points="' + shape(vals) + '" fill="var(--warn)" fill-opacity=".28" stroke="var(--warn)" stroke-width="3" stroke-linejoin="round"/>';
+    vals.forEach(function (v, k) { var p = pt(k, RR * v / 5); g += '<circle cx="' + p[0] + '" cy="' + p[1] + '" r="5" fill="var(--warn)" stroke="var(--border)" stroke-width="2"/>'; });
+    $('radar').innerHTML = g;
+
+    var sum = vals.reduce(function (a, b) { return a + b; }, 0), mx = Math.max.apply(null, vals);
+    var strongest = forces.filter(function (_, k) { return vals[k] === mx; }).map(function (f) { return f.n; });
+    $('poSum').textContent = sum + '/25';
+    $('poSumBox').className = 'stat ' + (sum <= 11 ? 'money' : sum >= 19 ? 'warn' : '');
+    $('poMax').textContent = mx <= 2 ? 'Không có cơn gió nào mạnh' : strongest.join(', ') + ' (' + lvName[mx] + ')';
+    $('poOwl').innerHTML = T.owl(sum <= 11 ? 'smile' : sum >= 19 ? 'stern' : 'talk');
+    $('poSay').textContent = sum <= 11
+      ? 'Ngành này khá dễ thở: các áp lực đều yếu, doanh nghiệp giỏi có cơ hội giữ được lợi nhuận cao lâu dài.'
+      : sum >= 19
+        ? 'Gió thổi từ mọi phía. Trong ngành thế này, ngay cả công ty giỏi cũng khó giữ biên lợi nhuận cao.'
+        : 'Ngành ở mức trung bình. Hãy để ý cơn gió mạnh nhất: ' + strongest[0].toLowerCase() + '. Công ty nào chống được nó mới đáng chú ý.';
+  }
+  forces.forEach(function (_, k) { $('pf' + k).addEventListener('input', renderPorter); });
+  renderPorter();
+
+  // ---------- 5.4 phiếu chấm ban lãnh đạo ----------
+  var mgCrit = [
+    { h: 'Uy tín và lịch sử', o: ['Làm đúng phần lớn kế hoạch ĐHCĐ 5 năm trước', 'Chưa đọc', 'Hứa nhiều, làm ít'] },
+    { h: 'Lợi ích gắn với cổ đông', o: ['Nắm nhiều cổ phiếu, đang mua vào', 'Chưa rõ', 'Nắm ít, hoặc đang bán ra'] },
+    { h: 'Phân bổ vốn', o: ['Tái đầu tư hiệu quả hoặc trả cổ tức', 'Chưa rõ', 'Đầu tư lan man ngoài ngành'] },
+    { h: 'Đối xử với cổ đông nhỏ', o: ['Công bố thông tin đầy đủ, đúng hạn', 'Chưa rõ', 'ESOP quá nhiều, giao dịch với bên liên quan, công bố chậm và thiếu'] },
+    { h: 'Thông điệp của chủ tịch', o: ['Thẳng thắn nói cả cái xấu', 'Chưa đọc', 'Chỉ toàn khoe thành tích'] }
+  ];
+  var mgVal = [1, 1, 1, 1, 1];
+  $('mgRows').innerHTML = mgCrit.map(function (c, k) {
+    return '<div class="mg-row" data-k="' + k + '"><h3>' + (k + 1) + '. ' + c.h + '</h3><div class="opts">' +
+      [2, 1, 0].map(function (v, j) { return '<button class="opt" type="button" data-v="' + v + '" aria-pressed="' + (v === 1) + '">' + c.o[j] + '</button>'; }).join('') + '</div></div>';
+  }).join('');
+  document.querySelectorAll('.mg-row').forEach(function (row) {
+    row.querySelectorAll('.opt').forEach(function (b) {
+      b.addEventListener('click', function () {
+        row.querySelectorAll('.opt').forEach(function (o) { o.setAttribute('aria-pressed', String(o === b)); });
+        mgVal[+row.dataset.k] = +b.dataset.v; renderMg();
+      });
+    });
+  });
+  function renderMg() {
+    var score = 0, flags = [], unk = 0;
+    mgVal.forEach(function (v, k) { score += v; if (v === 0) flags.push(mgCrit[k].h.toLowerCase()); if (v === 1) unk++; });
+    $('mgScore').textContent = score + '/10';
+    $('mgScoreBox').className = 'stat ' + (flags.length ? 'warn' : score >= 8 ? 'money' : '');
+    $('mgFlags').textContent = flags.length;
+    $('mgFlagBox').className = 'stat ' + (flags.length ? 'warn' : 'money');
+    var h, p, ch;
+    if (flags.length) { ch = T.owl('stern'); h = 'Cờ đỏ: ' + flags.join(', '); p = 'Một cờ đỏ ở ban lãnh đạo đủ để nghi ngờ cả câu chuyện đẹp. Lãnh đạo kém có thể phá hủy một doanh nghiệp tốt. Điểm cao ở các mục khác không bù được.'; }
+    else if (unk === 5) { ch = T.owl('talk'); h = 'Chưa chấm gì'; p = 'Mọi tiêu chí đang ở "chưa rõ". Bắt đầu từ việc dễ nhất: mở báo cáo thường niên, đọc thư của chủ tịch.'; }
+    else if (unk) { ch = T.pig('happy'); h = 'Chưa thấy cờ đỏ, nhưng còn ' + unk + ' mục chưa rõ'; p = 'Chưa rõ không có nghĩa là tốt. Đi tìm thông tin cho các mục còn lại trước khi tin tưởng.'; }
+    else { ch = T.pig('proud'); h = 'Ban lãnh đạo đáng tin'; p = 'Đủ 5 tiêu chí đều tốt. Vẫn nên theo dõi mỗi năm: lãnh đạo có thể thay đổi.'; }
+    $('mgVerdict').innerHTML = '<span class="char">' + ch + '</span><div><h3>' + h + '</h3><p>' + p + '</p></div>';
+  }
+  renderMg();
+
+  // ---------- 5.4 sổ đối chiếu lời hứa ----------
+  var plan = [100, 120, 140, 160, 180], act = [105, 118, 150, 130, 185];
+  $('promYears').innerHTML = plan.map(function (_, k) {
+    return '<div class="yr"><b>Năm ' + (k + 1) + '</b><label>Kế hoạch<input type="number" min="0" step="1" data-p="' + k + '" value="' + plan[k] + '"></label>' +
+      '<label>Thực tế<input type="number" step="1" data-a="' + k + '" value="' + act[k] + '"></label></div>';
+  }).join('');
+  $('promYears').querySelectorAll('input').forEach(function (inp) {
+    inp.addEventListener('input', function () {
+      var v = parseFloat(inp.value); if (isNaN(v)) return;
+      if (inp.dataset.p != null) plan[+inp.dataset.p] = v; else act[+inp.dataset.a] = v;
+      renderProm();
+    });
+  });
+  function renderProm() {
+    var hit = 0, sp = 0, sa = 0, valid = 0, html = '';
+    var maxR = 1.25;
+    plan.forEach(function (p, k) {
+      if (!(p > 0)) { html += '<div class="prom-row"><span>Năm ' + (k + 1) + '</span><span class="note">Nhập kế hoạch lớn hơn 0</span><span></span></div>'; return; }
+      var r = act[k] / p; valid++; sp += p; sa += act[k];
+      if (r >= 1) hit++;
+      var w = Math.max(0, Math.min(r, maxR)) / maxR * 100;
+      html += '<div class="prom-row"><span>Năm ' + (k + 1) + '</span><div class="track"><i class="' + (r >= 1 ? '' : 'miss') + '" style="width:' + w + '%"></i><s style="left:' + (100 / maxR) + '%"></s></div><span>' + pct(r * 100) + '</span></div>';
+    });
+    $('promBars').innerHTML = html;
+    $('promHit').textContent = hit + '/' + valid + ' năm';
+    var most = hit * 2 > valid;
+    $('promBox').className = 'stat ' + (most ? 'money' : 'warn');
+    $('promAll').textContent = sp > 0 ? pct(sa / sp * 100) : '—';
+    $('promOwl').innerHTML = T.owl(most ? 'smile' : 'stern');
+    $('promSay').textContent = most
+      ? 'Đạt kế hoạch ' + hit + ' trên ' + valid + ' năm: ban lãnh đạo đã thực hiện được phần lớn cam kết. Với năm hụt, đọc báo cáo thường niên xem họ giải thích thẳng thắn hay đổ lỗi.'
+      : 'Chỉ đạt ' + hit + ' trên ' + valid + ' năm. Hứa nhiều mà làm ít là cờ đỏ về uy tín. Đừng tin kế hoạch năm nay quá mức.';
+  }
+  renderProm();
+
+  // ---------- 5.5 xếp ngành ----------
+  var cycBins = ['Phòng thủ', 'Chu kỳ', 'Tăng trưởng'];
+  var cycWhy = [
+    'Ngành phòng thủ: doanh thu ổn định bất kể kinh tế. Phù hợp nắm giữ dài hạn, tăng trưởng chậm.',
+    'Ngành chu kỳ: lợi nhuận tăng vọt hay sụt mạnh theo kinh tế và giá hàng hóa. Mua lúc ngành ảm đạm, bán lúc ngành hưng phấn.',
+    'Ngành tăng trưởng: doanh thu tăng nhanh hơn kinh tế. Định giá cao, nhạy với lãi suất.'
+  ];
+  var cycItems = [
+    ['Thực phẩm', 0], ['Đồ uống', 0], ['Dược phẩm', 0], ['Điện nước', 0],
+    ['Thép', 1], ['Xi măng', 1], ['Hóa chất', 1], ['Chứng khoán', 1], ['Bất động sản', 1], ['Vận tải biển', 1],
+    ['Công nghệ', 2], ['Bán lẻ hiện đại', 2], ['Y tế tư nhân', 2]
+  ].map(function (r) { return { k: 'Ngành', t: r[0], a: r[1], why: cycWhy[r[1]] }; });
+  sorter($('cycleSort'), cycBins, cycItems, 'Cùng một con số lợi nhuận nhưng ý nghĩa khác nhau tùy loại ngành: lãi kỷ lục ở ngành chu kỳ có thể là đỉnh, ở ngành phòng thủ là chuyện bình thường.');
+
+  // ---------- 5.5 vòng đời ngành ----------
+  var life = [
+    { mood: 'wow', t: 'Khởi đầu: sản phẩm mới, doanh thu ngành còn nhỏ, nhiều công ty thử sức và không ít công ty sẽ biến mất. Kỳ vọng cao nhưng rủi ro cũng rất cao.' },
+    { mood: 'happy', t: 'Tăng trưởng nhanh: doanh thu ngành tăng mạnh, đối thủ đổ vào. Có thể kỳ vọng tăng trưởng cao, nhưng định giá thường cũng đã cao.' },
+    { mood: 'proud', t: 'Trưởng thành: tăng trưởng chậm lại, các công ty giành nhau thị phần. Đừng kỳ vọng tăng trưởng như thời trẻ; bù lại dòng tiền thường ổn định.' },
+    { mood: 'sad', t: 'Suy thoái: nhu cầu giảm dần, doanh thu ngành đi xuống. Checklist 15 câu yêu cầu ngành không ở giai đoạn này.' }
+  ];
+  function lifeCurve(x) { // x trong [0,1], trả về doanh thu ngành tương đối [0,1]
+    var up = 1 / (1 + Math.exp(-12 * (x - .35)));
+    var down = x > .72 ? Math.pow((x - .72) / .28, 2) * .45 : 0;
+    return up - down;
+  }
+  function renderLife(s) {
+    document.querySelectorAll('#lifeTabs .opt').forEach(function (b) { b.setAttribute('aria-pressed', String(+b.dataset.l === s)); });
+    var W = 640, H = 220, L = 20, R = 20, Tp = 16, B = 34, bounds = [0, .22, .5, .75, 1];
+    var x = function (u) { return L + (W - L - R) * u; }, y = function (v) { return Tp + (H - Tp - B) * (1 - v); };
+    var g = '<rect x="' + x(bounds[s]) + '" y="' + Tp + '" width="' + (x(bounds[s + 1]) - x(bounds[s])) + '" height="' + (H - Tp - B) + '" fill="var(--bubble-pig)"/>';
+    var names = ['Khởi đầu', 'Tăng trưởng nhanh', 'Trưởng thành', 'Suy thoái'];
+    for (var k = 0; k < 4; k++) {
+      if (k > 0) g += '<line x1="' + x(bounds[k]) + '" x2="' + x(bounds[k]) + '" y1="' + Tp + '" y2="' + (H - B) + '" stroke="var(--dot)" stroke-width="2" stroke-dasharray="5 4"/>';
+      g += '<text class="' + (k === s ? 'lbl' : '') + '" x="' + x((bounds[k] + bounds[k + 1]) / 2) + '" y="' + (H - 12) + '" text-anchor="middle">' + names[k] + '</text>';
+    }
+    g += '<line x1="' + L + '" x2="' + (W - R) + '" y1="' + (H - B) + '" y2="' + (H - B) + '" stroke="var(--border)" stroke-width="2"/>';
+    var pts = [];
+    for (var i = 0; i <= 80; i++) { var u = i / 80; pts.push(x(u).toFixed(1) + ',' + y(lifeCurve(u)).toFixed(1)); }
+    g += '<polyline points="' + pts.join(' ') + '" fill="none" stroke="var(--money)" stroke-width="4" stroke-linecap="round"/>';
+    var mu = (bounds[s] + bounds[s + 1]) / 2;
+    g += '<circle cx="' + x(mu) + '" cy="' + y(lifeCurve(mu)) + '" r="9" fill="var(--pig)" stroke="var(--border)" stroke-width="3"/>';
+    g += '<text x="' + (L + 4) + '" y="' + (Tp + 12) + '">Doanh thu ngành ↑</text>';
+    $('lifeChart').innerHTML = g;
+    $('lifePig').innerHTML = T.pig(life[s].mood);
+    $('lifeSay').textContent = life[s].t;
+  }
+  document.querySelectorAll('#lifeTabs .opt').forEach(function (b) { b.addEventListener('click', function () { renderLife(+b.dataset.l); }); });
+  renderLife(2);
+
+  // ---------- 5.6 tin thuộc rủi ro nào ----------
+  var riskBins = ['Pháp lý', 'Tập trung', 'Tỷ giá, nguyên liệu', 'Công nghệ', 'Quản trị'];
+  var riskWhy = [
+    'Rủi ro pháp lý: dự án chưa đủ giấy phép, thay đổi chính sách.',
+    'Rủi ro tập trung: phụ thuộc vào một khách hàng, một nhà cung cấp, một sản phẩm.',
+    'Rủi ro tỷ giá, nguyên liệu: nhập nguyên liệu bằng USD và bán bằng VND, chi phí tăng khi USD lên giá.',
+    'Rủi ro công nghệ: sản phẩm có thể bị thay thế bởi công nghệ mới.',
+    'Rủi ro quản trị: người chủ chốt ra đi, tranh chấp giữa các cổ đông.'
+  ];
+  var riskItems = [
+    ['Dự án nhà ở lớn nhất của công ty vẫn chưa đủ giấy phép xây dựng', 0],
+    ['Nhà nước thay đổi chính sách thuế với sản phẩm chủ lực của công ty', 0],
+    ['Phần lớn doanh thu đến từ đúng một khách hàng', 1],
+    ['Toàn bộ nguyên liệu được mua từ một nhà cung cấp duy nhất', 1],
+    ['Công ty nhập nguyên liệu bằng USD nhưng bán hàng trong nước bằng VND', 2],
+    ['Sản phẩm chính đang bị một công nghệ mới rẻ và tiện hơn thay thế dần', 3],
+    ['Tổng giám đốc gắn bó lâu năm bất ngờ từ nhiệm', 4],
+    ['Hai nhóm cổ đông lớn tranh chấp quyền kiểm soát công ty', 4]
+  ].map(function (r) { return { k: 'Mẩu tin', t: r[0], a: r[1], why: riskWhy[r[1]] }; });
+  sorter($('riskSort'), riskBins, riskItems, 'Với mỗi công ty bạn quan tâm, hãy viết ra ít nhất 3 rủi ro lớn nhất. Đó cũng là một câu trong checklist 15 câu ở mục 5.7.');
+
+  // ---------- 5.7 checklist 15 câu ----------
+  var ck = [
+    'Tôi giải thích được công ty kiếm tiền thế nào trong 2 phút',
+    'Công ty có ít nhất một loại lợi thế cạnh tranh rõ ràng',
+    'ROE trên 15% trong ít nhất 3–5 năm gần nhất',
+    'Doanh thu và lợi nhuận tăng trưởng ổn định, không giật cục',
+    'CFO xấp xỉ hoặc lớn hơn LNST',
+    'Nợ vay trong ngưỡng an toàn của ngành',
+    'Ban lãnh đạo đã thực hiện được phần lớn các cam kết trước đây',
+    'Lãnh đạo không bán ròng cổ phiếu liên tục',
+    'Không có dấu hiệu cảnh báo nào ở Module 3, mục 3.8',
+    'Ngành không ở giai đoạn suy thoái',
+    'Tôi biết 3 rủi ro lớn nhất của công ty',
+    'Định giá hợp lý so với lịch sử và so với ngành',
+    'Có biên an toàn đủ lớn',
+    'Tôi biết điều gì xảy ra thì tôi sẽ bán (luận điểm đầu tư bị phá vỡ)',
+    'Tôi sẵn lòng giữ cổ phiếu này kể cả khi thị trường đóng cửa 3 năm'
+  ];
+  var CK_KEY = 'heo-dat:m06:check15';
+  var ckSaved = T.store(CK_KEY) || {};
+  $('ckName').value = ckSaved.name || '';
+  $('check15').innerHTML = ck.map(function (c, k) {
+    return '<li><label><input type="checkbox" id="ck' + k + '"' + (ckSaved.c && ckSaved.c[k] ? ' checked' : '') + '><span><span class="num">' + (k + 1) + '.</span> ' + c + '</span></label></li>';
+  }).join('');
+  function renderCk(save) {
+    var c = ck.map(function (_, k) { return $('ck' + k).checked; }), n = c.filter(Boolean).length;
+    if (save) T.store(CK_KEY, { name: $('ckName').value, c: c });
+    $('ckCount').textContent = n + '/15';
+    $('ckBox').className = 'stat ' + (n === 15 ? 'money' : n < 10 ? 'warn' : '');
+    var miss = [];
+    c.forEach(function (v, k) { if (!v) miss.push(k + 1); });
+    var nm = $('ckName').value.trim() ? esc($('ckName').value.trim()) : 'cổ phiếu này';
+    var ch, h, p;
+    if (n === 15) { ch = T.pig('proud'); h = 'Đủ 15/15 cho ' + nm; p = 'Bạn đã làm đủ bài. Quyết định cuối cùng vẫn là của bạn, và nhớ ghi lại luận điểm đầu tư để biết khi nào nó bị phá vỡ.'; }
+    else if (n === 0) { ch = T.owl('talk'); h = 'Chưa tick câu nào'; p = 'Đi từng câu, chỉ tick khi bạn có bằng chứng cụ thể, không tick theo cảm giác.'; }
+    else { ch = n >= 10 ? T.pig('happy') : T.pig('worried'); h = 'Còn thiếu ' + miss.length + ' câu'; p = 'Chưa đạt các câu số ' + miss.join(', ') + '. Mỗi câu còn trống là một việc phải tìm hiểu trước khi mua ' + nm + '.'; }
+    $('ckVerdict').innerHTML = '<span class="char">' + ch + '</span><div><h3>' + h + '</h3><p>' + p + '</p></div>';
+  }
+  ck.forEach(function (_, k) { $('ck' + k).addEventListener('change', function () { renderCk(true); }); });
+  $('ckName').addEventListener('input', function () { renderCk(true); });
+  $('ckReset').addEventListener('click', function () {
+    ck.forEach(function (_, k) { $('ck' + k).checked = false; });
+    $('ckName').value = ''; renderCk(true);
+  });
+  renderCk(false);
+})();
+</script>
+</body>
+</html>

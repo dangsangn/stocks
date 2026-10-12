@@ -1,0 +1,587 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Heo Đất xem thủy triều</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;800&family=Be+Vietnam+Pro:wght@400;600;700&family=Patrick+Hand&display=swap">
+<link rel="stylesheet" href="assets/truyen.css">
+<style>
+/* Riêng Module 6: bảng 3 kênh lãi suất, đồng hồ PMI, trò chơi tình huống, bánh xe chu kỳ, phân loại Hãy/Đừng */
+.channels { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+@media (max-width: 760px) { .channels { grid-template-columns: 1fr; } }
+.chan { border: 2.5px solid var(--border); border-radius: 10px; padding: 12px 14px; background: var(--chip); display: grid; gap: 8px; align-content: start; min-width: 0; }
+.chan h4 { margin: 0; font-family: var(--f-display); font-size: 1.05rem; }
+.chan .row { display: flex; justify-content: space-between; gap: 8px; font-size: .92rem; font-variant-numeric: tabular-nums; }
+.chan .row b { white-space: nowrap; }
+.chan .row b.up { color: var(--money); } .chan .row b.down { color: var(--warn); }
+.chan .why { font-size: .88rem; color: var(--muted); }
+
+.gauge { max-width: 360px; margin: 0 auto; width: 100%; }
+.gauge svg { width: 100%; height: auto; display: block; }
+.gauge text { fill: var(--ink); font-family: var(--f-display); font-weight: 800; }
+
+.game { display: grid; gap: 12px; }
+.game .news { font-family: var(--f-hand); font-size: 1.35rem; line-height: 1.3; border: 2.5px solid var(--border); border-radius: 10px; padding: 10px 14px; background: var(--bubble-owl); }
+.game .meta { display: flex; justify-content: space-between; gap: 8px; flex-wrap: wrap; font-weight: 600; font-size: .9rem; color: var(--muted); }
+.game button.go { font: inherit; font-weight: 700; cursor: pointer; color: var(--ink); background: var(--gold); border: 2.5px solid var(--border); border-radius: 999px; padding: 6px 16px; box-shadow: 3px 3px 0 var(--hard); justify-self: start; }
+
+.freq-row[hidden] { display: none; }
+
+.cycle { display: grid; grid-template-columns: 300px minmax(0, 1fr); gap: 20px; align-items: center; }
+@media (max-width: 680px) { .cycle { grid-template-columns: 1fr; } .wheel { max-width: 300px; margin: 0 auto; width: 100%; } }
+.wheel svg { width: 100%; height: auto; display: block; }
+.wheel .seg { cursor: pointer; stroke: var(--border); stroke-width: 3; transition: opacity .15s ease; }
+.wheel .seg:focus-visible { outline: none; stroke: var(--pig-deep); stroke-width: 5; }
+.wheel text { fill: var(--ink); font-family: var(--f-display); font-weight: 800; font-size: 14px; pointer-events: none; }
+.wheel .hub { fill: var(--panel); stroke: var(--border); stroke-width: 3; }
+
+.sorter { display: grid; gap: 10px; }
+.sort-item { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 10px; align-items: center; border: 2.5px solid var(--border); border-radius: 10px; padding: 8px 12px; background: var(--panel); }
+.sort-item.ok { background: var(--money-soft); border-color: var(--money); }
+.sort-item.bad { background: var(--warn-soft); border-color: var(--warn); }
+.sort-item .why { grid-column: 1 / -1; font-size: .88rem; color: var(--muted); }
+.sort-item .opts { flex-wrap: nowrap; }
+@media (max-width: 480px) { .sort-item { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<main class="book">
+
+  <nav class="topnav"><a href="index.html">← Mục lục</a><span class="note">Module 6 / 9</span></nav>
+
+  <!-- MỞ ĐẦU -->
+  <header class="hero">
+    <div class="hero-title">
+      <span class="eyebrow">Module 6 · Tuần 23–27</span>
+      <h1>Heo Đất xem thủy triều</h1>
+      <p class="sub">Kinh tế vĩ mô cho nhà đầu tư cổ phiếu: lãi suất, các chỉ báo, chu kỳ kinh tế và những điều riêng của thị trường Việt Nam.</p>
+    </div>
+    <div class="strip">
+      <div class="panel">
+        <div class="say pig"><span class="char" data-char="pig:proud"></span><p class="bubble">Em chọn được công ty tốt rồi. Kinh tế vĩ mô kệ nó, đúng không thầy?</p></div>
+      </div>
+      <div class="panel">
+        <div class="say owl right"><p class="bubble">Vĩ mô là <b>thủy triều</b>, doanh nghiệp là <b>con thuyền</b>. Thủy triều lên thì hầu hết thuyền đều nổi.</p><span class="char" data-char="owl:stern"></span></div>
+      </div>
+      <div class="panel">
+        <div class="say pig"><span class="char" data-char="pig:worried"></span><p class="bubble">Vậy em phải dự báo kinh tế giỏi hơn chuyên gia à?</p></div>
+      </div>
+      <div class="panel">
+        <div class="say owl right"><p class="bubble">Không cần. Con chỉ cần hiểu các biến số chính ảnh hưởng đến thị trường <b>theo cơ chế nào</b>, để không bị bất ngờ.</p><span class="char" data-char="owl:talk"></span></div>
+      </div>
+      <div class="panel wide">
+        <div class="say owl"><span class="char" data-char="owl:talk"></span><p class="bubble">Năm 2022, lãi suất tiết kiệm ở Việt Nam tăng lên <b>9–10%</b> cùng với cuộc khủng hoảng trái phiếu doanh nghiệp. VN-Index giảm <b>hơn 40%</b>. Khi lãi suất hạ dần vào năm 2023, thị trường hồi phục. Thủy triều rút thì thuyền tốt cũng mắc cạn.</p></div>
+      </div>
+    </div>
+  </header>
+
+  <!-- 6.1 -->
+  <section class="chapter" id="lai-suat">
+    <div class="chapter-head"><span class="tag">6.1</span><h2>Lãi suất: cái núm vặn to nhất</h2></div>
+    <div class="panel talk">
+      <div class="say pig"><span class="char" data-char="pig:wow"></span><p class="bubble">Lãi suất là chuyện của ngân hàng chứ, sao cổ phiếu lại giảm theo?</p></div>
+      <div class="say owl right"><p class="bubble">Lãi suất là biến số quan trọng nhất. Nó chạm vào cổ phiếu qua <b>ba kênh</b>: định giá, dòng tiền và lợi nhuận doanh nghiệp. Vặn thử núm bên dưới mà xem.</p><span class="char" data-char="owl:talk"></span></div>
+    </div>
+
+    <div class="panel">
+      <ol class="plain">
+        <li><b>Định giá:</b> lãi suất tăng làm WACC tăng, nên giá trị DCF giảm (xem Module 4, mục 4.6). Cổ phiếu tăng trưởng bị ảnh hưởng nặng nhất, vì giá trị của chúng nằm chủ yếu ở dòng tiền xa trong tương lai.</li>
+        <li><b>Dòng tiền:</b> lãi tiết kiệm 8% làm nhiều người rút tiền khỏi chứng khoán để gửi ngân hàng. Lãi tiết kiệm 4–5% thì ngược lại.</li>
+        <li><b>Lợi nhuận doanh nghiệp:</b> doanh nghiệp vay nhiều (bất động sản, sản xuất thâm dụng vốn) phải trả lãi cao hơn, lợi nhuận giảm.</li>
+      </ol>
+    </div>
+
+    <div class="panel toy">
+      <div class="toy-title"><h3>Núm vặn lãi suất của Cú Già</h3><span class="pill">Kéo thử</span></div>
+      <div class="ctl" style="max-width:460px"><label for="rate">Lãi tiết kiệm 12 tháng <output id="rateOut"></output></label><input id="rate" type="range" min="4" max="10" step="0.5" value="5"></div>
+      <div class="channels">
+        <div class="chan">
+          <h4>1. Định giá</h4>
+          <div class="row"><span>WACC giả định</span><b id="cWacc"></b></div>
+          <div class="row"><span>Cổ phiếu A (đều đặn)</span><b id="cA"></b></div>
+          <div class="row"><span>Cổ phiếu B (tăng trưởng)</span><b id="cB"></b></div>
+          <p class="why">Giá trị hiện tại so với khi lãi tiết kiệm 5%.</p>
+        </div>
+        <div class="chan">
+          <h4>2. Dòng tiền</h4>
+          <div class="row"><span>Gửi 100 triệu, lãi 1 năm</span><b id="cDep"></b></div>
+          <p class="why" id="cFlow"></p>
+        </div>
+        <div class="chan">
+          <h4>3. Lợi nhuận doanh nghiệp</h4>
+          <div class="row"><span>Lãi vay giả định</span><b id="cLoan"></b></div>
+          <div class="row"><span>Công ty nợ 1.000 tỷ</span><b id="cBig"></b></div>
+          <div class="row"><span>Công ty nợ 100 tỷ</span><b id="cSmall"></b></div>
+          <p class="why">Lợi nhuận trước thuế; cả hai có lợi nhuận trước lãi vay 200 tỷ.</p>
+        </div>
+      </div>
+      <div class="chart-box"><svg id="dcfChart" viewBox="0 0 640 230" role="img" aria-label="Dòng tiền từng năm của cổ phiếu A và B, phần tô là giá trị hiện tại"></svg></div>
+      <div class="legend"><span><i style="background:var(--save)"></i>A: 15 mỗi năm, năm 1–10</span><span><i style="background:var(--money)"></i>B: 0 ở năm 1–5, 40 mỗi năm ở năm 6–10</span><span><i style="background:var(--panel)"></i>Khung rỗng: dòng tiền danh nghĩa</span></div>
+      <div class="say owl"><span class="char" id="rateOwl"></span><p class="bubble" id="rateSay"></p></div>
+      <p class="note">Ví dụ minh họa, không phải số liệu thị trường. Giả định WACC = lãi tiết kiệm + 5 điểm %, lãi vay doanh nghiệp = lãi tiết kiệm + 3 điểm %.</p>
+    </div>
+
+    <div class="panel">
+      <div class="callout">
+        <strong>Theo dõi ở đâu?</strong>
+        <p>Ở Việt Nam: lãi suất điều hành của <b>Ngân hàng Nhà nước (NHNN)</b>, lãi suất tiết kiệm 12 tháng của các ngân hàng lớn, lãi suất liên ngân hàng (tiền đồng).</p>
+        <p>Ở Mỹ: lãi suất của <b>Fed</b>, vì nó ảnh hưởng đến tỷ giá và dòng vốn ngoại.</p>
+      </div>
+    </div>
+
+    <div class="panel quiz">
+      <div class="mcq q" data-answer="2" data-right="Đúng. Giá trị của cổ phiếu tăng trưởng nằm chủ yếu ở dòng tiền xa trong tương lai, nên WACC tăng làm nó co lại nhiều nhất." data-wrong="Chưa đúng. Nhìn lại biểu đồ: dòng tiền càng xa, phần tô càng teo khi lãi suất tăng.">
+        <h3>Lãi suất tăng mạnh. Loại cổ phiếu nào thường bị giảm giá trị DCF nặng nhất?</h3>
+        <div class="opts">
+          <button class="opt" type="button">Cổ phiếu trả cổ tức đều mỗi năm</button>
+          <button class="opt" type="button">Mọi cổ phiếu giảm như nhau</button>
+          <button class="opt" type="button">Cổ phiếu tăng trưởng, lợi nhuận lớn ở các năm xa</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6.2 -->
+  <section class="chapter" id="chi-bao">
+    <div class="chapter-head"><span class="tag">6.2</span><h2>Bảng đồng hồ vĩ mô</h2></div>
+    <div class="panel talk">
+      <div class="say pig"><span class="char" data-char="pig:worried"></span><p class="bubble">Tin vĩ mô nhiều quá, em đọc cái nào trước?</p></div>
+      <div class="say owl right"><p class="bubble">Mười chỉ báo này là đủ. Nhớ ba thứ: lấy từ đâu, bao lâu ra một lần, và nó đẩy thị trường theo hướng nào.</p><span class="char" data-char="owl:talk"></span></div>
+    </div>
+
+    <div class="panel toy">
+      <div class="toy-title"><h3>Bảng chỉ báo cần theo dõi</h3><span class="pill">Lọc theo tần suất</span></div>
+      <div class="tabs" role="group" aria-label="Lọc theo tần suất" id="freqTabs">
+        <button class="opt" type="button" data-f="all" aria-pressed="true">Tất cả</button>
+        <button class="opt" type="button" data-f="day" aria-pressed="false">Hằng ngày</button>
+        <button class="opt" type="button" data-f="month" aria-pressed="false">Tháng</button>
+        <button class="opt" type="button" data-f="quarter" aria-pressed="false">Quý</button>
+      </div>
+      <div class="tbl-wrap">
+        <table class="tbl">
+          <thead><tr><th>Chỉ báo</th><th>Nguồn</th><th>Tần suất</th><th>Tác động lên thị trường</th></tr></thead>
+          <tbody id="freqBody">
+            <tr class="freq-row" data-f="quarter"><td>Tăng trưởng GDP</td><td>Tổng cục Thống kê (GSO)</td><td>Quý</td><td>GDP tăng thì lợi nhuận doanh nghiệp tăng</td></tr>
+            <tr class="freq-row" data-f="month"><td>Lạm phát (CPI)</td><td>GSO</td><td>Tháng</td><td>Lạm phát cao làm NHNN phải tăng lãi suất, bất lợi cho cổ phiếu</td></tr>
+            <tr class="freq-row" data-f="month"><td>PMI ngành sản xuất</td><td>S&amp;P Global</td><td>Tháng</td><td>Trên 50 là mở rộng, dưới 50 là thu hẹp</td></tr>
+            <tr class="freq-row" data-f="month quarter"><td>Tăng trưởng tín dụng</td><td>NHNN</td><td>Tháng/quý</td><td>Tín dụng tăng nhanh là bơm tiền vào nền kinh tế, tốt cho ngân hàng và chứng khoán</td></tr>
+            <tr class="freq-row" data-f="day"><td>Tỷ giá USD/VND</td><td>NHNN, ngân hàng thương mại</td><td>Hằng ngày</td><td>VND mất giá nhanh khiến khối ngoại bán ròng; bất lợi cho doanh nghiệp nhập khẩu, có lợi cho doanh nghiệp xuất khẩu</td></tr>
+            <tr class="freq-row" data-f="day"><td>Chỉ số đồng USD (DXY)</td><td>Thị trường quốc tế</td><td>Hằng ngày</td><td>DXY tăng thì vốn rút khỏi thị trường mới nổi</td></tr>
+            <tr class="freq-row" data-f="month"><td>Xuất nhập khẩu, FDI</td><td>GSO, Bộ Kế hoạch và Đầu tư</td><td>Tháng</td><td>Phản ánh sức khỏe kinh tế và dòng vốn dài hạn</td></tr>
+            <tr class="freq-row" data-f="month"><td>Giải ngân đầu tư công</td><td>Bộ Tài chính</td><td>Tháng</td><td>Tốt cho xây dựng, vật liệu (thép, xi măng, đá)</td></tr>
+            <tr class="freq-row" data-f="day"><td>Giá hàng hóa (dầu, thép, phân bón, sữa bột, cao su)</td><td>Thị trường quốc tế</td><td>Hằng ngày</td><td>Ảnh hưởng trực tiếp đến lợi nhuận từng ngành</td></tr>
+            <tr class="freq-row" data-f="day"><td>Giao dịch của khối ngoại</td><td>HOSE, CafeF, Vietstock</td><td>Hằng ngày</td><td>Bán ròng kéo dài tạo áp lực lên các mã vốn hóa lớn</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="note" id="freqNote"></p>
+    </div>
+
+    <div class="panel toy">
+      <div class="toy-title"><h3>Đồng hồ PMI</h3><span class="pill">Kéo thử</span></div>
+      <div class="ctl" style="max-width:460px"><label for="pmi">PMI ngành sản xuất <output id="pmiOut"></output></label><input id="pmi" type="range" min="40" max="60" step="0.5" value="52"></div>
+      <div class="gauge"><svg id="pmiGauge" viewBox="0 -14 300 196" role="img" aria-label="Đồng hồ PMI, mốc 50 ở giữa"></svg></div>
+      <div class="result">
+        <div class="stat" id="pmiBox"><div class="k">Ngành sản xuất đang</div><div class="v" id="pmiState"></div></div>
+        <div class="stat"><div class="k">Cách mốc 50</div><div class="v" id="pmiGap"></div></div>
+      </div>
+      <p class="note">Mốc 50 là ranh giới. Con số PMI ở đây do bạn kéo, không phải số công bố thật.</p>
+    </div>
+
+    <div class="panel toy">
+      <div class="toy-title"><h3>Tin nóng: ai vui, ai buồn?</h3><span class="pill">Trò chơi</span></div>
+      <div class="game">
+        <div class="meta"><span id="gRound"></span><span id="gScore"></span></div>
+        <p class="news" id="gNews"></p>
+        <div class="opts" id="gOpts"></div>
+        <div class="mcq-fb" id="gFb"></div>
+        <button class="go" type="button" id="gNext">Tin tiếp theo →</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6.3 -->
+  <section class="chapter" id="chu-ky">
+    <div class="chapter-head"><span class="tag">6.3</span><h2>Bánh xe chu kỳ và cuộc chạy tiếp sức của các ngành</h2></div>
+    <div class="panel talk">
+      <div class="say pig"><span class="char" data-char="pig:happy"></span><p class="bubble">Ngành nào lúc nào cũng thắng ạ? Em mua ngành đó thôi.</p></div>
+      <div class="say owl right"><p class="bubble">Không có ngành nào thắng mãi. Các ngành thường thay nhau dẫn dắt ở những giai đoạn khác nhau của chu kỳ. Đây là <b>xu hướng chung, không phải quy luật tuyệt đối</b>.</p><span class="char" data-char="owl:stern"></span></div>
+    </div>
+
+    <div class="panel toy">
+      <div class="toy-title"><h3>Bấm vào từng giai đoạn của bánh xe</h3></div>
+      <div class="cycle">
+        <div class="wheel"><svg id="wheel" viewBox="0 0 300 300" role="group" aria-label="Bánh xe chu kỳ kinh tế bốn giai đoạn"></svg></div>
+        <div class="stack" id="phaseDetail"></div>
+      </div>
+      <div class="tbl-wrap">
+        <table class="tbl">
+          <thead><tr><th>Giai đoạn</th><th>Dấu hiệu</th><th>Ngành thường hưởng lợi</th></tr></thead>
+          <tbody>
+            <tr><td>Phục hồi sớm</td><td>Lãi suất ở đáy, kinh tế bắt đầu hồi</td><td>Ngân hàng, chứng khoán, bất động sản</td></tr>
+            <tr><td>Tăng trưởng</td><td>GDP tăng mạnh, tín dụng mở rộng</td><td>Công nghệ, bán lẻ, công nghiệp, vật liệu xây dựng</td></tr>
+            <tr><td>Đỉnh / quá nóng</td><td>Lạm phát tăng, lãi suất bắt đầu tăng</td><td>Năng lượng, nguyên vật liệu, hàng hóa cơ bản</td></tr>
+            <tr><td>Suy thoái</td><td>Lợi nhuận doanh nghiệp giảm, lãi suất cao</td><td>Phòng thủ: thực phẩm, dược, điện nước; tiền mặt</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="panel quiz">
+      <div class="mcq q" data-answer="1" data-right="Đúng. Lạm phát tăng và lãi suất bắt đầu tăng là dấu hiệu của giai đoạn đỉnh / quá nóng; năng lượng, nguyên vật liệu, hàng hóa cơ bản thường hưởng lợi." data-wrong="Chưa đúng. Đối chiếu cột Dấu hiệu: lạm phát tăng, lãi suất bắt đầu tăng.">
+        <h3>Lạm phát tăng, NHNN bắt đầu nâng lãi suất. Nền kinh tế nhiều khả năng đang ở giai đoạn nào?</h3>
+        <div class="opts">
+          <button class="opt" type="button">Phục hồi sớm</button>
+          <button class="opt" type="button">Đỉnh / quá nóng</button>
+          <button class="opt" type="button">Suy thoái</button>
+        </div>
+      </div>
+      <div class="mcq q" data-answer="0" data-right="Đúng. Khi lợi nhuận doanh nghiệp giảm và lãi suất cao, nhóm phòng thủ (thực phẩm, dược, điện nước) và tiền mặt thường chống chịu tốt hơn." data-wrong="Chưa đúng. Ở giai đoạn suy thoái, người ta tìm đến nhóm phòng thủ và tiền mặt.">
+        <h3>Lợi nhuận doanh nghiệp giảm, lãi suất cao. Nhóm nào thường chống chịu tốt hơn?</h3>
+        <div class="opts">
+          <button class="opt" type="button">Thực phẩm, dược, điện nước; tiền mặt</button>
+          <button class="opt" type="button">Chứng khoán, bất động sản</button>
+          <button class="opt" type="button">Công nghệ, bán lẻ</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6.4 -->
+  <section class="chapter" id="dac-thu">
+    <div class="chapter-head"><span class="tag">6.4</span><h2>Thủy triều kiểu Việt Nam</h2></div>
+    <div class="panel talk">
+      <div class="say pig"><span class="char" data-char="pig:wow"></span><p class="bubble">Thị trường mình có gì khác thị trường Mỹ không thầy?</p></div>
+      <div class="say owl right"><p class="bubble">Có bốn điều đặc thù con cần nhớ. Lật từng thẻ ra xem.</p><span class="char" data-char="owl:smile"></span></div>
+    </div>
+    <div class="panel toy">
+      <div class="cards">
+        <button class="flip" type="button"><span class="front">Room tín dụng</span><span class="back"><b>Chính sách tín dụng và room tín dụng:</b> NHNN giao chỉ tiêu tăng trưởng tín dụng cho từng ngân hàng. Việc nới hay siết room ảnh hưởng mạnh đến thanh khoản toàn thị trường.</span></button>
+        <button class="flip" type="button"><span class="front">Nâng hạng thị trường</span><span class="back">Tháng 10/2025, FTSE Russell công bố sẽ nâng hạng Việt Nam từ thị trường cận biên lên thị trường mới nổi thứ cấp, dự kiến hiệu lực từ tháng 9/2026, kèm kỳ rà soát giữa chừng. Nâng hạng có thể thu hút dòng vốn từ các quỹ chỉ số toàn cầu.</span></button>
+        <button class="flip" type="button"><span class="front">Chính sách pháp lý</span><span class="back">Luật đất đai, luật kinh doanh bất động sản, quy định về trái phiếu doanh nghiệp đều tác động mạnh đến nhóm ngành liên quan.</span></button>
+        <button class="flip" type="button"><span class="front">Nhà đầu tư cá nhân chiếm tỷ trọng cao</span><span class="back">Thị trường phản ứng thái quá với tin tức, cả tốt lẫn xấu. Đó vừa là rủi ro vừa là cơ hội cho người kiên nhẫn.</span></button>
+      </div>
+      <div class="callout warn">
+        <strong>Kiểm tra lại thông tin nâng hạng</strong>
+        <p>Thông tin về FTSE Russell ở trên là theo công bố tháng 10/2025. Hãy kiểm tra trạng thái mới nhất và tiến trình của MSCI.</p>
+      </div>
+    </div>
+    <div class="panel quiz">
+      <div class="mcq q" data-answer="2" data-right="Đúng. Siết room thì tiền vào nền kinh tế chậm lại, thanh khoản toàn thị trường bị ảnh hưởng mạnh, không chỉ riêng ngân hàng." data-wrong="Chưa đúng. Room tín dụng tác động đến thanh khoản của cả thị trường.">
+        <h3>NHNN siết room tín dụng. Ảnh hưởng nào là hợp lý nhất?</h3>
+        <div class="opts">
+          <button class="opt" type="button">Chỉ cổ phiếu ngân hàng bị ảnh hưởng</button>
+          <button class="opt" type="button">Không ảnh hưởng, vì room là chuyện nội bộ ngân hàng</button>
+          <button class="opt" type="button">Thanh khoản toàn thị trường có thể giảm mạnh</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6.5 -->
+  <section class="chapter" id="dung-vi-mo">
+    <div class="chapter-head"><span class="tag">6.5</span><h2>Dùng vĩ mô làm la bàn, đừng làm quả cầu pha lê</h2></div>
+    <div class="panel talk">
+      <div class="say pig"><span class="char" data-char="pig:proud"></span><p class="bubble">Em đọc tin vĩ mô xong rồi, giờ em đoán được đáy thị trường!</p></div>
+      <div class="say owl right"><p class="bubble">Ngay cả các quỹ lớn cũng thường đoán sai đỉnh và đáy. Vĩ mô giúp con <b>điều chỉnh tỷ trọng</b> và <b>chọn ngành</b>, không giúp con bắt đáy.</p><span class="char" data-char="owl:stern"></span></div>
+    </div>
+
+    <div class="panel toy">
+      <div class="toy-title"><h3>Hãy hay Đừng?</h3><span class="pill">Phân loại</span></div>
+      <p>Mỗi câu là một cách dùng tin vĩ mô. Bấm <b>Hãy</b> hoặc <b>Đừng</b>.</p>
+      <div class="sorter" id="sorter"></div>
+      <div class="verdict" id="sortVerdict"></div>
+    </div>
+
+    <div class="panel toy">
+      <div class="toy-title"><h3>Kỳ vọng và thực tế</h3><span class="pill">Kéo thử</span></div>
+      <p>Tin vĩ mô thường <b>đã được phản ánh vào giá</b> trước khi công bố. Cái quan trọng là kết quả thực tế so với kỳ vọng.</p>
+      <div class="controls">
+        <div class="ctl"><label for="expG">Thị trường kỳ vọng GDP quý tăng <output id="expGOut"></output></label><input id="expG" type="range" min="3" max="9" step="0.1" value="6.5"></div>
+        <div class="ctl"><label for="actG">Số công bố thực tế <output id="actGOut"></output></label><input id="actG" type="range" min="3" max="9" step="0.1" value="6"></div>
+      </div>
+      <div class="result">
+        <div class="stat" id="surpBox"><div class="k">Chênh lệch so với kỳ vọng</div><div class="v" id="surp"></div></div>
+      </div>
+      <div class="say pig"><span class="char" id="surpPig"></span><p class="bubble" id="surpSay"></p></div>
+      <p class="note">Con số trong đồ chơi là giả định để minh họa. Ngưỡng ±0,3 điểm % chỉ để phân loại cho dễ thấy, không phải quy tắc của thị trường.</p>
+    </div>
+  </section>
+
+  <!-- BÀI TẬP -->
+  <section class="chapter" id="bai-tap">
+    <div class="chapter-head"><span class="tag">✓</span><h2>Bài tập: cho Heo ăn xu</h2></div>
+    <div class="panel toy">
+      <div class="feed">
+        <span class="char" id="feedPig"></span>
+        <div class="stack" style="gap:8px">
+          <strong id="feedText"></strong>
+          <div class="bar" aria-hidden="true"><div id="feedBar"></div></div>
+          <span class="note">Chỉ coi module là xong khi đã tick hết bài tập, không phải khi đọc xong. Tiến độ được lưu trên trình duyệt này.</span>
+        </div>
+      </div>
+      <ul class="tasks" id="tasks" data-module="07">
+        <li><label><input type="checkbox" id="t1"><span>Lập bảng theo dõi hằng tháng: lãi suất tiết kiệm 12 tháng, CPI, PMI, tăng trưởng tín dụng, tỷ giá USD/VND, giá trị mua/bán ròng của khối ngoại, VN-Index</span></label></li>
+        <li><label><input type="checkbox" id="t2"><span>Đọc báo cáo vĩ mô tháng của 1 công ty chứng khoán (SSI, VNDirect, VCSC...) và tóm tắt trong 5 dòng</span></label></li>
+        <li><label><input type="checkbox" id="t3"><span>Xem lại giai đoạn 2022–2023: lãi suất, tỷ giá và VN-Index đã thay đổi thế nào? Viết ra mối liên hệ</span></label></li>
+        <li><label><input type="checkbox" id="t4"><span>Xác định nền kinh tế đang ở giai đoạn nào của chu kỳ và giải thích lý do</span></label></li>
+        <li><label><input type="checkbox" id="t5"><span>Với công ty bạn đã phân tích, liệt kê 3 biến số vĩ mô ảnh hưởng mạnh nhất đến nó</span></label></li>
+      </ul>
+    </div>
+    <a class="panel next" href="08-phan-tich-ky-thuat.html">
+      <div class="stack" style="gap:4px">
+        <span class="eyebrow">Chương sau →</span>
+        <h3>Module 7: Phân tích kỹ thuật</h3>
+        <span class="note">Biểu đồ giá kể lại tâm lý đám đông. Học cách đọc nó.</span>
+      </div>
+      <span class="char bob" data-char="owl:smile" style="width:72px"></span>
+    </a>
+    <p class="disclaimer">Giáo trình mang tính giáo dục, không phải khuyến nghị mua bán mã cổ phiếu nào. Các con số trong đồ chơi là minh họa với giả định đơn giản, không phải số liệu hay dự báo thị trường. Thông tin nâng hạng thị trường có thể đã thay đổi; hãy kiểm tra nguồn chính thức.</p>
+  </section>
+</main>
+
+<script src="assets/truyen.js"></script>
+<script>
+(function () {
+  var T = Truyen, $ = T.$, money = T.money, pct = T.pct, trim = T.trim;
+
+  function signPct(x) { return (x > 0 ? '+' : x < 0 ? '−' : '') + pct(Math.abs(x)); }
+  function cls(x) { return x > 0.0001 ? 'up' : x < -0.0001 ? 'down' : ''; }
+
+  // ---------- 6.1 núm vặn lãi suất ----------
+  var flowA = [], flowB = [];
+  for (var t = 1; t <= 10; t++) { flowA.push(15); flowB.push(t <= 5 ? 0 : 40); }
+  function pv(flows, w) { return flows.reduce(function (s, c, i) { return s + c / Math.pow(1 + w, i + 1); }, 0); }
+  var BASE = 5, EBIT = 200e9;
+  function profit(debt, r) { return EBIT - debt * (r + 3) / 100; }
+
+  function renderRate() {
+    var r = +$('rate').value, w = (r + 5) / 100, w0 = (BASE + 5) / 100;
+    $('rateOut').textContent = pct(r);
+    $('cWacc').textContent = pct(r + 5);
+    var a = pv(flowA, w), b = pv(flowB, w), dA = (a / pv(flowA, w0) - 1) * 100, dB = (b / pv(flowB, w0) - 1) * 100;
+    $('cA').textContent = trim(a, 1) + ' (' + signPct(dA) + ')'; $('cA').className = cls(dA);
+    $('cB').textContent = trim(b, 1) + ' (' + signPct(dB) + ')'; $('cB').className = cls(dB);
+
+    $('cDep').textContent = money(100e6 * r / 100);
+    $('cFlow').textContent = r >= 8
+      ? 'Lãi tiết kiệm từ 8%: gửi ngân hàng đã hấp dẫn mà không rủi ro, nhiều người rút tiền khỏi chứng khoán để gửi ngân hàng.'
+      : r <= 5
+        ? 'Lãi tiết kiệm 4–5%: gửi ngân hàng kém hấp dẫn, tiền có xu hướng chảy sang chứng khoán.'
+        : 'Vùng giằng co: lãi tiết kiệm càng tiến về 8%, sức hút của ngân hàng càng lớn.';
+
+    var big = profit(1000e9, r), small = profit(100e9, r), big0 = profit(1000e9, BASE), small0 = profit(100e9, BASE);
+    var dBig = (big / big0 - 1) * 100, dSmall = (small / small0 - 1) * 100;
+    $('cLoan').textContent = pct(r + 3);
+    $('cBig').textContent = money(big) + ' (' + signPct(dBig) + ')'; $('cBig').className = cls(dBig);
+    $('cSmall').textContent = money(small) + ' (' + signPct(dSmall) + ')'; $('cSmall').className = cls(dSmall);
+
+    // biểu đồ: khung rỗng = dòng tiền danh nghĩa, phần tô = giá trị hiện tại
+    var W = 640, H = 230, L = 40, R = 12, Tp = 12, B = 30, top = 40;
+    var bw = (W - L - R) / 10, y = function (v) { return Tp + (H - Tp - B) * (1 - v / top); };
+    var g = '';
+    for (var k = 0; k <= top; k += 10) {
+      g += '<line x1="' + L + '" x2="' + (W - R) + '" y1="' + y(k) + '" y2="' + y(k) + '" stroke="var(--dot)" stroke-width="1.5"/>' +
+        '<text x="' + (L - 6) + '" y="' + (y(k) + 4) + '" text-anchor="end">' + k + '</text>';
+    }
+    for (var i = 0; i < 10; i++) {
+      var x0 = L + bw * i, d = Math.pow(1 + w, i + 1), one = bw * 0.36;
+      [[flowA[i], 'var(--save)', x0 + bw * 0.12], [flowB[i], 'var(--money)', x0 + bw * 0.52]].forEach(function (s) {
+        if (!s[0]) return;
+        g += '<rect x="' + s[2] + '" y="' + y(s[0]) + '" width="' + one + '" height="' + (y(0) - y(s[0])) + '" fill="var(--panel)" stroke="var(--border)" stroke-width="1.5" stroke-dasharray="4 3"/>';
+        g += '<rect x="' + s[2] + '" y="' + y(s[0] / d) + '" width="' + one + '" height="' + (y(0) - y(s[0] / d)) + '" fill="' + s[1] + '" stroke="var(--border)" stroke-width="1.5"/>';
+      });
+      g += '<text x="' + (x0 + bw / 2) + '" y="' + (H - 10) + '" text-anchor="middle">năm ' + (i + 1) + '</text>';
+    }
+    $('dcfChart').innerHTML = g;
+
+    $('rateOwl').innerHTML = T.owl(r > BASE ? 'stern' : 'talk');
+    $('rateSay').innerHTML = r === BASE
+      ? 'A và B có giá trị hiện tại gần bằng nhau (' + trim(a, 1) + ' và ' + trim(b, 1) + '). Giờ con kéo lãi suất lên 9% xem ai tụt nhanh hơn.'
+      : r > BASE
+        ? 'Lãi suất lên ' + pct(r) + ': A giảm ' + pct(Math.abs(dA)) + ', còn B giảm tới ' + pct(Math.abs(dB)) + ' vì tiền của B nằm ở năm 6–10. Công ty nợ nhiều mất ' + pct(Math.abs(dBig)) + ' lợi nhuận, công ty nợ ít chỉ mất ' + pct(Math.abs(dSmall)) + '.'
+        : 'Lãi suất xuống ' + pct(r) + ': B tăng giá trị mạnh hơn A (' + signPct(dB) + ' so với ' + signPct(dA) + '). Thủy triều lên, thuyền tăng trưởng nổi cao nhất.';
+  }
+  $('rate').addEventListener('input', renderRate); renderRate();
+
+  // ---------- 6.2 lọc bảng chỉ báo ----------
+  var freqName = { all: 'tất cả', day: 'hằng ngày', month: 'hằng tháng', quarter: 'hằng quý' };
+  function renderFreq(f) {
+    var n = 0;
+    document.querySelectorAll('#freqTabs .opt').forEach(function (b) { b.setAttribute('aria-pressed', String(b.dataset.f === f)); });
+    document.querySelectorAll('#freqBody .freq-row').forEach(function (tr) {
+      var show = f === 'all' || tr.dataset.f.split(' ').indexOf(f) >= 0;
+      tr.hidden = !show; if (show) n++;
+    });
+    $('freqNote').textContent = f === 'all'
+      ? '10 chỉ báo. Lọc theo tần suất để biết việc nào làm mỗi ngày, việc nào làm mỗi tháng.'
+      : n + ' chỉ báo cập nhật ' + freqName[f] + '.';
+  }
+  document.querySelectorAll('#freqTabs .opt').forEach(function (b) {
+    b.addEventListener('click', function () { renderFreq(b.dataset.f); });
+  });
+  renderFreq('all');
+
+  // ---------- 6.2 đồng hồ PMI ----------
+  function renderPmi() {
+    var v = +$('pmi').value, cx = 150, cy = 150, R = 120;
+    $('pmiOut').textContent = trim(v, 1);
+    var ang = function (p) { return Math.PI * (1 - (p - 40) / 20); }; // 40 → trái, 60 → phải
+    var pt = function (p, r) { return [cx + r * Math.cos(ang(p)), cy - r * Math.sin(ang(p))]; };
+    var arc = function (p0, p1, color) {
+      var a = pt(p0, R), b = pt(p1, R);
+      return '<path d="M' + a[0] + ' ' + a[1] + ' A' + R + ' ' + R + ' 0 0 1 ' + b[0] + ' ' + b[1] + '" fill="none" stroke="' + color + '" stroke-width="26"/>';
+    };
+    var g = arc(40, 50, 'var(--warn)') + arc(50, 60, 'var(--money)');
+    var o1 = pt(40, R + 15), o2 = pt(40, R - 15), e1 = pt(60, R - 15), e2 = pt(60, R + 15);
+    g += '<path d="M' + o1[0] + ' ' + o1[1] + ' A' + (R + 15) + ' ' + (R + 15) + ' 0 0 1 ' + e2[0] + ' ' + e2[1] + ' L' + e1[0] + ' ' + e1[1] + ' A' + (R - 15) + ' ' + (R - 15) + ' 0 0 0 ' + o2[0] + ' ' + o2[1] + ' Z" fill="none" stroke="var(--border)" stroke-width="3"/>';
+    var m1 = pt(50, R - 18), m2 = pt(50, R + 18);
+    g += '<line x1="' + m1[0] + '" y1="' + m1[1] + '" x2="' + m2[0] + '" y2="' + m2[1] + '" stroke="var(--border)" stroke-width="3"/>';
+    [40, 50, 60].forEach(function (p) { var q = p === 50 ? pt(p, R + 22) : pt(p, R); g += '<text x="' + q[0] + '" y="' + (q[1] + (p === 50 ? 0 : 24)) + '" text-anchor="middle" font-size="14">' + p + '</text>'; });
+    var n = pt(v, R - 22);
+    g += '<line x1="' + cx + '" y1="' + cy + '" x2="' + n[0] + '" y2="' + n[1] + '" stroke="var(--ink)" stroke-width="5" stroke-linecap="round"/>' +
+      '<circle cx="' + cx + '" cy="' + cy + '" r="9" fill="var(--gold)" stroke="var(--border)" stroke-width="3"/>' +
+      '<text x="70" y="172" text-anchor="middle" font-size="13">thu hẹp</text><text x="230" y="172" text-anchor="middle" font-size="13">mở rộng</text>';
+    $('pmiGauge').innerHTML = g;
+    var state = v > 50 ? 'mở rộng' : v < 50 ? 'thu hẹp' : 'đứng yên';
+    $('pmiState').textContent = state;
+    $('pmiBox').className = 'stat ' + (v > 50 ? 'money' : v < 50 ? 'warn' : '');
+    $('pmiGap').textContent = (v - 50 > 0 ? '+' : v - 50 < 0 ? '−' : '') + trim(Math.abs(v - 50), 1) + ' điểm';
+  }
+  $('pmi').addEventListener('input', renderPmi); renderPmi();
+
+  // ---------- 6.2 trò chơi tin nóng ----------
+  var rounds = [
+    { news: 'GDP quý này tăng trưởng tốt.', q: 'Điều này thường có nghĩa là gì?', opts: ['Lợi nhuận doanh nghiệp tăng', 'NHNN chắc chắn hạ lãi suất', 'Khối ngoại bắt buộc phải mua ròng'], a: 0, why: 'GDP tăng thì lợi nhuận doanh nghiệp tăng.' },
+    { news: 'CPI tăng cao nhiều tháng liền.', q: 'Cổ phiếu chịu tác động thế nào?', opts: ['Tốt, vì giá bán tăng', 'Bất lợi, vì NHNN phải tăng lãi suất', 'Không liên quan'], a: 1, why: 'Lạm phát cao làm NHNN phải tăng lãi suất, bất lợi cho cổ phiếu.' },
+    { news: 'PMI ngành sản xuất công bố dưới 50.', q: 'Đọc con số này thế nào?', opts: ['Sản xuất đang mở rộng', 'Lạm phát dưới 50%', 'Sản xuất đang thu hẹp'], a: 2, why: 'Trên 50 là mở rộng, dưới 50 là thu hẹp.' },
+    { news: 'Tín dụng tăng nhanh.', q: 'Nhóm nào thường hưởng lợi?', opts: ['Ngân hàng và chứng khoán', 'Chỉ doanh nghiệp nhập khẩu', 'Không nhóm nào'], a: 0, why: 'Tín dụng tăng nhanh là bơm tiền vào nền kinh tế, tốt cho ngân hàng và chứng khoán.' },
+    { news: 'VND mất giá nhanh so với USD.', q: 'Ai có lợi?', opts: ['Doanh nghiệp nhập khẩu', 'Doanh nghiệp xuất khẩu', 'Khối ngoại, nên họ mua ròng'], a: 1, why: 'VND mất giá nhanh khiến khối ngoại bán ròng; bất lợi cho doanh nghiệp nhập khẩu, có lợi cho doanh nghiệp xuất khẩu.' },
+    { news: 'Chỉ số đồng USD (DXY) tăng mạnh.', q: 'Dòng vốn quốc tế thường làm gì?', opts: ['Đổ vào thị trường mới nổi', 'Đứng yên', 'Rút khỏi thị trường mới nổi'], a: 2, why: 'DXY tăng thì vốn rút khỏi thị trường mới nổi.' },
+    { news: 'Giải ngân đầu tư công tăng tốc.', q: 'Nhóm nào thường hưởng lợi?', opts: ['Xây dựng, vật liệu (thép, xi măng, đá)', 'Dược phẩm', 'Ngân hàng nước ngoài'], a: 0, why: 'Giải ngân đầu tư công tốt cho xây dựng, vật liệu (thép, xi măng, đá).' },
+    { news: 'Giá dầu, thép, phân bón biến động mạnh.', q: 'Tác động thế nào?', opts: ['Chỉ ảnh hưởng thị trường Mỹ', 'Ảnh hưởng trực tiếp đến lợi nhuận từng ngành', 'Chỉ ảnh hưởng tỷ giá'], a: 1, why: 'Giá hàng hóa ảnh hưởng trực tiếp đến lợi nhuận từng ngành.' },
+    { news: 'Khối ngoại bán ròng kéo dài nhiều tuần.', q: 'Áp lực dồn vào đâu?', opts: ['Các mã vốn hóa lớn', 'Chỉ các mã nhỏ', 'Không đâu cả'], a: 0, why: 'Bán ròng kéo dài tạo áp lực lên các mã vốn hóa lớn.' }
+  ];
+  var gi = 0, gScore = 0, gAnswered = false;
+  function renderRound() {
+    var r = rounds[gi];
+    gAnswered = false;
+    $('gRound').textContent = 'Tin ' + (gi + 1) + '/' + rounds.length;
+    $('gScore').textContent = 'Đúng ngay lần đầu: ' + gScore;
+    $('gNews').textContent = 'Tin nóng: ' + r.news + ' ' + r.q;
+    $('gFb').innerHTML = '';
+    $('gNext').hidden = true;
+    $('gOpts').innerHTML = r.opts.map(function (o, i) { return '<button class="opt" type="button" data-i="' + i + '">' + o + '</button>'; }).join('');
+    $('gOpts').querySelectorAll('.opt').forEach(function (b) {
+      b.addEventListener('click', function () {
+        var ok = +b.dataset.i === r.a;
+        $('gOpts').querySelectorAll('.opt').forEach(function (o) { o.classList.remove('right', 'wrong'); });
+        b.classList.add(ok ? 'right' : 'wrong');
+        if (!gAnswered && ok) gScore++;
+        gAnswered = true;
+        $('gScore').textContent = 'Đúng ngay lần đầu: ' + gScore;
+        $('gFb').innerHTML = '<span class="char">' + (ok ? T.pig('proud') : T.owl('stern')) + '</span><p>' + (ok ? 'Chuẩn! ' : 'Chưa đúng. ') + r.why + '</p>';
+        if (ok) {
+          $('gNext').hidden = false;
+          $('gNext').textContent = gi < rounds.length - 1 ? 'Tin tiếp theo →' : 'Chơi lại từ đầu';
+        }
+      });
+    });
+  }
+  $('gNext').addEventListener('click', function () {
+    if (gi < rounds.length - 1) gi++; else { gi = 0; gScore = 0; }
+    renderRound();
+  });
+  renderRound();
+
+  // ---------- 6.3 bánh xe chu kỳ ----------
+  var phases = [
+    { name: 'Phục hồi sớm', lines: ['Phục hồi', 'sớm'], fill: 'var(--chip)', sign: 'Lãi suất ở đáy, kinh tế bắt đầu hồi', win: ['Ngân hàng', 'Chứng khoán', 'Bất động sản'], pig: 'wow', say: 'Lãi suất ở đáy, tiền rẻ. Ngân hàng, chứng khoán, bất động sản thường dẫn đầu khi kinh tế bắt đầu hồi.' },
+    { name: 'Tăng trưởng', lines: ['Tăng', 'trưởng'], fill: 'var(--money-soft)', sign: 'GDP tăng mạnh, tín dụng mở rộng', win: ['Công nghệ', 'Bán lẻ', 'Công nghiệp', 'Vật liệu xây dựng'], pig: 'happy', say: 'Kinh tế chạy nhanh, tín dụng mở rộng. Công nghệ, bán lẻ, công nghiệp, vật liệu xây dựng tiếp gậy.' },
+    { name: 'Đỉnh / quá nóng', lines: ['Đỉnh /', 'quá nóng'], fill: 'var(--bubble-owl)', sign: 'Lạm phát tăng, lãi suất bắt đầu tăng', win: ['Năng lượng', 'Nguyên vật liệu', 'Hàng hóa cơ bản'], pig: 'worried', say: 'Lạm phát tăng, lãi suất bắt đầu tăng. Giá hàng hóa lên nên năng lượng, nguyên vật liệu, hàng hóa cơ bản thường hưởng lợi.' },
+    { name: 'Suy thoái', lines: ['Suy', 'thoái'], fill: 'var(--warn-soft)', sign: 'Lợi nhuận doanh nghiệp giảm, lãi suất cao', win: ['Thực phẩm', 'Dược', 'Điện nước', 'Tiền mặt'], pig: 'sad', say: 'Lợi nhuận doanh nghiệp giảm, lãi suất cao. Lúc này nhóm phòng thủ (thực phẩm, dược, điện nước) và tiền mặt chống chịu tốt hơn.' }
+  ];
+  var cx = 150, cy = 150, RO = 140, RI = 58;
+  function P(r, deg) { var a = deg * Math.PI / 180; return [cx + r * Math.sin(a), cy - r * Math.cos(a)]; }
+  function renderWheel(sel) {
+    var g = '';
+    phases.forEach(function (ph, i) {
+      var a0 = 90 * i + 2, a1 = 90 * (i + 1) - 2;
+      var p1 = P(RO, a0), p2 = P(RO, a1), p3 = P(RI, a1), p4 = P(RI, a0);
+      var on = i === sel;
+      g += '<path class="seg" tabindex="0" role="button" aria-pressed="' + on + '" aria-label="' + ph.name + '" data-i="' + i + '" d="M' + p1 + ' A' + RO + ' ' + RO + ' 0 0 1 ' + p2 + ' L' + p3 + ' A' + RI + ' ' + RI + ' 0 0 0 ' + p4 + ' Z" fill="' + (on ? 'var(--pig)' : ph.fill) + '" style="stroke-width:' + (on ? 5 : 3) + '"/>';
+      var m = P((RO + RI) / 2, 90 * i + 45);
+      g += '<text x="' + m[0] + '" y="' + (m[1] - 3) + '" text-anchor="middle">' + ph.lines[0] + '</text><text x="' + m[0] + '" y="' + (m[1] + 14) + '" text-anchor="middle">' + ph.lines[1] + '</text>';
+    });
+    // mũi tên chiều kim đồng hồ ở vành ngoài
+    [0, 90, 180, 270].forEach(function (d) {
+      var tip = P(RO + 2, d + 6), b1 = P(RO - 8, d - 3), b2 = P(RO + 12, d - 3);
+      g += '<path d="M' + b1 + ' L' + tip + ' L' + b2 + ' Z" fill="var(--ink)"/>';
+    });
+    g += '<circle class="hub" cx="' + cx + '" cy="' + cy + '" r="' + (RI - 8) + '"/><text x="' + cx + '" y="' + (cy - 2) + '" text-anchor="middle" font-size="13">Chu kỳ</text><text x="' + cx + '" y="' + (cy + 14) + '" text-anchor="middle" font-size="13">kinh tế</text>';
+    $('wheel').innerHTML = g;
+    $('wheel').querySelectorAll('.seg').forEach(function (s) {
+      var go = function () { renderWheel(+s.dataset.i); };
+      s.addEventListener('click', go);
+      s.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); go(); } });
+    });
+    var ph = phases[sel];
+    $('phaseDetail').innerHTML = '<span class="eyebrow">Giai đoạn ' + (sel + 1) + '/4</span><h3>' + ph.name + '</h3>' +
+      '<p><b>Dấu hiệu:</b> ' + ph.sign + '</p>' +
+      '<div class="chips">' + ph.win.map(function (w) { return '<span class="chip">' + w + '</span>'; }).join('') + '</div>' +
+      '<div class="say pig"><span class="char">' + T.pig(ph.pig) + '</span><p class="bubble">' + ph.say + '</p></div>' +
+      '<p class="note">Bấm giai đoạn kế tiếp theo chiều mũi tên. Đây là xu hướng chung, không phải quy luật tuyệt đối.</p>';
+  }
+  renderWheel(0);
+
+  // ---------- 6.5 Hãy hay Đừng ----------
+  var items = [
+    { t: 'Đọc tin vĩ mô rồi cố đoán đỉnh và đáy thị trường.', a: 'dont', why: 'Đừng. Ngay cả các quỹ lớn cũng thường đoán sai.' },
+    { t: 'Lãi suất tăng mạnh: giảm cổ phiếu dùng nhiều nợ vay, giữ nhiều tiền mặt hơn.', a: 'do', why: 'Hãy. Dùng vĩ mô để điều chỉnh tỷ trọng.' },
+    { t: 'Dùng vĩ mô để chọn ngành, rồi dùng phân tích cơ bản để chọn doanh nghiệp tốt nhất trong ngành đó.', a: 'do', why: 'Hãy. Vĩ mô chọn ngành, phân tích cơ bản chọn doanh nghiệp.' },
+    { t: 'Thấy tin GDP tăng là mua ngay, vì tin tốt thì giá chắc chắn tăng.', a: 'dont', why: 'Đừng. Tin vĩ mô thường đã được phản ánh vào giá trước khi công bố.' },
+    { t: 'So sánh kết quả thực tế với kỳ vọng trước khi kết luận tin tốt hay xấu.', a: 'do', why: 'Hãy. Cái quan trọng là kết quả thực tế so với kỳ vọng.' }
+  ];
+  var picks = items.map(function () { return null; });
+  function renderSorter() {
+    $('sorter').innerHTML = items.map(function (it, i) {
+      var p = picks[i], st = p === null ? '' : p === it.a ? ' ok' : ' bad';
+      return '<div class="sort-item' + st + '"><span>' + it.t + '</span><div class="opts">' +
+        '<button class="opt" type="button" data-i="' + i + '" data-v="do" aria-pressed="' + (p === 'do') + '">Hãy</button>' +
+        '<button class="opt" type="button" data-i="' + i + '" data-v="dont" aria-pressed="' + (p === 'dont') + '">Đừng</button></div>' +
+        (p === null ? '' : '<span class="why">' + (p === it.a ? 'Đúng. ' : 'Chưa đúng. ') + it.why + '</span>') + '</div>';
+    }).join('');
+    $('sorter').querySelectorAll('.opt').forEach(function (b) {
+      b.addEventListener('click', function () { picks[+b.dataset.i] = b.dataset.v; renderSorter(); });
+    });
+    var done = picks.filter(function (p) { return p !== null; }).length;
+    var right = picks.filter(function (p, i) { return p === items[i].a; }).length;
+    $('sortVerdict').innerHTML = done < items.length
+      ? '<span class="char">' + T.owl('talk') + '</span><div><h3>' + done + '/' + items.length + ' câu đã chọn</h3><p>Phân loại hết, Cú Già sẽ chấm điểm.</p></div>'
+      : '<span class="char">' + (right === items.length ? T.pig('proud') : T.owl('stern')) + '</span><div><h3>' + right + '/' + items.length + ' câu đúng</h3><p>' +
+        (right === items.length ? 'Con dùng vĩ mô làm la bàn rồi đấy: chỉnh tỷ trọng, chọn ngành, so với kỳ vọng.' : 'Xem lại các câu tô đỏ. Vĩ mô để chỉnh tỷ trọng và chọn ngành, không để bắt đỉnh đáy.') + '</p></div>';
+  }
+  renderSorter();
+
+  // ---------- 6.5 kỳ vọng và thực tế ----------
+  function renderSurprise() {
+    var e = +$('expG').value, a = +$('actG').value, d = Math.round((a - e) * 10) / 10;
+    $('expGOut').textContent = pct(e); $('actGOut').textContent = pct(a);
+    $('surp').textContent = (d > 0 ? '+' : d < 0 ? '−' : '') + trim(Math.abs(d), 1) + ' điểm %';
+    $('surpBox').className = 'stat ' + (d > 0.3 ? 'money' : d < -0.3 ? 'warn' : '');
+    $('surpPig').innerHTML = T.pig(d > 0.3 ? 'happy' : d < -0.3 ? 'sad' : 'worried');
+    $('surpSay').textContent = d > 0.3
+      ? 'GDP ' + pct(a) + ' cao hơn kỳ vọng ' + pct(e) + '. Đây mới là bất ngờ tích cực, phần chưa có trong giá.'
+      : d < -0.3
+        ? 'GDP vẫn tăng ' + pct(a) + ' mà thấp hơn kỳ vọng ' + pct(e) + '. Tin nghe thì tốt, nhưng thị trường có thể thất vọng.'
+        : 'GDP ' + pct(a) + ' gần đúng kỳ vọng ' + pct(e) + '. Tin này nhiều khả năng đã được phản ánh vào giá từ trước.';
+  }
+  ['expG', 'actG'].forEach(function (id) { $(id).addEventListener('input', renderSurprise); });
+  renderSurprise();
+})();
+</script>
+</body>
+</html>

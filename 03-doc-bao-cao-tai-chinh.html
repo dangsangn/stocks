@@ -1,0 +1,992 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Heo Đất khám sức khỏe công ty</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;800&family=Be+Vietnam+Pro:wght@400;600;700&family=Patrick+Hand&display=swap">
+<link rel="stylesheet" href="assets/truyen.css">
+<style>
+/* Riêng Module 3: thước tin cậy, cân bảng cân đối, thác lợi nhuận, dòng tiền, nối ba báo cáo, trò soi cờ đỏ */
+.trust { display: flex; gap: 6px; }
+.trust i { width: 28px; height: 14px; border: 2.5px solid var(--border); border-radius: 999px; background: var(--chip); }
+.trust i.on { background: var(--money); }
+
+.bs { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 10px; }
+.bs-col { display: grid; gap: 6px; align-content: start; }
+.bs-col h4 { margin: 0; font-family: var(--f-display); font-size: 1rem; text-align: center; }
+.bs-stack { height: 300px; border: 3px solid var(--border); border-radius: 8px; display: flex; flex-direction: column-reverse; overflow: hidden; background: var(--chip); }
+.bs-seg { border-top: 2px solid var(--border); display: flex; align-items: center; justify-content: space-between; gap: 4px; padding: 0 8px; font-size: .8rem; font-weight: 700; color: #1D2140; overflow: hidden; white-space: nowrap; transition: flex-basis .3s ease; }
+.bs-seg:last-child { border-top: 0; }
+.bs-seg span:first-child { overflow: hidden; text-overflow: ellipsis; }
+.bs-total { text-align: center; font-family: var(--f-display); font-weight: 800; font-size: 1.15rem; }
+.beam { height: 12px; border: 3px solid var(--border); border-radius: 999px; background: var(--owl); transform-origin: 50% 50%; transition: transform .3s ease; margin: 6px 8% 0; }
+.fulcrum { width: 0; height: 0; margin: 0 auto; border-left: 16px solid transparent; border-right: 16px solid transparent; border-bottom: 22px solid var(--border); }
+.tx { display: flex; flex-wrap: wrap; gap: 8px; }
+.tx .opt { font-size: .9rem; }
+.tx .opt.bad { border-style: dashed; }
+
+.wf { display: grid; gap: 4px; }
+.wf-row { display: grid; grid-template-columns: minmax(0, 210px) minmax(0, 1fr) 64px; gap: 8px; align-items: center; font-size: .86rem; }
+.wf-row .lb { line-height: 1.2; }
+.wf-row.total .lb { font-weight: 700; }
+.wf-row .vv { text-align: right; font-variant-numeric: tabular-nums; font-weight: 700; }
+.wf-track { position: relative; height: 20px; background: var(--chip); border-radius: 4px; }
+.wf-bar { position: absolute; top: 2px; bottom: 2px; border: 2px solid var(--border); border-radius: 3px; transition: left .3s ease, width .3s ease; }
+.wf-bar.up { background: var(--money); }
+.wf-bar.down { background: var(--warn); }
+.wf-bar.sum { background: var(--save); }
+.wf-bar.once { background: repeating-linear-gradient(45deg, var(--gold) 0 6px, var(--owl) 6px 12px); }
+.wf-row.dim { opacity: .35; }
+.badge { font-size: .7rem; font-weight: 700; padding: 0 6px; border-radius: 999px; background: var(--gold); color: #1D2140; border: 2px solid var(--border); margin-left: 4px; white-space: nowrap; }
+@media (max-width: 520px) { .wf-row { grid-template-columns: minmax(0, 120px) minmax(0, 1fr) 46px; font-size: .76rem; gap: 6px; } }
+
+.chart-box svg text.lbl { fill: var(--ink); font-weight: 700; }
+.toggle-row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; font-weight: 600; }
+
+.signs { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+.sign { font: inherit; cursor: pointer; color: var(--ink); border: 3px solid var(--border); border-radius: 12px; background: var(--chip); padding: 8px; display: grid; justify-items: center; gap: 2px; box-shadow: 3px 3px 0 var(--hard); }
+.sign .s { font-family: var(--f-display); font-weight: 800; font-size: 2.2rem; line-height: 1; }
+.sign.plus { background: var(--money-soft); } .sign.plus .s { color: var(--money); }
+.sign.minus { background: var(--warn-soft); } .sign.minus .s { color: var(--warn); }
+.sign small { font-size: .8rem; color: var(--muted); font-weight: 600; text-align: center; }
+
+.links { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+@media (max-width: 700px) { .links { grid-template-columns: 1fr; } }
+.ledger { border: 2.5px solid var(--border); border-radius: 10px; padding: 10px 12px; background: var(--panel); display: grid; gap: 4px; align-content: start; font-size: .9rem; }
+.ledger h4 { margin: 0 0 4px; font-family: var(--f-display); font-size: 1rem; }
+.ledger .ln { display: flex; justify-content: space-between; gap: 8px; font-variant-numeric: tabular-nums; }
+.ledger .ln b { white-space: nowrap; }
+.ledger .ln.sum { border-top: 2px solid var(--border); padding-top: 4px; font-weight: 700; }
+.hl-a { background: var(--money-soft); border-radius: 4px; padding: 0 4px; }
+.hl-b { background: var(--bubble-owl); border-radius: 4px; padding: 0 4px; }
+.hl-c { background: var(--bubble-pig); border-radius: 4px; padding: 0 4px; }
+
+.deck { display: grid; gap: 12px; }
+.deck .item { font-family: var(--f-display); font-weight: 800; font-size: 1.3rem; border: 3px solid var(--border); border-radius: 12px; padding: 14px; background: var(--bubble-owl); text-align: center; }
+
+.flags { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 10px; }
+.fact { font: inherit; color: var(--ink); cursor: pointer; text-align: left; border: 2.5px solid var(--border); border-radius: 12px; background: var(--panel); padding: 10px 12px; display: grid; gap: 6px; box-shadow: 3px 3px 0 var(--hard); }
+.fact .why { display: none; font-size: .88rem; }
+.fact.red { background: var(--warn-soft); border-color: var(--warn); }
+.fact.green { background: var(--money-soft); border-color: var(--money); }
+.fact.red .why, .fact.green .why { display: block; }
+.fact .act { display: flex; gap: 6px; flex-wrap: wrap; }
+.fact .act .opt { font-size: .82rem; padding: 3px 10px; }
+
+.order { display: grid; gap: 8px; }
+.order .opt { width: 100%; border-radius: 10px; }
+.order .opt.done { background: var(--money-soft); border-color: var(--money); cursor: default; }
+.shake { animation: shake .3s ease; }
+@keyframes shake { 25% { transform: translateX(-4px); } 75% { transform: translateX(4px); } }
+</style>
+</head>
+<body>
+<main class="book">
+
+  <nav class="topnav"><a href="index.html">← Mục lục</a><span class="note">Module 3 / 9</span></nav>
+
+  <!-- MỞ ĐẦU -->
+  <header class="hero">
+    <div class="hero-title">
+      <span class="eyebrow">Module 3 · Tuần 6–10</span>
+      <h1>Heo Đất khám sức khỏe công ty</h1>
+      <p class="sub">Báo cáo tài chính (BCTC) là "hồ sơ sức khỏe" của doanh nghiệp. Cân thử bảng cân đối, đổ nước xuống phễu lợi nhuận, soi dòng tiền, rồi tick bài tập ở cuối trang.</p>
+    </div>
+    <div class="strip">
+      <div class="panel">
+        <div class="say pig"><span class="char" data-char="pig:wow"></span><p class="bubble">Thầy ơi, công ty này báo lãi tăng 50%! Mua liền được chưa?</p></div>
+      </div>
+      <div class="panel">
+        <div class="say owl right"><p class="bubble">Lãi đó từ đâu ra? Và công ty đã thu được đồng tiền nào chưa?</p><span class="char" data-char="owl:stern"></span></div>
+      </div>
+      <div class="panel">
+        <div class="say pig"><span class="char" data-char="pig:worried"></span><p class="bubble">Em đâu phải kế toán, đọc báo cáo sao nổi…</p></div>
+      </div>
+      <div class="panel">
+        <div class="say owl right"><p class="bubble">Không cần là kế toán. Chỉ cần trả lời được bốn câu hỏi.</p><span class="char" data-char="owl:smile"></span></div>
+      </div>
+      <div class="panel wide">
+        <div class="say owl"><span class="char" data-char="owl:talk"></span><p class="bubble">Công ty <b>có gì</b>, <b>nợ ai</b>, <b>kiếm được bao nhiêu</b>, và <b>có thu được tiền thật không</b>. Ba báo cáo chính, cộng phần thuyết minh và ý kiến kiểm toán, trả lời đủ cả bốn.</p></div>
+      </div>
+    </div>
+  </header>
+
+  <!-- 3.1 -->
+  <section class="chapter" id="nguon">
+    <div class="chapter-head"><span class="tag">3.1</span><h2>Lấy hồ sơ ở đâu, bản nào tin được</h2></div>
+    <div class="panel talk">
+      <div class="say pig"><span class="char" data-char="pig:happy"></span><p class="bubble">Em xem số trên mấy trang tổng hợp là đủ rồi nhỉ?</p></div>
+      <div class="say owl right"><p class="bubble">Tra nhanh thì tiện, nhưng có thể sai khi nhập liệu. Số quan trọng thì đối chiếu với bản gốc.</p><span class="char" data-char="owl:talk"></span></div>
+    </div>
+    <div class="strip">
+      <div class="panel callout good">
+        <strong>Nguồn gốc (ưu tiên)</strong>
+        <p>Mục "Quan hệ cổ đông" trên website doanh nghiệp, trang công bố thông tin của HOSE/HNX.</p>
+      </div>
+      <div class="panel callout">
+        <strong>Nguồn tổng hợp (tiện tra nhanh)</strong>
+        <p>CafeF, Vietstock, FireAnt, Simplize. Có thể sai sót khi nhập liệu, nên số quan trọng thì đối chiếu với bản gốc.</p>
+      </div>
+    </div>
+    <div class="panel toy">
+      <div class="toy-title"><h3>Ba loại BCTC: bản nào đáng tin nhất?</h3><span class="pill">Bấm chọn</span></div>
+      <div class="tabs" role="group" aria-label="Chọn loại báo cáo" id="rptTabs">
+        <button class="opt" type="button" data-r="0">BCTC quý</button>
+        <button class="opt" type="button" data-r="1">BCTC bán niên</button>
+        <button class="opt" type="button" data-r="2">BCTC năm</button>
+      </div>
+      <div class="result">
+        <div class="stat"><div class="k">Thời điểm công bố</div><div class="v" id="rptWhen"></div></div>
+        <div class="stat" id="rptTrustBox"><div class="k">Độ tin cậy</div><div class="v" id="rptTrust"></div><div class="trust" id="rptMeter" aria-hidden="true"><i></i><i></i><i></i></div></div>
+      </div>
+      <div class="tbl-wrap">
+        <table class="tbl">
+          <thead><tr><th>Loại báo cáo</th><th>Thời điểm</th><th>Độ tin cậy</th></tr></thead>
+          <tbody>
+            <tr><td>BCTC quý</td><td>Trong 20–30 ngày sau quý</td><td>Chưa kiểm toán, chưa soát xét</td></tr>
+            <tr><td>BCTC bán niên</td><td>Tháng 8</td><td>Đã được kiểm toán viên <b>soát xét</b></td></tr>
+            <tr><td>BCTC năm</td><td>Tháng 3–4 năm sau</td><td>Đã <b>kiểm toán</b>, đáng tin nhất</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="callout">
+        <strong>Luôn đọc báo cáo hợp nhất</strong>
+        <p>Báo cáo hợp nhất gộp công ty mẹ và các công ty con. Không đọc báo cáo riêng của công ty mẹ, trừ khi bạn cần xem riêng khả năng trả cổ tức của công ty mẹ.</p>
+      </div>
+      <div class="mcq q" data-answer="1" data-right="Đúng. Báo cáo hợp nhất gộp cả công ty mẹ và các công ty con, phản ánh toàn bộ tập đoàn." data-wrong="Chưa đúng. Báo cáo riêng của công ty mẹ chỉ dùng khi cần xem khả năng trả cổ tức của riêng công ty mẹ.">
+        <h3>Heo muốn đánh giá cả tập đoàn gồm công ty mẹ và 5 công ty con. Nên đọc bản nào?</h3>
+        <div class="opts">
+          <button class="opt" type="button">Báo cáo riêng của công ty mẹ</button>
+          <button class="opt" type="button">Báo cáo hợp nhất</button>
+          <button class="opt" type="button">Báo cáo của công ty con lớn nhất</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3.2 -->
+  <section class="chapter" id="can-doi">
+    <div class="chapter-head"><span class="tag">3.2</span><h2>Bảng cân đối: cái cân không bao giờ lệch</h2></div>
+    <div class="strip">
+      <div class="panel">
+        <div class="talk">
+          <div class="say pig"><span class="char" data-char="pig:worried"></span><p class="bubble">Công ty này nợ tận 50 tỷ! Nghe đã thấy sợ.</p></div>
+          <div class="say owl right"><p class="bubble">Bảng cân đối là bức ảnh chụp tại <b>một thời điểm</b> (ví dụ 31/12). Bên trái là công ty có gì, bên phải là tiền đó từ đâu ra. Hai bên luôn bằng nhau.</p><span class="char" data-char="owl:talk"></span></div>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="chalk" aria-label="Phương trình kế toán">
+          <span>Phương trình cốt lõi:</span>
+          <span class="f">Tổng tài sản = Nợ phải trả + Vốn chủ sở hữu</span>
+          <small>Mọi giao dịch đều chạm hai chỗ, nên cân luôn thăng bằng.</small>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel toy">
+      <div class="toy-title"><h3>Cái cân của Công ty Heo Con</h3><span class="pill">Bấm giao dịch</span></div>
+      <p>Công ty giả định, đơn vị tỷ đồng. Bấm một giao dịch và xem cả hai bên cùng thay đổi. Thử nút viền đứt để thấy chuyện gì xảy ra khi ghi sổ chỉ một vế.</p>
+      <div class="tx" id="txBtns"></div>
+      <div class="bs">
+        <div class="bs-col"><h4>Tài sản</h4><div class="bs-stack" id="bsLeft"></div><div class="bs-total" id="bsLT"></div></div>
+        <div class="bs-col"><h4>Nợ phải trả + Vốn chủ</h4><div class="bs-stack" id="bsRight"></div><div class="bs-total" id="bsRT"></div></div>
+      </div>
+      <div><div class="beam" id="beam"></div><div class="fulcrum"></div></div>
+      <div class="say owl"><span class="char" id="txOwl"></span><p class="bubble" id="txSay"></p></div>
+      <div class="result">
+        <div class="stat"><div class="k">Nợ vay có lãi</div><div class="v" id="bsDebt"></div></div>
+        <div class="stat money"><div class="k">Nợ không mất lãi (phải trả người bán)</div><div class="v" id="bsFree"></div></div>
+      </div>
+      <div class="callout good">
+        <strong>Mẹo: không phải khoản nợ nào cũng xấu</strong>
+        <p>"Phải trả người bán" và "người mua trả tiền trước" là nợ không mất lãi, cho thấy công ty có vị thế mạnh với đối tác. Nợ cần soi kỹ là <b>nợ vay có lãi</b>.</p>
+      </div>
+    </div>
+
+    <div class="panel toy">
+      <div class="toy-title"><h3>Khoản này nằm ở ngăn nào?</h3><span class="pill">Phân loại</span></div>
+      <div class="deck">
+        <div class="note" id="deckCount"></div>
+        <div class="item" id="deckItem"></div>
+        <div class="opts" id="deckOpts"></div>
+        <div class="say owl"><span class="char" id="deckOwl"></span><p class="bubble" id="deckSay"></p></div>
+        <div><button class="opt" type="button" id="deckNext">Khoản tiếp theo →</button></div>
+      </div>
+      <div class="tbl-wrap">
+        <table class="tbl">
+          <thead><tr><th>Phần</th><th>Khoản mục chính</th><th>Câu hỏi cần đặt ra</th></tr></thead>
+          <tbody>
+            <tr><td>Tài sản ngắn hạn</td><td>Tiền và tương đương tiền; đầu tư tài chính ngắn hạn (tiền gửi có kỳ hạn); phải thu khách hàng; hàng tồn kho</td><td>Tiền có nhiều không? Phải thu và tồn kho có tăng nhanh hơn doanh thu không?</td></tr>
+            <tr><td>Tài sản dài hạn</td><td>Tài sản cố định (nhà máy, máy móc); xây dựng cơ bản dở dang; đầu tư vào công ty liên kết; lợi thế thương mại</td><td>Công ty có đang mở rộng sản xuất không? Dự án dở dang có bị "treo" lâu không?</td></tr>
+            <tr><td>Nợ ngắn hạn</td><td>Vay ngắn hạn; phải trả người bán; người mua trả tiền trước; thuế phải nộp</td><td>Nợ vay ngắn hạn có quá lớn so với tiền mặt không?</td></tr>
+            <tr><td>Nợ dài hạn</td><td>Vay dài hạn; trái phiếu phát hành</td><td>Lãi suất bao nhiêu, khi nào đáo hạn?</td></tr>
+            <tr><td>Vốn chủ sở hữu</td><td>Vốn góp; thặng dư vốn; lợi nhuận chưa phân phối; lợi ích cổ đông không kiểm soát</td><td>Vốn có tăng nhờ lợi nhuận giữ lại, hay nhờ phát hành thêm cổ phiếu (pha loãng)?</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3.3 -->
+  <section class="chapter" id="ket-qua">
+    <div class="chapter-head"><span class="tag">3.3</span><h2>Kết quả kinh doanh: cái phễu lọc lợi nhuận</h2></div>
+    <div class="panel talk">
+      <div class="say pig"><span class="char" data-char="pig:proud"></span><p class="bubble">Công ty B lãi sau thuế 232 tỷ, hơn hẳn công ty A có 152 tỷ. Chọn B!</p></div>
+      <div class="say owl right"><p class="bubble">Bảng cân đối là bức ảnh; báo cáo này là cuốn phim của <b>cả một kỳ</b> (quý hoặc năm). Đọc từ trên xuống như cái phễu, và xem lợi nhuận rơi ra ở tầng nào.</p><span class="char" data-char="owl:stern"></span></div>
+    </div>
+
+    <div class="panel">
+      <div class="chalk" aria-label="Cấu trúc báo cáo kết quả kinh doanh" style="font-size:1.1rem">
+<span>Doanh thu thuần</span>
+<span>&nbsp;− Giá vốn hàng bán</span>
+<span>&nbsp;= <b>Lợi nhuận gộp</b> → biên lợi nhuận gộp = LN gộp / Doanh thu</span>
+<span>&nbsp;+ Doanh thu tài chính (lãi tiền gửi, cổ tức...)</span>
+<span>&nbsp;− Chi phí tài chính (trong đó: chi phí lãi vay)</span>
+<span>&nbsp;+ Lãi/lỗ từ công ty liên doanh, liên kết</span>
+<span>&nbsp;− Chi phí bán hàng</span>
+<span>&nbsp;− Chi phí quản lý doanh nghiệp</span>
+<span>&nbsp;= <b>Lợi nhuận thuần từ hoạt động kinh doanh</b> ← lợi nhuận "cốt lõi"</span>
+<span>&nbsp;+ Lợi nhuận khác (thanh lý tài sản, tiền phạt...)</span>
+<span>&nbsp;= <b>Lợi nhuận trước thuế</b></span>
+<span>&nbsp;− Thuế thu nhập doanh nghiệp</span>
+<span>&nbsp;= <b>Lợi nhuận sau thuế</b></span>
+<span>&nbsp;&nbsp;&nbsp;&nbsp;├─ của cổ đông công ty mẹ ← dùng để tính EPS</span>
+<span>&nbsp;&nbsp;&nbsp;&nbsp;└─ của cổ đông không kiểm soát</span>
+      </div>
+    </div>
+
+    <div class="panel toy">
+      <div class="toy-title"><h3>Thác lợi nhuận của ba công ty</h3><span class="pill">Chọn công ty</span></div>
+      <div class="tabs" role="group" aria-label="Chọn công ty" id="isTabs">
+        <button class="opt" type="button" data-s="A">A: Đều Đặn</button>
+        <button class="opt" type="button" data-s="B">B: Bán Vốn</button>
+        <button class="opt" type="button" data-s="C">C: Thanh Lý</button>
+      </div>
+      <label class="toggle-row"><input type="checkbox" id="isStrip"> Bỏ các khoản lợi nhuận một lần (dải sọc vàng)</label>
+      <div class="wf" id="wf"></div>
+      <div class="legend"><span><i style="background:var(--money)"></i>Cộng vào</span><span><i style="background:var(--warn)"></i>Trừ đi</span><span><i style="background:var(--save)"></i>Tổng tầng</span><span><i style="background:var(--gold)"></i>Một lần, không lặp lại</span></div>
+      <div class="result">
+        <div class="stat"><div class="k">Biên lợi nhuận gộp</div><div class="v" id="isGM"></div></div>
+        <div class="stat"><div class="k">LN thuần từ HĐKD ("cốt lõi")</div><div class="v" id="isCore"></div></div>
+        <div class="stat" id="isOnceBox"><div class="k">Phần một lần trong LN trước thuế</div><div class="v" id="isOnce"></div></div>
+      </div>
+      <div class="say owl"><span class="char" id="isOwl"></span><p class="bubble" id="isSay"></p></div>
+      <p class="note">Số liệu giả định, đơn vị tỷ đồng. Giả định thuế thu nhập doanh nghiệp 20% lợi nhuận trước thuế và cổ đông không kiểm soát hưởng 10% lợi nhuận sau thuế.</p>
+    </div>
+
+    <div class="panel callout">
+      <strong>Ba điều chuyên gia luôn xem</strong>
+      <ol class="plain">
+        <li><b>Tăng trưởng doanh thu so với cùng kỳ.</b> So quý này với cùng quý năm trước, không so với quý liền trước, vì nhiều ngành có tính mùa vụ.</li>
+        <li><b>Biên lợi nhuận gộp ổn định hay biến động.</b> Biên ổn định qua nhiều năm cho thấy công ty có quyền định giá.</li>
+        <li><b>Lợi nhuận đến từ đâu.</b> Nếu lợi nhuận tăng mạnh nhưng chủ yếu nhờ "lợi nhuận khác" hoặc doanh thu tài chính bất thường (bán công ty con, hoàn nhập dự phòng), thì đó là lợi nhuận <b>một lần</b>, không lặp lại năm sau.</li>
+      </ol>
+    </div>
+
+    <div class="panel toy">
+      <div class="toy-title"><h3>Bẫy mùa vụ: so với quý nào?</h3><span class="pill">Bấm một quý</span></div>
+      <p>Công ty bánh kẹo giả định bán chạy nhất vào quý 4 (mùa Tết). Bấm một cột năm 2025 để so sánh.</p>
+      <div class="chart-box"><svg id="seaChart" viewBox="0 0 640 250" role="img" aria-label="Doanh thu theo quý năm 2024 và 2025"></svg></div>
+      <div class="result">
+        <div class="stat" id="seaQoQBox"><div class="k" id="seaQoQK"></div><div class="v" id="seaQoQ"></div></div>
+        <div class="stat" id="seaYoYBox"><div class="k" id="seaYoYK"></div><div class="v" id="seaYoY"></div></div>
+      </div>
+      <div class="say pig"><span class="char" id="seaPig"></span><p class="bubble" id="seaSay"></p></div>
+    </div>
+
+    <div class="panel quiz">
+      <div class="mcq q" data-answer="0" data-right="Đúng. Biên gộp ổn định qua nhiều năm cho thấy công ty có quyền định giá: chi phí tăng thì vẫn tăng được giá bán." data-wrong="Chưa đúng. Biên gộp nhảy lung tung là dấu hiệu công ty không giữ được giá bán khi chi phí thay đổi.">
+        <h3>Biên lợi nhuận gộp 4 năm của hai công ty giả định. Công ty nào nhiều khả năng có quyền định giá?</h3>
+        <div class="opts">
+          <button class="opt" type="button">X: 40%, 41%, 39%, 40%</button>
+          <button class="opt" type="button">Y: 25%, 38%, 18%, 33%</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3.4 -->
+  <section class="chapter" id="dong-tien">
+    <div class="chapter-head"><span class="tag">3.4</span><h2>Lưu chuyển tiền tệ: tiền thật hay lãi giấy?</h2></div>
+    <div class="panel talk">
+      <div class="say pig"><span class="char" data-char="pig:happy"></span><p class="bubble">Có lãi là có tiền chứ thầy?</p></div>
+      <div class="say owl right"><p class="bubble">Không hẳn. Lợi nhuận là con số kế toán; tiền mới là thứ trả được lương, trả nợ và trả cổ tức. Bán chịu cả năm thì lãi to mà két vẫn rỗng.</p><span class="char" data-char="owl:stern"></span></div>
+    </div>
+    <div class="tbl-wrap">
+      <table class="tbl">
+        <thead><tr><th>Dòng tiền</th><th>Gồm</th><th>Doanh nghiệp khỏe thường có</th></tr></thead>
+        <tbody>
+          <tr><td>Từ hoạt động kinh doanh (CFO)</td><td>Tiền thu từ khách hàng trừ tiền trả nhà cung cấp, lương, thuế, lãi vay</td><td>Dương, xấp xỉ hoặc lớn hơn lợi nhuận sau thuế</td></tr>
+          <tr><td>Từ hoạt động đầu tư (CFI)</td><td>Mua sắm tài sản cố định, mua bán công ty, gửi/rút tiền gửi có kỳ hạn</td><td>Âm (đang đầu tư cho tương lai)</td></tr>
+          <tr><td>Từ hoạt động tài chính (CFF)</td><td>Vay và trả nợ, phát hành cổ phiếu, trả cổ tức</td><td>Âm (đang trả nợ, trả cổ tức)</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="panel toy">
+      <div class="toy-title"><h3>Đoán bệnh qua ba dấu cộng trừ</h3><span class="pill">Bấm đổi dấu</span></div>
+      <div class="signs" id="signs">
+        <button class="sign" type="button" data-k="0"><span class="s"></span><small>CFO · kinh doanh</small></button>
+        <button class="sign" type="button" data-k="1"><span class="s"></span><small>CFI · đầu tư</small></button>
+        <button class="sign" type="button" data-k="2"><span class="s"></span><small>CFF · tài chính</small></button>
+      </div>
+      <div class="verdict" id="cfVerdict"></div>
+      <div class="tbl-wrap">
+        <table class="tbl" id="cfTable">
+          <thead><tr><th>CFO</th><th>CFI</th><th>CFF</th><th>Thường có nghĩa là</th></tr></thead>
+          <tbody>
+            <tr><td>+</td><td>−</td><td>−</td><td>Doanh nghiệp trưởng thành, khỏe: tự kiếm tiền, tự đầu tư, còn dư trả cổ tức</td></tr>
+            <tr><td>+</td><td>−</td><td>+</td><td>Đang tăng trưởng, kinh doanh ra tiền nhưng vẫn vay thêm để mở rộng</td></tr>
+            <tr><td>−</td><td>−</td><td>+</td><td>Kinh doanh chưa ra tiền, sống nhờ đi vay hoặc phát hành cổ phiếu. Rủi ro cao</td></tr>
+            <tr><td>−</td><td>+</td><td>+ hoặc −</td><td>Đang bán tài sản để bù cho kinh doanh. Dấu hiệu khó khăn</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="panel toy">
+      <div class="toy-title"><h3>Máy tính dòng tiền tự do</h3><span class="pill">Kéo thử</span></div>
+      <div class="chalk"><span class="f">FCF = CFO − chi mua sắm tài sản cố định (capex)</span><small>Số tiền doanh nghiệp thật sự "dư ra" để trả cổ tức, trả nợ hoặc mua lại cổ phiếu. Chỉ số yêu thích của các nhà đầu tư giá trị.</small></div>
+      <div class="controls">
+        <div class="ctl"><label for="fcLN">Lợi nhuận sau thuế <output id="fcLNOut"></output></label><input id="fcLN" type="range" min="0" max="300" step="10" value="100"></div>
+        <div class="ctl"><label for="fcCFO">CFO <output id="fcCFOOut"></output></label><input id="fcCFO" type="range" min="-200" max="300" step="10" value="120"></div>
+        <div class="ctl"><label for="fcCap">Capex <output id="fcCapOut"></output></label><input id="fcCap" type="range" min="0" max="300" step="10" value="50"></div>
+      </div>
+      <div class="result">
+        <div class="stat" id="fcFCFBox"><div class="k">Dòng tiền tự do (FCF)</div><div class="v" id="fcFCF"></div></div>
+        <div class="stat" id="fcRatioBox"><div class="k">CFO / Lợi nhuận sau thuế</div><div class="v" id="fcRatio"></div></div>
+      </div>
+      <div class="say owl"><span class="char" id="fcOwl"></span><p class="bubble" id="fcSay"></p></div>
+      <p class="note">Đơn vị tỷ đồng, số giả định.</p>
+    </div>
+
+    <div class="panel toy">
+      <div class="toy-title"><h3>Soi cờ đỏ: lãi trên giấy hay tiền về két?</h3></div>
+      <p>Hai công ty giả định, 4 năm liền. Cột hồng là lợi nhuận sau thuế, cột xanh là CFO.</p>
+      <div class="links" style="grid-template-columns:repeat(auto-fit,minmax(260px,1fr))">
+        <div class="stack" style="gap:4px"><strong>Công ty M</strong><div class="chart-box"><svg id="cfM" viewBox="0 0 320 200" role="img" aria-label="Lợi nhuận và CFO của công ty M"></svg></div></div>
+        <div class="stack" style="gap:4px"><strong>Công ty N</strong><div class="chart-box"><svg id="cfN" viewBox="0 0 320 200" role="img" aria-label="Lợi nhuận và CFO của công ty N"></svg></div></div>
+      </div>
+      <div class="legend"><span><i style="background:var(--pig)"></i>Lợi nhuận sau thuế</span><span><i style="background:var(--money)"></i>CFO</span></div>
+      <div class="mcq q" data-answer="0" data-right="Chính xác. M báo lãi tăng đều nhưng CFO âm 3 trên 4 năm: lãi chưa biến thành tiền. CFO âm nhiều năm trong khi vẫn báo lãi là một cờ đỏ." data-wrong="Nhìn lại cột xanh. N có CFO dương và lớn hơn lợi nhuận mỗi năm, đúng kiểu doanh nghiệp khỏe.">
+        <h3>Công ty nào đáng lo hơn?</h3>
+        <div class="opts">
+          <button class="opt" type="button">Công ty M</button>
+          <button class="opt" type="button">Công ty N</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3.5 -->
+  <section class="chapter" id="lien-ket">
+    <div class="chapter-head"><span class="tag">3.5</span><h2>Ba báo cáo nối dây với nhau</h2></div>
+    <div class="panel talk">
+      <div class="say pig"><span class="char" data-char="pig:wow"></span><p class="bubble">Ba báo cáo, mỗi cái một kiểu. Em đọc riêng từng cái được không?</p></div>
+      <div class="say owl right"><p class="bubble">Chúng nối dây với nhau. Kéo thử bên dưới: các ô cùng màu luôn khớp nhau giữa các báo cáo.</p><span class="char" data-char="owl:talk"></span></div>
+    </div>
+    <ul class="panel plain" style="padding-left:2.2em">
+      <li><span class="hl-a">Lợi nhuận sau thuế</span> (báo cáo kết quả kinh doanh) → cộng vào lợi nhuận chưa phân phối (bảng cân đối) → là điểm xuất phát của CFO (lưu chuyển tiền tệ, phương pháp gián tiếp).</li>
+      <li><span class="hl-b">Tiền cuối kỳ</span> trên báo cáo lưu chuyển tiền tệ = khoản mục "Tiền và tương đương tiền" trên bảng cân đối.</li>
+      <li><span class="hl-c">Phải thu hoặc tồn kho tăng</span> thì CFO giảm (doanh nghiệp đã ghi doanh thu nhưng chưa thu được tiền, hoặc đã chi tiền nhưng hàng vẫn nằm trong kho).</li>
+    </ul>
+    <div class="panel toy">
+      <div class="toy-title"><h3>Bảng nối dây</h3><span class="pill">Kéo thử</span></div>
+      <div class="controls">
+        <div class="ctl"><label for="lkLN">Lợi nhuận sau thuế <output id="lkLNOut"></output></label><input id="lkLN" type="range" min="0" max="200" step="10" value="100"></div>
+        <div class="ctl"><label for="lkPT">Phải thu tăng thêm <output id="lkPTOut"></output></label><input id="lkPT" type="range" min="0" max="150" step="10" value="30"></div>
+        <div class="ctl"><label for="lkTK">Tồn kho tăng thêm <output id="lkTKOut"></output></label><input id="lkTK" type="range" min="0" max="150" step="10" value="20"></div>
+      </div>
+      <div class="links" id="links"></div>
+      <div class="say pig"><span class="char" id="lkPig"></span><p class="bubble" id="lkSay"></p></div>
+      <p class="note">Mô hình rút gọn, đơn vị tỷ đồng: CFO chỉ tính từ lợi nhuận sau thuế trừ phần tăng phải thu và tồn kho, bỏ qua các điều chỉnh khác. Giả định tiền đầu kỳ 50, CFI −40, CFF −20, lợi nhuận chưa phân phối đầu kỳ 200, không chia cổ tức trong kỳ.</p>
+    </div>
+  </section>
+
+  <!-- 3.6 -->
+  <section class="chapter" id="thuyet-minh">
+    <div class="chapter-head"><span class="tag">3.6</span><h2>Thuyết minh: nơi giấu sự thật</h2></div>
+    <div class="panel talk">
+      <div class="say pig"><span class="char" data-char="pig:happy"></span><p class="bubble">Mấy chục trang chữ nhỏ ở cuối, em bỏ qua nhé?</p></div>
+      <div class="say owl right"><p class="bubble">Người mới thường bỏ qua thuyết minh, trong khi các thông tin quan trọng nhất lại nằm ở đây. Lật từng thẻ xem.</p><span class="char" data-char="owl:stern"></span></div>
+    </div>
+    <div class="panel toy">
+      <div class="cards">
+        <button class="flip" type="button"><span class="front">Chi tiết phải thu</span><span class="back">Phải thu của ai, bao lâu, đã trích dự phòng chưa.</span></button>
+        <button class="flip" type="button"><span class="front">Chi tiết hàng tồn kho</span><span class="back">Thành phẩm hay nguyên liệu, dự phòng giảm giá.</span></button>
+        <button class="flip" type="button"><span class="front">Chi tiết vay nợ</span><span class="back">Ngân hàng nào, lãi suất, kỳ hạn, tài sản đảm bảo.</span></button>
+        <button class="flip" type="button"><span class="front">Giao dịch với bên liên quan</span><span class="back">Công ty có bán hàng hoặc cho vay các công ty của lãnh đạo không.</span></button>
+        <button class="flip" type="button"><span class="front">Sự kiện sau kỳ, nợ tiềm tàng, vụ kiện</span><span class="back">Sự kiện sau ngày kết thúc kỳ kế toán, các khoản nợ tiềm tàng, các vụ kiện.</span></button>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3.7 -->
+  <section class="chapter" id="kiem-toan">
+    <div class="chapter-head"><span class="tag">3.7</span><h2>Ý kiến kiểm toán: con dấu của trọng tài</h2></div>
+    <div class="panel talk">
+      <div class="say owl"><span class="char" data-char="owl:talk"></span><p class="bubble">Trước khi đọc số, đọc xem kiểm toán viên nói gì về những con số đó. Bấm từng loại ý kiến.</p></div>
+    </div>
+    <div class="panel toy">
+      <div class="tabs" role="group" aria-label="Chọn loại ý kiến" id="audTabs">
+        <button class="opt" type="button" data-a="0">Chấp nhận toàn phần</button>
+        <button class="opt" type="button" data-a="1">Toàn phần kèm "vấn đề cần nhấn mạnh"</button>
+        <button class="opt" type="button" data-a="2">Ngoại trừ</button>
+        <button class="opt" type="button" data-a="3">Từ chối / Trái ngược</button>
+      </div>
+      <div class="verdict" id="audVerdict"></div>
+      <div class="tbl-wrap">
+        <table class="tbl">
+          <thead><tr><th>Loại ý kiến</th><th>Ý nghĩa</th><th>Bạn nên làm gì</th></tr></thead>
+          <tbody>
+            <tr><td>Chấp nhận toàn phần</td><td>BCTC trung thực, hợp lý</td><td>Bình thường</td></tr>
+            <tr><td>Chấp nhận toàn phần kèm "vấn đề cần nhấn mạnh"</td><td>Vẫn chấp nhận, nhưng lưu ý một điểm (ví dụ nghi ngờ khả năng hoạt động liên tục)</td><td>Đọc kỹ đoạn nhấn mạnh</td></tr>
+            <tr><td>Ngoại trừ</td><td>Có khoản mục kiểm toán viên không đồng ý hoặc không kiểm tra được</td><td>Cảnh giác cao</td></tr>
+            <tr><td>Từ chối đưa ra ý kiến / Ý kiến trái ngược</td><td>BCTC không đáng tin</td><td>Tránh xa</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="panel toy">
+      <div class="toy-title"><h3>Lợi nhuận trước và sau kiểm toán</h3></div>
+      <p>Hãy so sánh <b>lợi nhuận trước và sau kiểm toán</b>. Nếu lợi nhuận bị điều chỉnh giảm mạnh sau kiểm toán, đó là dấu hiệu xấu về chất lượng quản trị.</p>
+      <div class="controls">
+        <div class="ctl"><label for="audPre">Lợi nhuận công ty tự báo cáo (tỷ đồng)</label><input id="audPre" type="number" min="1" value="120" inputmode="decimal"></div>
+        <div class="ctl"><label for="audPost">Lợi nhuận sau kiểm toán (tỷ đồng)</label><input id="audPost" type="number" value="80" inputmode="decimal"></div>
+      </div>
+      <div class="result">
+        <div class="stat" id="audDiffBox"><div class="k">Kiểm toán điều chỉnh</div><div class="v" id="audDiff"></div></div>
+      </div>
+      <p class="note" id="audNote"></p>
+    </div>
+  </section>
+
+  <!-- 3.8 -->
+  <section class="chapter" id="co-do">
+    <div class="chapter-head"><span class="tag">3.8</span><h2>Săn cờ đỏ</h2></div>
+    <div class="panel talk">
+      <div class="say pig"><span class="char" data-char="pig:wow"></span><p class="bubble">Thầy cho em tập soi đi! Em nghĩ cái gì tăng cũng là tốt.</p></div>
+      <div class="say owl right"><p class="bubble">Thử xem. Tám dữ kiện về một công ty giả định, có cái là cờ đỏ, có cái là dấu hiệu khỏe. Chấm từng cái.</p><span class="char" data-char="owl:smile"></span></div>
+    </div>
+    <div class="panel toy">
+      <div class="toy-title"><h3>Công ty Bong Bóng: cờ đỏ hay cờ xanh?</h3><span class="pill" id="flagScore"></span></div>
+      <div class="flags" id="flags"></div>
+    </div>
+    <div class="panel toy">
+      <div class="toy-title"><h3>Checklist cờ đỏ để chấm công ty của bạn</h3><span class="pill" id="rfCount"></span></div>
+      <ul class="tasks" id="rfList">
+        <li><label><input type="checkbox"><span>Phải thu tăng nhanh hơn doanh thu nhiều kỳ liền</span></label></li>
+        <li><label><input type="checkbox"><span>Hàng tồn kho tăng mạnh trong khi doanh thu đi ngang</span></label></li>
+        <li><label><input type="checkbox"><span>CFO âm nhiều năm trong khi vẫn báo lãi</span></label></li>
+        <li><label><input type="checkbox"><span>Lợi nhuận chủ yếu đến từ hoạt động tài chính hoặc thu nhập khác</span></label></li>
+        <li><label><input type="checkbox"><span>Nhiều giao dịch lớn với bên liên quan; cho lãnh đạo hoặc công ty "sân sau" vay</span></label></li>
+        <li><label><input type="checkbox"><span>Nợ vay tăng nhanh, chi phí lãi vay lớn hơn 30–50% lợi nhuận hoạt động</span></label></li>
+        <li><label><input type="checkbox"><span>Thường xuyên phát hành thêm cổ phiếu khiến cổ phần bị pha loãng</span></label></li>
+        <li><label><input type="checkbox"><span>Đổi công ty kiểm toán liên tục, ý kiến ngoại trừ, chậm công bố BCTC</span></label></li>
+        <li><label><input type="checkbox"><span>Lợi nhuận trước và sau kiểm toán chênh lệch lớn</span></label></li>
+      </ul>
+      <p class="note">Dùng để chấm khi làm bài tập; danh sách này không lưu lại.</p>
+    </div>
+  </section>
+
+  <!-- 3.9 -->
+  <section class="chapter" id="quy-trinh">
+    <div class="chapter-head"><span class="tag">3.9</span><h2>Khám tổng quát trong 30 phút</h2></div>
+    <div class="panel talk">
+      <div class="say owl"><span class="char" data-char="owl:talk"></span><p class="bubble">Đọc theo đúng thứ tự này, con sẽ không lạc giữa trăm trang số.</p></div>
+    </div>
+    <div class="panel callout">
+      <strong>Quy trình đọc BCTC trong 30 phút</strong>
+      <ol class="plain">
+        <li>Đọc ý kiến kiểm toán (2 phút). Có ngoại trừ thì dừng lại tìm hiểu lý do.</li>
+        <li>Báo cáo kết quả kinh doanh: doanh thu, lợi nhuận gộp, lợi nhuận thuần từ hoạt động kinh doanh, lợi nhuận sau thuế của 3–5 năm. Tăng hay giảm?</li>
+        <li>Tính biên lợi nhuận gộp và biên lợi nhuận ròng qua các năm.</li>
+        <li>Bảng cân đối: tiền, phải thu, tồn kho, vay nợ, vốn chủ. Khoản nào thay đổi bất thường?</li>
+        <li>Lưu chuyển tiền tệ: so CFO với lợi nhuận sau thuế; tính FCF.</li>
+        <li>Thuyết minh: đọc các mục liên quan đến điểm bất thường bạn vừa phát hiện.</li>
+        <li>Ghi ra 3 điểm mạnh, 3 điểm yếu và 3 câu hỏi còn bỏ ngỏ.</li>
+      </ol>
+    </div>
+    <div class="panel toy">
+      <div class="toy-title"><h3>Heo xếp lại quy trình</h3><span class="pill">Bấm theo thứ tự</span></div>
+      <p>Các bước bị xáo trộn. Bấm bước nên làm <b>tiếp theo</b>.</p>
+      <div class="order" id="ordDone"></div>
+      <div class="order" id="ordLeft"></div>
+      <div class="say pig"><span class="char" id="ordPig"></span><p class="bubble" id="ordSay"></p></div>
+      <div><button class="opt" type="button" id="ordReset">Xáo lại</button></div>
+    </div>
+  </section>
+
+  <!-- BÀI TẬP -->
+  <section class="chapter" id="bai-tap">
+    <div class="chapter-head"><span class="tag">✓</span><h2>Bài tập: cho Heo ăn xu</h2></div>
+    <div class="panel toy">
+      <div class="feed">
+        <span class="char" id="feedPig"></span>
+        <div class="stack" style="gap:8px">
+          <strong id="feedText"></strong>
+          <div class="bar" aria-hidden="true"><div id="feedBar"></div></div>
+          <span class="note">Chỉ coi module là xong khi đã tick hết bài tập, không phải khi đọc xong. Tiến độ được lưu trên trình duyệt này.</span>
+        </div>
+      </div>
+      <ul class="tasks" id="tasks" data-module="03">
+        <li><label><input type="checkbox" id="t1"><span>Tải BCTC hợp nhất đã kiểm toán năm gần nhất của 1 công ty bạn hiểu (sữa, bán lẻ, công nghệ...) từ website doanh nghiệp</span></label></li>
+        <li><label><input type="checkbox" id="t2"><span>Kiểm tra phương trình Tài sản = Nợ + Vốn chủ trên chính báo cáo đó</span></label></li>
+        <li><label><input type="checkbox" id="t3"><span>Vẽ "cái phễu" kết quả kinh doanh với số liệu thật của công ty đó</span></label></li>
+        <li><label><input type="checkbox" id="t4"><span>Xác định kiểu dòng tiền (+/−) của công ty trong 3 năm gần nhất và giải thích</span></label></li>
+        <li><label><input type="checkbox" id="t5"><span>Đọc ít nhất 5 mục thuyết minh và ghi lại 1 điều bạn không thấy ở 3 báo cáo chính</span></label></li>
+        <li><label><input type="checkbox" id="t6"><span>Chấm checklist red flags cho công ty đó</span></label></li>
+      </ul>
+    </div>
+    <a class="panel next" href="04-chi-so-va-dinh-gia.html">
+      <div class="stack" style="gap:4px">
+        <span class="eyebrow">Chương sau →</span>
+        <h3>Module 4: Chỉ số tài chính và định giá</h3>
+        <span class="note">Doanh nghiệp này có tốt không, và giá hiện tại có hợp lý không?</span>
+      </div>
+      <span class="char bob" data-char="owl:smile" style="width:72px"></span>
+    </a>
+    <p class="disclaimer">Giáo trình mang tính giáo dục, không phải khuyến nghị mua bán mã cổ phiếu nào. Mọi công ty và con số trong các đồ chơi là giả định để minh họa, không phải số liệu của doanh nghiệp thật.</p>
+  </section>
+</main>
+
+<script src="assets/truyen.js"></script>
+<script>
+(function () {
+  var T = Truyen, $ = T.$, pct = T.pct, trim = T.trim;
+  function ty(v) { return (v < 0 ? '−' : '') + T.num(Math.abs(v), 1) + ' tỷ'; }
+  function signed(v) { return (v > 0 ? '+' : '') + ty(v); }
+  function press(sel, el) { document.querySelectorAll(sel).forEach(function (b) { b.setAttribute('aria-pressed', String(b === el)); }); }
+
+  // ---------- 3.1 loại báo cáo ----------
+  var rpts = [
+    { when: '20–30 ngày sau quý', trust: 'Chưa kiểm toán', n: 1, say: 'chưa kiểm toán, chưa soát xét' },
+    { when: 'Tháng 8', trust: 'Đã soát xét', n: 2, say: 'đã được kiểm toán viên soát xét' },
+    { when: 'Tháng 3–4 năm sau', trust: 'Đã kiểm toán', n: 3, say: 'đã kiểm toán, đáng tin nhất' }
+  ];
+  function renderRpt(i) {
+    press('#rptTabs .opt', document.querySelector('#rptTabs .opt[data-r="' + i + '"]'));
+    var r = rpts[i];
+    $('rptWhen').textContent = r.when;
+    $('rptTrust').textContent = r.trust;
+    $('rptTrustBox').className = 'stat' + (r.n === 3 ? ' money' : r.n === 1 ? ' warn' : '');
+    $('rptMeter').querySelectorAll('i').forEach(function (el, j) { el.className = j < r.n ? 'on' : ''; });
+  }
+  document.querySelectorAll('#rptTabs .opt').forEach(function (b) { b.addEventListener('click', function () { renderRpt(+b.dataset.r); }); });
+  renderRpt(2);
+
+  // ---------- 3.2 cái cân ----------
+  var L = [['tien', 'Tiền', 'var(--money)'], ['pthu', 'Phải thu', 'var(--save)'], ['tkho', 'Tồn kho', 'var(--gold)'], ['tscd', 'TSCĐ', 'var(--owl)']];
+  var R = [['ptnb', 'Phải trả người bán', 'var(--owl-light)'], ['vay', 'Vay có lãi', 'var(--warn)'], ['vgop', 'Vốn góp', 'var(--pig-deep)'], ['lncpp', 'LN chưa phân phối', 'var(--pig)']];
+  var start = { tien: 20, pthu: 15, tkho: 25, tscd: 40, ptnb: 15, vay: 35, vgop: 30, lncpp: 20 };
+  var bs, bsBroken;
+  var txs = [
+    { t: 'Vay ngân hàng 10', d: { tien: 10, vay: 10 }, s: 'Tiền +10 bên trái, vay có lãi +10 bên phải. Cân vẫn thăng bằng, nhưng nợ có lãi tăng.' },
+    { t: 'Mua máy móc 15 bằng tiền', d: { tien: -15, tscd: 15 }, s: 'Tiền đổi thành máy: tổng tài sản không đổi, chỉ đổi ngăn. Công ty đang mở rộng sản xuất.' },
+    { t: 'Mua chịu nguyên liệu 8', d: { tkho: 8, ptnb: 8 }, s: 'Tồn kho +8, phải trả người bán +8. Đây là nợ không mất lãi: nhà cung cấp đang cho công ty "mượn" hàng.' },
+    { t: 'Bán chịu: hàng vốn 10, giá bán 14', d: { tkho: -10, pthu: 14, lncpp: 4 }, s: 'Tồn kho −10, phải thu +14, lợi nhuận +4. Có lãi nhưng chưa thu đồng tiền nào! Nhớ cảnh này khi sang mục 3.4.' },
+    { t: 'Thu tiền khách nợ 12', d: { pthu: -12, tien: 12 }, s: 'Phải thu đổi thành tiền. Giờ lợi nhuận mới thành tiền thật.' },
+    { t: 'Phát hành cổ phiếu 20', d: { tien: 20, vgop: 20 }, s: 'Vốn chủ tăng 20, nhưng nhờ phát hành thêm chứ không phải nhờ lợi nhuận giữ lại. Cổ đông cũ bị pha loãng.' },
+    { t: 'Trả cổ tức tiền 5', d: { tien: -5, lncpp: -5 }, s: 'Tiền −5, lợi nhuận chưa phân phối −5. Tiền rời công ty về túi cổ đông.' },
+    { t: 'Trả nợ vay 10', d: { tien: -10, vay: -10 }, s: 'Tiền −10, vay −10. Hai bên cùng nhỏ lại, cân vẫn thăng bằng.' },
+    { t: 'Heo ghi một vế: vay 10, chỉ cộng tiền', d: { tien: 10 }, bad: true, s: 'Cân lệch! Tiền tăng mà không ghi khoản nợ tương ứng. Khi tự cộng một bảng cân đối mà hai bên không bằng nhau, chắc chắn đã đọc sai hoặc thiếu một khoản.' }
+  ];
+  var txBox = $('txBtns');
+  txs.forEach(function (x, i) {
+    var b = document.createElement('button');
+    b.type = 'button'; b.className = 'opt' + (x.bad ? ' bad' : ''); b.textContent = x.t;
+    b.addEventListener('click', function () { applyTx(i); });
+    txBox.appendChild(b);
+  });
+  var rb = document.createElement('button');
+  rb.type = 'button'; rb.className = 'opt'; rb.textContent = '↺ Về ban đầu';
+  rb.addEventListener('click', resetBs);
+  txBox.appendChild(rb);
+  function sum(keys) { return keys.reduce(function (s, k) { return s + bs[k[0]]; }, 0); }
+  function applyTx(i) {
+    var x = txs[i], k;
+    for (k in x.d) if (bs[k] + x.d[k] < 0) { say('stern', 'Không làm được: ' + (L.concat(R).filter(function (r) { return r[0] === k; })[0][1]) + ' chỉ còn ' + bs[k] + ' tỷ. Thử giao dịch khác hoặc bấm "Về ban đầu".'); return; }
+    for (k in x.d) bs[k] += x.d[k];
+    renderBs(x.bad ? 'stern' : 'talk', x.s);
+  }
+  function say(mood, text) { $('txOwl').innerHTML = T.owl(mood); $('txSay').innerHTML = text; }
+  function stack(el, keys, max) {
+    el.innerHTML = keys.map(function (r) {
+      var v = bs[r[0]];
+      return v > 0 ? '<div class="bs-seg" style="flex:0 0 ' + (v / max * 100) + '%;background:' + r[2] + '"><span>' + r[1] + '</span><span>' + v + '</span></div>' : '';
+    }).join('');
+  }
+  function renderBs(mood, text) {
+    var lt = sum(L), rt = sum(R), max = Math.max(lt, rt, 1) * 1.05;
+    stack($('bsLeft'), L, max); stack($('bsRight'), R, max);
+    $('bsLT').textContent = lt + ' tỷ'; $('bsRT').textContent = rt + ' tỷ';
+    var ang = Math.max(-12, Math.min(12, (rt - lt) * 0.8));
+    $('beam').style.transform = 'rotate(' + ang + 'deg)';
+    $('bsLT').style.color = $('bsRT').style.color = lt === rt ? 'var(--money)' : 'var(--warn)';
+    $('bsDebt').textContent = bs.vay + ' tỷ';
+    $('bsFree').textContent = bs.ptnb + ' tỷ';
+    say(mood, (lt === rt ? '<b>' + lt + ' = ' + rt + '.</b> ' : '<b>' + lt + ' ≠ ' + rt + '.</b> ') + text);
+  }
+  function resetBs() {
+    bs = {}; for (var k in start) bs[k] = start[k];
+    renderBs('talk', 'Tài sản 100 tỷ: tiền 20, phải thu 15, tồn kho 25, tài sản cố định 40. Nguồn vốn 100 tỷ: phải trả người bán 15, vay có lãi 35, vốn góp 30, lợi nhuận chưa phân phối 20. Trong 50 tỷ nợ, chỉ 35 tỷ là nợ vay có lãi.');
+  }
+  resetBs();
+
+  // phân loại khoản mục
+  var parts = ['Tài sản ngắn hạn', 'Tài sản dài hạn', 'Nợ ngắn hạn', 'Nợ dài hạn', 'Vốn chủ sở hữu'];
+  var deck = [
+    ['Tiền gửi có kỳ hạn 6 tháng', 0, 'Đầu tư tài chính ngắn hạn, nằm trong tài sản ngắn hạn.'],
+    ['Nhà máy đang xây dở', 1, 'Xây dựng cơ bản dở dang, tài sản dài hạn. Soi xem dự án có bị "treo" lâu không.'],
+    ['Người mua trả tiền trước', 2, 'Nợ ngắn hạn, nhưng là nợ không mất lãi: khách tin công ty đến mức trả tiền trước.'],
+    ['Trái phiếu công ty đã phát hành', 3, 'Nợ dài hạn. Câu hỏi: lãi suất bao nhiêu, khi nào đáo hạn?'],
+    ['Thặng dư vốn', 4, 'Vốn chủ sở hữu, thường sinh ra khi phát hành cổ phiếu cao hơn mệnh giá.'],
+    ['Lợi thế thương mại', 1, 'Tài sản dài hạn, phát sinh khi mua công ty khác.'],
+    ['Hàng tồn kho', 0, 'Tài sản ngắn hạn. Tồn kho tăng nhanh hơn doanh thu là điều cần hỏi.'],
+    ['Thuế phải nộp', 2, 'Nợ ngắn hạn.'],
+    ['Lợi ích cổ đông không kiểm soát', 4, 'Nằm trong vốn chủ sở hữu trên báo cáo hợp nhất.'],
+    ['Đầu tư vào công ty liên kết', 1, 'Tài sản dài hạn.']
+  ];
+  var di = 0, dScore = 0, dAnswered = false;
+  function renderDeck() {
+    var d = deck[di]; dAnswered = false;
+    $('deckCount').textContent = 'Khoản ' + (di + 1) + '/' + deck.length + ' · đúng ' + dScore;
+    $('deckItem').textContent = d[0];
+    $('deckOpts').innerHTML = parts.map(function (p, i) { return '<button class="opt" type="button" data-i="' + i + '">' + p + '</button>'; }).join('');
+    $('deckOwl').innerHTML = T.owl('talk');
+    $('deckSay').textContent = 'Khoản này thuộc ngăn nào của bảng cân đối?';
+    $('deckOpts').querySelectorAll('.opt').forEach(function (b) {
+      b.addEventListener('click', function () {
+        var ok = +b.dataset.i === d[1];
+        $('deckOpts').querySelectorAll('.opt').forEach(function (o) { o.classList.remove('right', 'wrong'); });
+        b.classList.add(ok ? 'right' : 'wrong');
+        if (!dAnswered && ok) dScore++;
+        dAnswered = true;
+        $('deckCount').textContent = 'Khoản ' + (di + 1) + '/' + deck.length + ' · đúng ' + dScore;
+        $('deckOwl').innerHTML = T.owl(ok ? 'smile' : 'stern');
+        $('deckSay').textContent = (ok ? 'Đúng! ' : 'Chưa đúng, đáp án là ' + parts[d[1]].toLowerCase() + '. ') + d[2];
+      });
+    });
+  }
+  $('deckNext').addEventListener('click', function () {
+    di = (di + 1) % deck.length;
+    if (di === 0) dScore = 0;
+    renderDeck();
+  });
+  renderDeck();
+
+  // ---------- 3.3 thác lợi nhuận ----------
+  var cos = {
+    A: { dt: 1000, gv: 600, dttc: 10, cptc: 20, lv: 15, ldlk: 5, cpbh: 150, cpql: 60, khac: 5, oneTC: 0, oneK: 0 },
+    B: { dt: 1000, gv: 820, dttc: 300, cptc: 60, lv: 50, ldlk: 0, cpbh: 80, cpql: 50, khac: 0, oneTC: 280, oneK: 0, why: 'bán công ty con' },
+    C: { dt: 800, gv: 560, dttc: 5, cptc: 30, lv: 28, ldlk: 0, cpbh: 100, cpql: 70, khac: 120, oneTC: 0, oneK: 120, why: 'thanh lý tài sản' }
+  };
+  var TAX = 0.2, MI = 0.1, curCo = 'A';
+  function calcIS(s, strip) {
+    var dttc = s.dttc - (strip ? s.oneTC : 0), khac = s.khac - (strip ? s.oneK : 0);
+    var g = s.dt - s.gv, core = g + dttc - s.cptc + s.ldlk - s.cpbh - s.cpql, lntt = core + khac;
+    var tax = Math.max(0, lntt) * TAX, ln = lntt - tax, mi = ln * MI;
+    return { dttc: dttc, khac: khac, g: g, core: core, lntt: lntt, tax: tax, ln: ln, me: ln - mi, mi: mi };
+  }
+  function renderIS() {
+    var s = cos[curCo], strip = $('isStrip').checked, r = calcIS(s, strip), full = calcIS(s, false);
+    press('#isTabs .opt', document.querySelector('#isTabs .opt[data-s="' + curCo + '"]'));
+    var rows = [
+      ['Doanh thu thuần', 'sum', 0, s.dt],
+      ['− Giá vốn hàng bán', 'down', s.dt, -s.gv],
+      ['= Lợi nhuận gộp', 'sum', 0, r.g, 1],
+      ['+ Doanh thu tài chính', 'up', r.g, r.dttc, 0, s.oneTC && !strip ? s.oneTC : 0],
+      ['− Chi phí tài chính (lãi vay ' + T.num(s.lv) + ')', 'down', r.g + r.dttc, -s.cptc],
+      ['+ Lãi/lỗ liên doanh, liên kết', 'up', r.g + r.dttc - s.cptc, s.ldlk],
+      ['− Chi phí bán hàng', 'down', r.g + r.dttc - s.cptc + s.ldlk, -s.cpbh],
+      ['− Chi phí quản lý DN', 'down', r.g + r.dttc - s.cptc + s.ldlk - s.cpbh, -s.cpql],
+      ['= LN thuần từ HĐKD', 'sum', 0, r.core, 1],
+      ['+ Lợi nhuận khác', 'up', r.core, r.khac, 0, s.oneK && !strip ? s.oneK : 0],
+      ['= Lợi nhuận trước thuế', 'sum', 0, r.lntt, 1],
+      ['− Thuế TNDN', 'down', r.lntt, -r.tax],
+      ['= Lợi nhuận sau thuế', 'sum', 0, r.ln, 1],
+      ['├ của cổ đông công ty mẹ', 'sum', 0, r.me],
+      ['└ của cổ đông không kiểm soát', 'sum', r.me, r.mi]
+    ];
+    var max = s.dt;
+    var x = function (v) { return Math.max(0, Math.min(100, v / max * 100)); };
+    $('wf').innerHTML = rows.map(function (w) {
+      var a = w[2], b = w[2] + w[3], lo = Math.min(a, b), hi = Math.max(a, b), cls = w[1];
+      if (w[1] === 'up' && w[3] < 0) cls = 'down';
+      var bars = '<div class="wf-bar ' + cls + '" style="left:' + x(lo) + '%;width:' + (x(hi) - x(lo)) + '%"></div>';
+      if (w[5]) {
+        var oLo = b - w[5];
+        bars += '<div class="wf-bar once" style="left:' + x(oLo) + '%;width:' + (x(b) - x(oLo)) + '%"></div>';
+      }
+      var badge = w[5] ? '<span class="badge">một lần ' + T.num(w[5]) + '</span>' : '';
+      return '<div class="wf-row' + (w[4] ? ' total' : '') + (w[3] === 0 ? ' dim' : '') + '"><span class="lb">' + w[0] + badge + '</span><div class="wf-track">' + bars + '</div><span class="vv">' + T.num(w[3], 1) + '</span></div>';
+    }).join('');
+    $('isGM').textContent = pct(r.g / s.dt * 100);
+    $('isCore').textContent = ty(r.core);
+    var once = s.oneTC + s.oneK;
+    $('isOnce').textContent = strip ? 'đã bỏ' : once ? pct(once / full.lntt * 100) : '0%';
+    $('isOnceBox').className = 'stat' + (!strip && once ? ' warn' : ' money');
+    var msg, mood;
+    if (curCo === 'A') {
+      mood = 'smile';
+      msg = 'Công ty A: biên gộp ' + pct(r.g / s.dt * 100) + ', lợi nhuận gần như đến hết từ hoạt động cốt lõi. Lợi nhuận sau thuế ' + ty(full.ln) + ', trong đó ' + ty(full.me) + ' của cổ đông công ty mẹ dùng để tính EPS.';
+    } else if (!strip) {
+      mood = 'stern';
+      msg = 'Lợi nhuận sau thuế ' + ty(full.ln) + ' trông đẹp, nhưng ' + T.num(once) + ' tỷ đến từ ' + s.why + '. Đó là lợi nhuận một lần, năm sau không lặp lại. Tick ô "Bỏ các khoản một lần" xem còn bao nhiêu.';
+    } else {
+      mood = 'talk';
+      msg = 'Bỏ ' + T.num(once) + ' tỷ từ ' + s.why + ', lợi nhuận sau thuế còn ' + ty(r.ln) + ' thay vì ' + ty(full.ln) + '. Đây mới là sức kiếm tiền lặp lại được' + (curCo === 'B' ? ', thấp hơn rất xa công ty A (' + ty(calcIS(cos.A, false).ln) + ').' : '.');
+    }
+    $('isOwl').innerHTML = T.owl(mood); $('isSay').textContent = msg;
+  }
+  document.querySelectorAll('#isTabs .opt').forEach(function (b) { b.addEventListener('click', function () { curCo = b.dataset.s; renderIS(); }); });
+  $('isStrip').addEventListener('change', renderIS);
+  curCo = 'B'; renderIS();
+
+  // mùa vụ
+  var sea = [200, 150, 180, 400, 220, 165, 198, 440], seaSel = 4;
+  function renderSea() {
+    var W = 640, H = 250, Lp = 50, Rp = 10, Tp = 24, B = 40, n = sea.length;
+    var top = 500, step = T.niceStep(top);
+    var bw = (W - Lp - Rp) / n;
+    var y = function (v) { return Tp + (H - Tp - B) * (1 - v / top); };
+    var g = '';
+    for (var t = 0; t <= top; t += step) g += '<line x1="' + Lp + '" x2="' + (W - Rp) + '" y1="' + y(t) + '" y2="' + y(t) + '" stroke="var(--dot)" stroke-width="1.5"/><text x="' + (Lp - 6) + '" y="' + (y(t) + 4) + '" text-anchor="end">' + t + '</text>';
+    var qoq = seaSel - 1, yoy = seaSel - 4;
+    sea.forEach(function (v, i) {
+      var x0 = Lp + i * bw + bw * 0.18, w = bw * 0.64;
+      var fill = i === seaSel ? 'var(--pig)' : i === qoq ? 'var(--warn)' : i === yoy ? 'var(--money)' : 'var(--save)';
+      g += '<rect data-i="' + i + '" x="' + x0 + '" y="' + y(v) + '" width="' + w + '" height="' + (y(0) - y(v)) + '" fill="' + fill + '" stroke="var(--border)" stroke-width="2" style="cursor:' + (i >= 4 ? 'pointer' : 'default') + '"/>';
+      g += '<text class="lbl" x="' + (x0 + w / 2) + '" y="' + (y(v) - 6) + '" text-anchor="middle">' + v + '</text>';
+      g += '<text x="' + (x0 + w / 2) + '" y="' + (H - 22) + '" text-anchor="middle">Q' + (i % 4 + 1) + '</text>';
+    });
+    g += '<text x="' + (Lp + 2 * bw) + '" y="' + (H - 4) + '" text-anchor="middle">2024</text><text x="' + (Lp + 6 * bw) + '" y="' + (H - 4) + '" text-anchor="middle">2025</text>';
+    g += '<line x1="' + (Lp + 4 * bw) + '" x2="' + (Lp + 4 * bw) + '" y1="' + Tp + '" y2="' + (H - B) + '" stroke="var(--muted)" stroke-dasharray="4 4"/>';
+    $('seaChart').innerHTML = g;
+    $('seaChart').querySelectorAll('rect').forEach(function (r) {
+      if (+r.dataset.i >= 4) r.addEventListener('click', function () { seaSel = +r.dataset.i; renderSea(); });
+    });
+    var q = (sea[seaSel] / sea[qoq] - 1) * 100, yy = (sea[seaSel] / sea[yoy] - 1) * 100;
+    var lab = function (i) { return 'Q' + (i % 4 + 1) + '/' + (i < 4 ? 2024 : 2025); };
+    $('seaQoQK').textContent = lab(seaSel) + ' so với quý liền trước ' + lab(qoq);
+    $('seaYoYK').textContent = lab(seaSel) + ' so với cùng kỳ ' + lab(yoy);
+    $('seaQoQ').textContent = (q > 0 ? '+' : '') + pct(q);
+    $('seaYoY').textContent = (yy > 0 ? '+' : '') + pct(yy);
+    $('seaQoQBox').className = 'stat ' + (q < 0 ? 'warn' : 'money');
+    $('seaYoYBox').className = 'stat ' + (yy < 0 ? 'warn' : 'money');
+    $('seaPig').innerHTML = T.pig(q < 0 ? 'sad' : 'wow');
+    $('seaSay').textContent = q < 0
+      ? 'Em suýt hoảng vì doanh thu giảm ' + pct(-q) + ' so với quý trước! Nhưng so cùng kỳ năm ngoái thì vẫn tăng ' + pct(yy) + '. Chỉ là hết mùa Tết thôi.'
+      : 'Tăng ' + pct(q) + ' so với quý trước nghe sướng quá, nhưng đó là nhờ mùa vụ. So cùng kỳ năm ngoái, tăng trưởng thật là ' + pct(yy) + '.';
+  }
+  renderSea();
+
+  // ---------- 3.4 dòng tiền ----------
+  var signs = [1, -1, -1];
+  var patterns = {
+    '1,-1,-1': ['proud', 'Trưởng thành, khỏe', 'Doanh nghiệp tự kiếm tiền, tự đầu tư, còn dư trả cổ tức.'],
+    '1,-1,1': ['happy', 'Đang tăng trưởng', 'Kinh doanh ra tiền nhưng vẫn vay thêm để mở rộng.'],
+    '-1,-1,1': ['worried', 'Rủi ro cao', 'Kinh doanh chưa ra tiền, sống nhờ đi vay hoặc phát hành cổ phiếu.'],
+    '-1,1,1': ['sad', 'Dấu hiệu khó khăn', 'Đang bán tài sản để bù cho kinh doanh.'],
+    '-1,1,-1': ['sad', 'Dấu hiệu khó khăn', 'Đang bán tài sản để bù cho kinh doanh.']
+  };
+  function renderSigns() {
+    document.querySelectorAll('#signs .sign').forEach(function (b, i) {
+      b.className = 'sign ' + (signs[i] > 0 ? 'plus' : 'minus');
+      b.querySelector('.s').textContent = signs[i] > 0 ? '+' : '−';
+    });
+    var p = patterns[signs.join(',')];
+    $('cfVerdict').innerHTML = p
+      ? '<span class="char">' + T.pig(p[0]) + '</span><div><h3>' + p[1] + '</h3><p>' + p[2] + '</p></div>'
+      : '<span class="char">' + T.owl('talk') + '</span><div><h3>Không thuộc bốn kiểu thường gặp</h3><p>Tổ hợp này không nằm trong bảng bên dưới. Hãy xem chi tiết từng dòng tiền và đọc thuyết minh để hiểu chuyện gì đang xảy ra.</p></div>';
+    var key = signs.join(','), rowIdx = { '1,-1,-1': 0, '1,-1,1': 1, '-1,-1,1': 2, '-1,1,1': 3, '-1,1,-1': 3 }[key];
+    document.querySelectorAll('#cfTable tbody tr').forEach(function (tr, i) { tr.style.background = i === rowIdx ? 'var(--bubble-pig)' : ''; });
+  }
+  document.querySelectorAll('#signs .sign').forEach(function (b, i) {
+    b.addEventListener('click', function () { signs[i] = -signs[i]; renderSigns(); });
+  });
+  renderSigns();
+
+  function renderFCF() {
+    var ln = +$('fcLN').value, cfo = +$('fcCFO').value, cap = +$('fcCap').value, fcf = cfo - cap;
+    $('fcLNOut').textContent = ty(ln); $('fcCFOOut').textContent = ty(cfo); $('fcCapOut').textContent = ty(cap);
+    $('fcFCF').textContent = ty(fcf);
+    $('fcFCFBox').className = 'stat ' + (fcf < 0 ? 'warn' : 'money');
+    var ratio = ln > 0 ? cfo / ln : null;
+    $('fcRatio').textContent = ratio === null ? 'không tính' : trim(ratio, 2) + ' lần';
+    var good = ratio !== null && ratio >= 0.9;
+    $('fcRatioBox').className = 'stat ' + (ratio === null ? '' : good ? 'money' : 'warn');
+    var t;
+    if (ln === 0) t = 'Không có lợi nhuận thì không so CFO với lợi nhuận được. Nhìn FCF: ' + (fcf >= 0 ? 'còn dư ' + ty(fcf) + '.' : 'thiếu ' + ty(-fcf) + ', phải vay hoặc dùng tiền sẵn có.');
+    else if (cfo < 0) t = 'Báo lãi ' + ty(ln) + ' mà CFO âm ' + ty(-cfo) + '. Lãi chưa biến thành tiền. Nếu kéo dài nhiều năm, đó là cờ đỏ.';
+    else if (!good) t = 'CFO chỉ bằng ' + trim(ratio, 2) + ' lần lợi nhuận: một phần lãi còn nằm ở phải thu hoặc tồn kho. Doanh nghiệp khỏe thường có CFO xấp xỉ hoặc lớn hơn lợi nhuận sau thuế.';
+    else t = 'CFO bằng ' + trim(ratio, 2) + ' lần lợi nhuận: lãi đã về thành tiền. ' + (fcf >= 0 ? 'Sau khi chi ' + ty(cap) + ' mua sắm tài sản, còn dư ' + ty(fcf) + ' để trả cổ tức, trả nợ hoặc mua lại cổ phiếu.' : 'Nhưng capex lớn hơn CFO, thiếu ' + ty(-fcf) + ' phải bù bằng vay hoặc tiền sẵn có.');
+    $('fcOwl').innerHTML = T.owl(cfo < 0 || fcf < 0 ? 'stern' : good ? 'smile' : 'talk');
+    $('fcSay').textContent = t;
+  }
+  ['fcLN', 'fcCFO', 'fcCap'].forEach(function (id) { $(id).addEventListener('input', renderFCF); });
+  renderFCF();
+
+  function pairChart(id, ln, cfo) {
+    var W = 320, H = 200, Lp = 34, Rp = 6, Tp = 12, B = 24;
+    var all = ln.concat(cfo), hi = Math.max.apply(null, all), lo = Math.min(0, Math.min.apply(null, all));
+    var step = T.niceStep(hi - lo), top = Math.ceil(hi / step) * step, bot = Math.floor(lo / step) * step;
+    var y = function (v) { return Tp + (H - Tp - B) * (top - v) / (top - bot); };
+    var g = '';
+    for (var t = bot; t <= top; t += step) g += '<line x1="' + Lp + '" x2="' + (W - Rp) + '" y1="' + y(t) + '" y2="' + y(t) + '" stroke="' + (t === 0 ? 'var(--border)' : 'var(--dot)') + '" stroke-width="' + (t === 0 ? 2 : 1.5) + '"/><text x="' + (Lp - 4) + '" y="' + (y(t) + 4) + '" text-anchor="end">' + t + '</text>';
+    var gw = (W - Lp - Rp) / ln.length;
+    ln.forEach(function (v, i) {
+      var x0 = Lp + i * gw + gw * 0.12, w = gw * 0.36;
+      [[v, 'var(--pig)'], [cfo[i], 'var(--money)']].forEach(function (p, j) {
+        var ya = y(Math.max(0, p[0])), yb = y(Math.min(0, p[0]));
+        g += '<rect x="' + (x0 + j * w) + '" y="' + ya + '" width="' + w + '" height="' + (yb - ya) + '" fill="' + p[1] + '" stroke="var(--border)" stroke-width="1.5"/>';
+      });
+      g += '<text x="' + (x0 + w) + '" y="' + (H - 6) + '" text-anchor="middle">Năm ' + (i + 1) + '</text>';
+    });
+    $(id).innerHTML = g;
+  }
+  pairChart('cfM', [100, 120, 150, 180], [-20, -40, 10, -60]);
+  pairChart('cfN', [100, 110, 120, 130], [115, 105, 135, 140]);
+
+  // ---------- 3.5 nối dây ----------
+  var CASH0 = 50, CFI = -40, CFF = -20, RE0 = 200, AR0 = 80, INV0 = 60;
+  function renderLinks() {
+    var ln = +$('lkLN').value, dpt = +$('lkPT').value, dtk = +$('lkTK').value;
+    $('lkLNOut').textContent = ty(ln); $('lkPTOut').textContent = ty(dpt); $('lkTKOut').textContent = ty(dtk);
+    var cfo = ln - dpt - dtk, cash = CASH0 + cfo + CFI + CFF;
+    var line = function (k, v, cls) { return '<div class="ln' + (cls === 'sum' ? ' sum' : '') + '"><span>' + (cls && cls !== 'sum' ? '<span class="' + cls + '">' + k + '</span>' : k) + '</span><b>' + v + '</b></div>'; };
+    $('links').innerHTML =
+      '<div class="ledger"><h4>Kết quả kinh doanh</h4>' + line('…', '') + line('Lợi nhuận sau thuế', ty(ln), 'hl-a') + '</div>' +
+      '<div class="ledger"><h4>Lưu chuyển tiền tệ</h4>' +
+        line('Lợi nhuận sau thuế', ty(ln), 'hl-a') + line('Phải thu tăng', signed(-dpt), 'hl-c') + line('Tồn kho tăng', signed(-dtk), 'hl-c') +
+        line('CFO', ty(cfo), 'sum') + line('CFI', ty(CFI)) + line('CFF', ty(CFF)) + line('Tiền đầu kỳ', ty(CASH0)) + line('Tiền cuối kỳ', ty(cash), 'hl-b') + '</div>' +
+      '<div class="ledger"><h4>Bảng cân đối (cuối kỳ)</h4>' +
+        line('Tiền và tương đương tiền', ty(cash), 'hl-b') + line('Phải thu', ty(AR0 + dpt), 'hl-c') + line('Hàng tồn kho', ty(INV0 + dtk), 'hl-c') +
+        line('LN chưa phân phối', ty(RE0) + ' + ' + ty(ln), 'hl-a') + line('', '= ' + ty(RE0 + ln)) + '</div>';
+    var mood, t;
+    if (cash < 0) { mood = 'sad'; t = 'Tiền cuối kỳ âm ' + ty(-cash) + '! Công ty báo lãi ' + ty(ln) + ' mà hết sạch tiền, phải đi vay gấp. Lãi nằm cả ở phải thu và kho.'; }
+    else if (cfo < ln) { mood = 'worried'; t = 'Lãi ' + ty(ln) + ' nhưng CFO chỉ ' + ty(cfo) + ': ' + ty(dpt + dtk) + ' đã kẹt ở phải thu và tồn kho. Tiền trong két còn ' + ty(cash) + ', khớp đúng dòng tiền trên bảng cân đối.'; }
+    else { mood = 'proud'; t = 'Phải thu và tồn kho không tăng, nên CFO bằng đúng lợi nhuận ' + ty(ln) + '. Tiền cuối kỳ ' + ty(cash) + ' khớp với bảng cân đối.'; }
+    $('lkPig').innerHTML = T.pig(mood); $('lkSay').textContent = t;
+  }
+  ['lkLN', 'lkPT', 'lkTK'].forEach(function (id) { $(id).addEventListener('input', renderLinks); });
+  renderLinks();
+
+  // ---------- 3.7 kiểm toán ----------
+  var auds = [
+    ['proud', 'Chấp nhận toàn phần', 'BCTC trung thực, hợp lý.', 'Bình thường. Đọc tiếp các báo cáo.'],
+    ['worried', 'Toàn phần kèm "vấn đề cần nhấn mạnh"', 'Vẫn chấp nhận, nhưng lưu ý một điểm (ví dụ nghi ngờ khả năng hoạt động liên tục).', 'Đọc kỹ đoạn nhấn mạnh.'],
+    ['wow', 'Ngoại trừ', 'Có khoản mục kiểm toán viên không đồng ý hoặc không kiểm tra được.', 'Cảnh giác cao. Dừng lại tìm hiểu lý do trước khi đọc tiếp.'],
+    ['sad', 'Từ chối đưa ra ý kiến / Ý kiến trái ngược', 'BCTC không đáng tin.', 'Tránh xa.']
+  ];
+  function renderAud(i) {
+    press('#audTabs .opt', document.querySelector('#audTabs .opt[data-a="' + i + '"]'));
+    var a = auds[i];
+    $('audVerdict').innerHTML = '<span class="char">' + T.pig(a[0]) + '</span><div><span class="eyebrow">Ý nghĩa: ' + a[2] + '</span><h3>' + a[1] + '</h3><p><b>Bạn nên làm gì:</b> ' + a[3] + '</p></div>';
+  }
+  document.querySelectorAll('#audTabs .opt').forEach(function (b) { b.addEventListener('click', function () { renderAud(+b.dataset.a); }); });
+  renderAud(2);
+
+  function renderAudDiff() {
+    var pre = parseFloat($('audPre').value), post = parseFloat($('audPost').value);
+    if (!(pre > 0) || isNaN(post)) { $('audDiff').textContent = 'Nhập hai số'; $('audDiffBox').className = 'stat'; $('audNote').textContent = ''; return; }
+    var d = (post / pre - 1) * 100;
+    $('audDiff').textContent = (d > 0 ? '+' : '') + pct(d);
+    $('audDiffBox').className = 'stat ' + (d < 0 ? 'warn' : 'money');
+    $('audNote').textContent = d < 0
+      ? 'Lợi nhuận bị điều chỉnh giảm ' + T.num(pre - post, 1) + ' tỷ (' + pct(-d) + '). Giảm càng mạnh, chất lượng quản trị càng đáng ngờ. Đây cũng là một cờ đỏ ở mục 3.8.'
+      : 'Kiểm toán không điều chỉnh giảm lợi nhuận. Vẫn đọc ý kiến kiểm toán trước khi tin các con số.';
+  }
+  ['audPre', 'audPost'].forEach(function (id) { $(id).addEventListener('input', renderAudDiff); });
+  renderAudDiff();
+
+  // ---------- 3.8 săn cờ đỏ ----------
+  var facts = [
+    ['Doanh thu chỉ tăng 5%/năm, nhưng phải thu khách hàng tăng 60%/năm, ba năm liền.', 1, 'Phải thu tăng nhanh hơn doanh thu nhiều kỳ liền: bán được nhưng không thu được tiền.'],
+    ['Phải trả người bán và người mua trả tiền trước tăng cùng nhịp doanh thu.', 0, 'Nợ không mất lãi, cho thấy công ty có vị thế mạnh với đối tác.'],
+    ['Báo lãi 4 năm liền nhưng CFO âm cả 4 năm.', 1, 'CFO âm nhiều năm trong khi vẫn báo lãi.'],
+    ['Chi phí lãi vay 60 tỷ, lợi nhuận hoạt động 100 tỷ.', 1, 'Chi phí lãi vay bằng 60% lợi nhuận hoạt động, vượt ngưỡng 30–50%.'],
+    ['Biên lợi nhuận gộp giữ trong khoảng 38–41% suốt 5 năm.', 0, 'Biên ổn định qua nhiều năm cho thấy quyền định giá.'],
+    ['Cho một công ty do chủ tịch sở hữu vay 500 tỷ.', 1, 'Giao dịch lớn với bên liên quan, cho công ty "sân sau" vay.'],
+    ['CFI âm vì xây thêm nhà máy; CFO dương và lớn hơn lợi nhuận sau thuế.', 0, 'CFO lớn hơn lợi nhuận là dấu hiệu khỏe; CFI âm nghĩa là đang đầu tư cho tương lai.'],
+    ['Ba năm đổi ba công ty kiểm toán.', 1, 'Đổi công ty kiểm toán liên tục.']
+  ];
+  var fState = facts.map(function () { return null; });
+  function renderFlags() {
+    var right = 0, done = 0;
+    $('flags').innerHTML = facts.map(function (f, i) {
+      var st = fState[i], cls = '';
+      if (st !== null) { done++; if (st === f[1]) right++; cls = f[1] ? ' red' : ' green'; }
+      var verdict = st === null ? '' : (st === f[1] ? 'Đúng! ' : 'Chưa đúng. ') + (f[1] ? 'Cờ đỏ: ' : 'Cờ xanh: ');
+      return '<div class="fact' + cls + '" data-i="' + i + '"><span>' + f[0] + '</span>' +
+        (st === null ? '<span class="act"><button class="opt" type="button" data-v="1">Cờ đỏ</button><button class="opt" type="button" data-v="0">Cờ xanh</button></span>' : '') +
+        '<span class="why"><b>' + verdict + '</b>' + f[2] + '</span></div>';
+    }).join('');
+    $('flags').querySelectorAll('.fact .opt').forEach(function (b) {
+      b.addEventListener('click', function () { fState[+b.closest('.fact').dataset.i] = +b.dataset.v; renderFlags(); });
+    });
+    $('flagScore').textContent = done === facts.length ? 'Đúng ' + right + '/' + facts.length : 'Đã chấm ' + done + '/' + facts.length;
+  }
+  renderFlags();
+
+  var rf = document.querySelectorAll('#rfList input');
+  function renderRf() {
+    var n = 0; rf.forEach(function (c) { if (c.checked) n++; });
+    $('rfCount').textContent = n + '/' + rf.length + ' cờ đỏ';
+  }
+  rf.forEach(function (c) { c.addEventListener('change', renderRf); });
+  renderRf();
+
+  // ---------- 3.9 xếp quy trình ----------
+  var steps = [
+    'Đọc ý kiến kiểm toán (2 phút)',
+    'Kết quả kinh doanh 3–5 năm: tăng hay giảm?',
+    'Tính biên lợi nhuận gộp và biên ròng',
+    'Bảng cân đối: khoản nào thay đổi bất thường?',
+    'Lưu chuyển tiền tệ: so CFO với LNST, tính FCF',
+    'Thuyết minh: đọc mục liên quan điểm bất thường',
+    'Ghi 3 điểm mạnh, 3 điểm yếu, 3 câu hỏi'
+  ];
+  var hints = [
+    'Bước đầu tiên luôn là xem trọng tài nói gì. Có ngoại trừ thì dừng lại tìm hiểu lý do.',
+    'Sau kiểm toán, xem công ty kiếm được bao nhiêu qua nhiều năm.',
+    'Có doanh thu và lợi nhuận rồi thì tính biên.',
+    'Tiếp theo là công ty có gì, nợ ai.',
+    'Rồi kiểm tra lãi có thành tiền không.',
+    'Thuyết minh để đào sâu vào chỗ bất thường vừa thấy.',
+    'Cuối cùng, tổng kết bằng chữ của chính mình.'
+  ];
+  var ordNext, ordShuf;
+  function shuffle() {
+    ordShuf = steps.map(function (s, i) { return i; });
+    for (var i = ordShuf.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)), t = ordShuf[i]; ordShuf[i] = ordShuf[j]; ordShuf[j] = t; }
+    ordNext = 0;
+  }
+  function renderOrd(msg, mood) {
+    var done = '';
+    for (var i = 0; i < ordNext; i++) done += '<button class="opt done" type="button" disabled>' + (i + 1) + '. ' + steps[i] + '</button>';
+    $('ordDone').innerHTML = done;
+    $('ordLeft').innerHTML = ordShuf.filter(function (i) { return i >= ordNext; }).map(function (i) { return '<button class="opt" type="button" data-i="' + i + '">' + steps[i] + '</button>'; }).join('');
+    $('ordLeft').querySelectorAll('.opt').forEach(function (b) {
+      b.addEventListener('click', function () {
+        if (+b.dataset.i === ordNext) {
+          ordNext++;
+          renderOrd(ordNext === steps.length ? 'Xong cả 7 bước! Giờ em có thể khám một công ty trong 30 phút.' : 'Đúng rồi! Bước ' + (ordNext + 1) + ' là gì nhỉ?', ordNext === steps.length ? 'proud' : 'happy');
+        } else {
+          b.classList.remove('shake'); void b.offsetWidth; b.classList.add('shake');
+          $('ordPig').innerHTML = T.pig('worried');
+          $('ordSay').textContent = 'Chưa phải bước này. Gợi ý: ' + hints[ordNext];
+        }
+      });
+    });
+    $('ordPig').innerHTML = T.pig(mood); $('ordSay').textContent = msg;
+  }
+  $('ordReset').addEventListener('click', function () { shuffle(); renderOrd('Xáo xong rồi. Bước 1 là gì?', 'happy'); });
+  shuffle(); renderOrd('Bước 1 là gì nhỉ? Bấm vào bước nên làm đầu tiên.', 'happy');
+})();
+</script>
+</body>
+</html>

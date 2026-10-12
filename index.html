@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Heo Đất đi chứng khoán</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;800&family=Be+Vietnam+Pro:wght@400;600;700&family=Patrick+Hand&display=swap">
+<link rel="stylesheet" href="assets/truyen.css">
+<style>
+/* Mục lục: con đường các trạm dừng; mỗi trạm là một module, có tiến độ lấy từ checklist */
+.hero-row { display: grid; grid-template-columns: minmax(0, 1fr) 220px; gap: 20px; align-items: end; }
+.hero-cast { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; align-items: end; }
+@media (max-width: 620px) { .hero-row { grid-template-columns: 1fr; } .hero-cast { max-width: 220px; } }
+
+.overall { display: grid; grid-template-columns: 90px minmax(0, 1fr); gap: 16px; align-items: center; }
+
+.road { list-style: none; margin: 0; padding: 0; display: grid; gap: 14px; position: relative; }
+.road::before { content: ""; position: absolute; left: 27px; top: 10px; bottom: 10px; border-left: 4px dashed var(--border); opacity: .5; }
+.stop { display: grid; grid-template-columns: 58px minmax(0, 1fr); gap: 12px; align-items: start; position: relative; }
+.badge {
+  width: 58px; height: 58px; border-radius: 50%; border: 3px solid var(--border); background: var(--panel);
+  display: grid; place-items: center; font-family: var(--f-display); font-weight: 800; font-size: 1.3rem; z-index: 1;
+}
+.stop.done .badge { background: var(--money); color: #fff; }
+.stop.doing .badge { background: var(--gold); color: #1D2140; }
+.card { display: grid; gap: 8px; padding: 14px 16px; }
+.card-top { display: flex; justify-content: space-between; gap: 10px; flex-wrap: wrap; align-items: baseline; }
+.card h3 a { text-decoration: none; }
+.card h3 a:hover { text-decoration: underline; }
+.card .bar { height: 14px; border-width: 2.5px; }
+.meta { display: flex; gap: 8px 14px; flex-wrap: wrap; font-size: .88rem; color: var(--muted); }
+.state { font-weight: 700; font-size: .82rem; padding: 1px 10px; border-radius: 999px; border: 2px solid var(--border); background: var(--chip); }
+.state.done { background: var(--money-soft); color: var(--money); border-color: var(--money); }
+.state.doing { background: var(--bubble-owl); }
+.extra { display: grid; grid-template-columns: 150px minmax(0, 1fr); gap: 8px; }
+.extra input { padding: 5px 8px; font-size: .9rem; border-width: 2px; }
+@media (max-width: 480px) { .extra { grid-template-columns: 1fr; } }
+
+.rules { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+.rules .panel { display: grid; gap: 8px; align-content: start; }
+.rules .num { font-family: var(--f-display); font-size: 2.2rem; line-height: 1; color: var(--pig-deep); }
+@media (max-width: 760px) { .rules { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<main class="book">
+
+  <header class="hero">
+    <div class="hero-row">
+      <div class="hero-title">
+        <span class="eyebrow">Giáo trình chứng khoán cho người mới · Cập nhật 12/10/2026</span>
+        <h1>Heo Đất đi chứng khoán</h1>
+        <p class="sub">9 module và 1 case study, học trong khoảng 9–12 tháng nếu dành 4–5 giờ mỗi tuần. Mỗi module có truyện, đồ chơi số liệu và bài tập. Chỉ coi một module là xong khi đã tick hết bài tập, không phải khi đọc xong.</p>
+      </div>
+      <div class="hero-cast" aria-hidden="true">
+        <span class="char bob" data-char="pig:happy"></span>
+        <span class="char" data-char="owl:smile"></span>
+      </div>
+    </div>
+    <div class="panel overall">
+      <span class="char" id="overallPig"></span>
+      <div class="stack" style="gap:8px">
+        <strong id="overallText"></strong>
+        <div class="bar" aria-hidden="true"><div id="overallBar"></div></div>
+        <span class="note">Tiến độ lấy từ checklist bài tập ở cuối mỗi module, lưu trên trình duyệt này.</span>
+      </div>
+    </div>
+  </header>
+
+  <section class="chapter" id="lo-trinh">
+    <div class="chapter-head"><span class="tag">Lộ trình</span><h2>Đi lần lượt từng trạm</h2></div>
+    <ol class="road" id="road"></ol>
+  </section>
+
+  <section class="chapter" id="nguyen-tac">
+    <div class="chapter-head"><span class="tag">Luật</span><h2>Ba nguyên tắc suốt quá trình học</h2></div>
+    <div class="rules">
+      <div class="panel"><span class="num">1</span><h3>Học đến đâu, thực hành đến đó, nhưng với tiền nhỏ</h3><p>Trong 6 tháng đầu, số tiền đặt vào cổ phiếu riêng lẻ không nên vượt 10–20% số vốn bạn định đầu tư. Phần còn lại để gửi tiết kiệm hoặc mua quỹ ETF.</p></div>
+      <div class="panel"><span class="num">2</span><h3>Không dùng margin cho đến khi học xong Module 8</h3><p>Margin là vay ký quỹ. Phần lớn người mới mất tiền vì đòn bẩy, không phải vì chọn sai cổ phiếu.</p></div>
+      <div class="panel"><span class="num">3</span><h3>Viết ra mọi quyết định</h3><p>Mỗi lần mua hay bán, ghi lại lý do trong <a href="nhat-ky-dau-tu.html">nhật ký đầu tư</a>. Sau một năm, đây là tài liệu quý nhất bạn có.</p></div>
+    </div>
+    <div class="panel talk">
+      <div class="say owl"><span class="char" data-char="owl:stern"></span><p class="bubble">Nhớ nhé: không dùng tiền vay, không bỏ hết vốn vào một mã, và luôn ghi lại vì sao mình mua.</p></div>
+      <div class="say pig right"><p class="bubble">Dạ! Em dán ba luật này lên tường luôn.</p><span class="char" data-char="pig:proud"></span></div>
+    </div>
+  </section>
+
+  <p class="disclaimer">Giáo trình mang tính giáo dục, không phải khuyến nghị mua bán mã cổ phiếu nào. Quy định về giờ giao dịch, biên độ, phí và thuế có thể thay đổi; luôn kiểm tra lại với công ty chứng khoán của bạn.</p>
+</main>
+
+<script src="assets/truyen.js"></script>
+<script>
+(function () {
+  var T = Truyen, $ = T.$;
+  // Thêm module mới: thêm một dòng vào đây (đúng thứ tự học).
+  var MODULES = [
+    { id: '01', badge: '1', name: 'Nền tảng tài chính cá nhân', file: '01-tai-chinh-ca-nhan.html', time: 'Tuần 1–2' },
+    { id: '02', badge: '2', name: 'Thị trường chứng khoán vận hành ra sao', file: '02-thi-truong-chung-khoan.html', time: 'Tuần 3–5' },
+    { id: '03', badge: '3', name: 'Đọc báo cáo tài chính', file: '03-doc-bao-cao-tai-chinh.html', time: 'Tuần 6–10' },
+    { id: '04', badge: '4', name: 'Chỉ số tài chính và định giá', file: '04-chi-so-va-dinh-gia.html', time: 'Tuần 11–16' },
+    { id: '05', badge: '4b', name: 'Case study: phân tích Vinamilk (VNM)', file: '05-case-study-vinamilk.html', time: 'Tuần 17–18' },
+    { id: '06', badge: '5', name: 'Phân tích doanh nghiệp (định tính)', file: '06-phan-tich-doanh-nghiep.html', time: 'Tuần 19–22' },
+    { id: '07', badge: '6', name: 'Kinh tế vĩ mô', file: '07-kinh-te-vi-mo.html', time: 'Tuần 23–27' },
+    { id: '08', badge: '7', name: 'Phân tích kỹ thuật', file: '08-phan-tich-ky-thuat.html', time: 'Tuần 28–33' },
+    { id: '09', badge: '8', name: 'Quản trị rủi ro và danh mục', file: '09-quan-tri-rui-ro.html', time: 'Tuần 34–38' },
+    { id: '10', badge: '9', name: 'Tâm lý và chiến lược đầu tư', file: '10-tam-ly-va-chien-luoc.html', time: 'Tuần 39–44, ôn liên tục' },
+    { id: '11', badge: '?', name: 'Thuật ngữ, sách, công cụ', file: '11-thuat-ngu-va-tai-nguyen.html', time: 'Tra cứu khi cần', ref: true },
+    { id: 'nk', badge: '✎', name: 'Nhật ký đầu tư', file: 'nhat-ky-dau-tu.html', time: 'Ghi mỗi lần mua hoặc bán', ref: true }
+  ];
+
+  var notes = T.store('heo-dat:index-notes') || {};
+  var counted = 0, finished = 0, html = '';
+  MODULES.forEach(function (m) {
+    var p = T.store('heo-dat:tasks:' + m.id);
+    var done = p && p.total ? p.done : 0, total = p && p.total ? p.total : 0;
+    var st = total && done === total ? 'done' : done > 0 ? 'doing' : '';
+    var label = m.ref ? 'Tài liệu tra cứu' : st === 'done' ? 'Đã xong' : st === 'doing' ? 'Đang học · ' + done + '/' + total : total ? 'Chưa bắt đầu · 0/' + total : 'Chưa mở';
+    if (!m.ref) { counted++; if (st === 'done') finished++; }
+    var n = notes[m.id] || {};
+    html += '<li class="stop ' + (m.ref ? '' : st) + '"><span class="badge">' + m.badge + '</span>' +
+      '<div class="panel card"><div class="card-top"><h3><a href="' + m.file + '">' + m.name + '</a></h3>' +
+      '<span class="state ' + (m.ref ? '' : st) + '">' + label + '</span></div>' +
+      '<div class="meta"><span>' + m.time + '</span></div>' +
+      (m.ref ? '' : '<div class="bar" aria-hidden="true"><div style="width:' + (total ? done / total * 100 : 0) + '%"></div></div>' +
+        '<div class="extra"><input type="date" id="d-' + m.id + '" aria-label="Ngày xong ' + m.name + '" value="' + (n.date || '') + '">' +
+        '<input type="text" id="n-' + m.id + '" aria-label="Ghi chú ' + m.name + '" placeholder="Ghi chú của bạn" value="' + (n.note || '').replace(/"/g, '&quot;') + '"></div>') +
+      '</div></li>';
+  });
+  $('road').innerHTML = html;
+
+  MODULES.forEach(function (m) {
+    if (m.ref) return;
+    ['d', 'n'].forEach(function (k) {
+      $(k + '-' + m.id).addEventListener('change', function () {
+        notes[m.id] = { date: $('d-' + m.id).value, note: $('n-' + m.id).value };
+        T.store('heo-dat:index-notes', notes);
+      });
+    });
+  });
+
+  $('overallBar').style.width = (finished / counted * 100) + '%';
+  $('overallPig').innerHTML = T.pig(finished === counted ? 'proud' : finished === 0 ? 'wow' : 'happy');
+  $('overallText').textContent = finished === counted
+    ? 'Hoàn thành cả giáo trình! Giờ là lúc ôn và ghi nhật ký đều đặn.'
+    : 'Đã xong ' + finished + '/' + counted + ' trạm';
+})();
+</script>
+</body>
+</html>

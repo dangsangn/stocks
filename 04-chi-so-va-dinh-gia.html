@@ -1,0 +1,840 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Heo Đất cầm kính lúp</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;800&family=Be+Vietnam+Pro:wght@400;600;700&family=Patrick+Hand&display=swap">
+<link rel="stylesheet" href="assets/truyen.css">
+<style>
+/* Riêng Module 4: phương trình DuPont, bảng khám sức khỏe, trò phân loại, thước biên an toàn */
+.eq { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.eq .chip small { font-family: var(--f-body); font-weight: 600; font-size: .72rem; display: block; line-height: 1.1; }
+.eq .chip.res { background: var(--money-soft); color: var(--money); border-color: var(--money); }
+.check { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.check li { display: grid; grid-template-columns: minmax(0, 1fr) auto auto; gap: 6px 12px; align-items: center; padding: 8px 12px; border: 2.5px solid var(--border); border-radius: 10px; background: var(--panel); }
+.check .nm { font-weight: 600; font-size: .93rem; }
+.check .nm small { display: block; color: var(--muted); font-weight: 400; }
+.check .val { font-family: var(--f-display); font-weight: 800; font-size: 1.2rem; font-variant-numeric: tabular-nums; }
+.badge { font-size: .8rem; font-weight: 700; padding: 2px 10px; border-radius: 999px; border: 2px solid var(--border); background: var(--chip); color: var(--ink); white-space: nowrap; }
+.badge.ok { background: var(--money-soft); color: var(--money); border-color: var(--money); }
+.badge.bad { background: var(--warn-soft); color: var(--warn); border-color: var(--warn); }
+@media (max-width: 480px) { .check li { grid-template-columns: minmax(0, 1fr) auto; } .check .nm { grid-column: 1 / -1; } }
+.mini-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px 14px; }
+.mini-grid label { font-size: .85rem; font-weight: 600; display: grid; gap: 2px; }
+.game-card { border: 3px dashed var(--border); border-radius: 12px; padding: 14px 16px; background: var(--bubble-owl); display: grid; gap: 6px; }
+.game-card .big { font-family: var(--f-display); font-weight: 800; font-size: 1.35rem; line-height: 1.2; }
+.tbl td.hit { background: var(--bubble-pig); font-weight: 700; }
+.tbl td.base { outline: 3px solid var(--money); outline-offset: -3px; }
+.chart-box text.lbl { fill: var(--ink); font-weight: 700; }
+</style>
+</head>
+<body>
+<main class="book">
+
+  <nav class="topnav"><a href="index.html">← Mục lục</a><span class="note">Module 4 / 9</span></nav>
+
+  <!-- MỞ ĐẦU -->
+  <header class="hero">
+    <div class="hero-title">
+      <span class="eyebrow">Module 4 · Tuần 11–16</span>
+      <h1>Heo Đất cầm kính lúp</h1>
+      <p class="sub">Chỉ số tài chính và định giá: biến con số khô khan trong báo cáo thành câu trả lời. Kéo thanh trượt, chơi trò phân loại, rồi tick bài tập ở cuối trang.</p>
+    </div>
+    <div class="strip">
+      <div class="panel">
+        <div class="say pig"><span class="char" data-char="pig:wow"></span><p class="bubble">Thầy ơi, công ty này tốt lắm, ai cũng khen. Em mua ngay bất kể giá nào!</p></div>
+      </div>
+      <div class="panel">
+        <div class="say owl right"><p class="bubble">Chỉ số trả lời hai câu hỏi: <b>doanh nghiệp này có tốt không</b>, và <b>giá hiện tại có hợp lý không</b>. Con mới hỏi câu đầu.</p><span class="char" data-char="owl:stern"></span></div>
+      </div>
+      <div class="panel">
+        <div class="say pig"><span class="char" data-char="pig:worried"></span><p class="bubble">Công ty tốt thì sao mà lỗ được ạ?</p></div>
+      </div>
+      <div class="panel">
+        <div class="say owl right"><p class="bubble">Doanh nghiệp tốt mua với giá quá đắt vẫn có thể là một khoản đầu tư tồi.</p><span class="char" data-char="owl:talk"></span></div>
+      </div>
+      <div class="panel wide">
+        <div class="say owl"><span class="char" data-char="owl:talk"></span><div class="stack" style="gap:8px">
+          <p class="bubble">Ba luật khi dùng chỉ số, nhớ kỹ trước khi đọc tiếp:</p>
+          <div class="callout">
+            <strong>Nguyên tắc dùng chỉ số</strong>
+            <ul class="plain">
+              <li>Không bao giờ nhìn một chỉ số đơn lẻ.</li>
+              <li>Luôn so sánh theo <b>thời gian</b> (5 năm của chính công ty) và theo <b>ngành</b> (các công ty cùng ngành).</li>
+              <li>Không so P/E của ngân hàng với P/E của công ty công nghệ.</li>
+            </ul>
+          </div>
+        </div></div>
+      </div>
+    </div>
+  </header>
+
+  <!-- 4.1 -->
+  <section class="chapter" id="sinh-loi">
+    <div class="chapter-head"><span class="tag">4.1</span><h2>Sinh lời: cỗ máy in tiền chạy khỏe cỡ nào</h2></div>
+    <div class="panel talk">
+      <div class="say pig"><span class="char" data-char="pig:happy"></span><p class="bubble">Hai công ty cùng ROE 20%. Vậy là tốt ngang nhau rồi thầy nhỉ?</p></div>
+      <div class="say owl right"><p class="bubble">Chưa chắc. Phải hỏi ROE cao <b>từ đâu mà có</b>: nhờ bán hàng lời, nhờ quay vòng tài sản nhanh, hay nhờ vay nợ?</p><span class="char" data-char="owl:talk"></span></div>
+    </div>
+    <div class="tbl-wrap">
+      <table class="tbl">
+        <thead><tr><th>Chỉ số</th><th>Công thức</th><th>Ý nghĩa</th><th>Mức tham khảo</th></tr></thead>
+        <tbody>
+          <tr><td>Biên lợi nhuận gộp</td><td>LN gộp / Doanh thu thuần</td><td>Sức mạnh định giá sản phẩm</td><td>Tùy ngành; quan trọng là ổn định</td></tr>
+          <tr><td>Biên lợi nhuận ròng</td><td>LNST / Doanh thu thuần</td><td>Còn lại bao nhiêu sau mọi chi phí</td><td>&gt; 10% là tốt với đa số ngành sản xuất</td></tr>
+          <tr><td>ROE</td><td>LNST / Vốn chủ sở hữu bình quân</td><td>Mỗi 100 đồng vốn cổ đông sinh ra bao nhiêu lợi nhuận</td><td>&gt; 15% bền vững qua nhiều năm là tốt</td></tr>
+          <tr><td>ROA</td><td>LNST / Tổng tài sản bình quân</td><td>Hiệu quả sử dụng toàn bộ tài sản</td><td>&gt; 7–8% (ngân hàng thường chỉ 1–2%)</td></tr>
+          <tr><td>ROIC</td><td>LN hoạt động sau thuế / (Vốn chủ + Nợ vay − Tiền)</td><td>Lợi suất trên vốn thật sự đầu tư vào kinh doanh</td><td>Cao hơn chi phí vốn (khoảng 10–12%)</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="chalk" aria-label="Công thức DuPont">
+      <span>Phân tích DuPont: ROE cao từ đâu mà có?</span>
+      <span class="f">ROE = Biên LN ròng × Vòng quay tài sản × Đòn bẩy tài chính</span>
+      <small>= (LNST / Doanh thu) × (Doanh thu / Tổng tài sản) × (Tổng tài sản / Vốn chủ)</small>
+    </div>
+
+    <div class="panel toy">
+      <div class="toy-title"><h3>Máy tách ROE của Cú Già</h3><span class="pill">Kéo thử</span></div>
+      <p>Ví dụ: hai công ty cùng có ROE 20%. Bấm A hoặc B để nạp số của từng công ty, rồi tự kéo ba bánh răng.</p>
+      <div class="tabs" role="group" aria-label="Chọn công ty" id="dpTabs">
+        <button class="opt" type="button" data-m="20" data-t="0.8" data-l="1.25">Công ty A</button>
+        <button class="opt" type="button" data-m="5" data-t="1" data-l="4">Công ty B</button>
+      </div>
+      <div class="controls">
+        <div class="ctl"><label for="dpM">Biên lợi nhuận ròng <output id="dpMOut"></output></label><input id="dpM" type="range" min="1" max="40" step="0.5" value="20"></div>
+        <div class="ctl"><label for="dpT">Vòng quay tài sản <output id="dpTOut"></output></label><input id="dpT" type="range" min="0.2" max="3" step="0.1" value="0.8"></div>
+        <div class="ctl"><label for="dpL">Đòn bẩy (Tài sản/Vốn chủ) <output id="dpLOut"></output></label><input id="dpL" type="range" min="1" max="8" step="0.05" value="1.25"></div>
+      </div>
+      <div class="eq" id="dpEq" aria-live="polite"></div>
+      <div class="result">
+        <div class="stat" id="dpRoaBox"><div class="k">ROA = biên × vòng quay (phần tự làm ra)</div><div class="v" id="dpRoa"></div></div>
+        <div class="stat" id="dpRoeBox"><div class="k">ROE (sau khi nhân đòn bẩy)</div><div class="v" id="dpRoe"></div></div>
+        <div class="stat" id="dpDebtBox"><div class="k">Nợ phải trả so với vốn chủ</div><div class="v" id="dpDebt"></div></div>
+      </div>
+      <div class="say owl"><span class="char" id="dpOwl"></span><p class="bubble" id="dpSay"></p></div>
+    </div>
+
+    <div class="tbl-wrap">
+      <table class="tbl">
+        <thead><tr><th></th><th class="r">Công ty A</th><th class="r">Công ty B</th></tr></thead>
+        <tbody>
+          <tr><td>Biên lợi nhuận ròng</td><td class="r">20%</td><td class="r">5%</td></tr>
+          <tr><td>Vòng quay tài sản</td><td class="r">0,8 lần</td><td class="r">1,0 lần</td></tr>
+          <tr><td>Đòn bẩy (Tài sản/Vốn chủ)</td><td class="r">1,25 lần</td><td class="r">4,0 lần</td></tr>
+          <tr><td><b>ROE</b></td><td class="r"><b>20%</b></td><td class="r"><b>20%</b></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>Công ty A có ROE cao nhờ biên lợi nhuận tốt và gần như không vay nợ. Công ty B có ROE cao chủ yếu nhờ vay nợ gấp 3 lần vốn. Khi kinh tế xấu, B rủi ro hơn rất nhiều. Cùng một con số ROE, nhưng chất lượng khác hẳn.</p>
+
+    <div class="panel quiz">
+      <div class="mcq q" data-answer="1" data-right="Đúng. B có tài sản gấp 4 lần vốn chủ, tức nợ gấp 3 lần vốn. Biên lợi nhuận chỉ 5% thì doanh thu giảm một chút là lợi nhuận không đủ trả lãi." data-wrong="Nhìn lại cột đòn bẩy. Cùng ROE 20%, nhưng một bên dựa vào vay nợ.">
+        <h3>Kinh tế đi xuống, doanh thu cả hai công ty giảm. Công ty nào nguy hiểm hơn?</h3>
+        <div class="opts">
+          <button class="opt" type="button">Công ty A (biên 20%, đòn bẩy 1,25)</button>
+          <button class="opt" type="button">Công ty B (biên 5%, đòn bẩy 4,0)</button>
+          <button class="opt" type="button">Như nhau, vì ROE bằng nhau</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4.2 -->
+  <section class="chapter" id="tang-truong">
+    <div class="chapter-head"><span class="tag">4.2</span><h2>Tăng trưởng: đừng chia đơn giản</h2></div>
+    <div class="panel talk">
+      <div class="say pig"><span class="char" data-char="pig:proud"></span><p class="bubble">Lợi nhuận tăng 100% sau 5 năm. Chia 5 là 20%/năm, dễ ợt!</p></div>
+      <div class="say owl right"><p class="bubble">Sai rồi. Lợi nhuận năm sau đứng trên vai năm trước, nên phải dùng <b>CAGR</b>, tức tăng trưởng kép.</p><span class="char" data-char="owl:stern"></span></div>
+    </div>
+    <div class="tbl-wrap">
+      <table class="tbl">
+        <thead><tr><th>Chỉ số</th><th>Công thức</th><th>Ghi chú</th></tr></thead>
+        <tbody>
+          <tr><td>Tăng trưởng doanh thu, LNST</td><td>(Năm nay − Năm trước) / Năm trước</td><td>So cùng kỳ</td></tr>
+          <tr><td>CAGR (tăng trưởng kép hằng năm)</td><td>(Giá trị cuối / Giá trị đầu)^(1/số năm) − 1</td><td>Đo tăng trưởng bình quân nhiều năm</td></tr>
+          <tr><td>Tăng trưởng EPS</td><td>Như trên, tính trên EPS</td><td>Phản ánh cả việc pha loãng cổ phiếu</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="panel toy">
+      <div class="toy-title"><h3>CAGR hay phép chia của Heo?</h3><span class="pill">Kéo thử</span></div>
+      <div class="controls">
+        <div class="ctl"><label for="cgS">Giá trị đầu (tỷ đồng)</label><input id="cgS" type="number" min="1" max="100000" value="500" inputmode="decimal"></div>
+        <div class="ctl"><label for="cgE">Giá trị cuối (tỷ đồng)</label><input id="cgE" type="number" min="1" max="100000" value="1000" inputmode="decimal"></div>
+        <div class="ctl"><label for="cgN">Số năm <output id="cgNOut"></output></label><input id="cgN" type="range" min="1" max="15" step="1" value="5"></div>
+      </div>
+      <div class="result">
+        <div class="stat money"><div class="k">CAGR đúng</div><div class="v" id="cgRate"></div></div>
+        <div class="stat warn"><div class="k">Phép chia đơn giản của Heo</div><div class="v" id="cgSimple"></div></div>
+      </div>
+      <div class="chart-box"><svg id="cgChart" viewBox="0 0 640 240" role="img" aria-label="Đường tăng trưởng theo CAGR và theo phép chia đơn giản"></svg></div>
+      <div class="legend"><span><i style="background:var(--money)"></i>Tăng đều theo CAGR (về đúng đích)</span><span><i style="background:var(--warn)"></i>Nếu thật sự tăng kép theo con số của Heo</span></div>
+      <div class="say owl"><span class="char" data-char="owl:talk"></span><p class="bubble" id="cgSay"></p></div>
+    </div>
+    <div class="callout good">
+      <strong>Ví dụ CAGR</strong>
+      <p>LNST tăng từ 500 tỷ lên 1.000 tỷ sau 5 năm thì CAGR = (1.000/500)^(1/5) − 1 = 2^0,2 − 1 ≈ <b>14,9%/năm</b> (không phải 20%/năm như phép chia đơn giản 100%/5).</p>
+    </div>
+  </section>
+
+  <!-- 4.3 -->
+  <section class="chapter" id="suc-khoe">
+    <div class="chapter-head"><span class="tag">4.3</span><h2>Sức khỏe: khám tổng quát cho doanh nghiệp</h2></div>
+    <div class="panel talk">
+      <div class="say pig"><span class="char" data-char="pig:happy"></span><p class="bubble">Lợi nhuận đang tăng thì cần gì khám sức khỏe ạ?</p></div>
+      <div class="say owl right"><p class="bubble">Công ty phá sản thường vì hết tiền trả nợ, không phải vì hết lãi trên giấy. Năm chỉ số dưới đây đo xem nó có bị nợ đè không.</p><span class="char" data-char="owl:stern"></span></div>
+    </div>
+    <div class="tbl-wrap">
+      <table class="tbl">
+        <thead><tr><th>Chỉ số</th><th>Công thức</th><th>Ngưỡng an toàn tham khảo</th></tr></thead>
+        <tbody>
+          <tr><td>Nợ vay / Vốn chủ (D/E)</td><td>(Vay ngắn hạn + Vay dài hạn) / Vốn chủ</td><td>&lt; 1 lần với doanh nghiệp sản xuất; bất động sản thường cao hơn</td></tr>
+          <tr><td>Nợ vay ròng / EBITDA</td><td>(Nợ vay − Tiền) / EBITDA</td><td>&lt; 3 lần (số năm cần để trả hết nợ bằng lợi nhuận hoạt động)</td></tr>
+          <tr><td>Thanh toán hiện hành</td><td>Tài sản ngắn hạn / Nợ ngắn hạn</td><td>&gt; 1,2 lần</td></tr>
+          <tr><td>Thanh toán nhanh</td><td>(Tài sản ngắn hạn − Tồn kho) / Nợ ngắn hạn</td><td>&gt; 1 lần</td></tr>
+          <tr><td>Khả năng trả lãi vay</td><td>EBIT / Chi phí lãi vay</td><td>&gt; 3 lần</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="note">EBIT = lợi nhuận trước lãi vay và thuế. EBITDA = EBIT + khấu hao.</p>
+    <div class="panel toy">
+      <div class="toy-title"><h3>Phòng khám của Cú Già</h3><span class="pill">Nhập số</span></div>
+      <p>Nhập số liệu từ báo cáo tài chính (tỷ đồng), hoặc nạp một bệnh nhân mẫu. Hai công ty mẫu là giả định để luyện tập.</p>
+      <div class="tabs" role="group" aria-label="Bệnh nhân mẫu" id="hcTabs">
+        <button class="opt" type="button" data-p="0">Công ty khỏe (giả định)</button>
+        <button class="opt" type="button" data-p="1">Công ty ham vay (giả định)</button>
+      </div>
+      <div class="tabs" role="group" aria-label="Ngành" id="hcSector">
+        <button class="opt" type="button" data-s="sx">Doanh nghiệp sản xuất</button>
+        <button class="opt" type="button" data-s="bds">Bất động sản</button>
+      </div>
+      <div class="mini-grid">
+        <label>Vay ngắn hạn<input type="number" id="hcVnh" min="0" inputmode="decimal"></label>
+        <label>Vay dài hạn<input type="number" id="hcVdh" min="0" inputmode="decimal"></label>
+        <label>Vốn chủ<input type="number" id="hcVc" min="1" inputmode="decimal"></label>
+        <label>Tiền và tương đương<input type="number" id="hcTien" min="0" inputmode="decimal"></label>
+        <label>EBIT<input type="number" id="hcEbit" inputmode="decimal"></label>
+        <label>Khấu hao<input type="number" id="hcKh" min="0" inputmode="decimal"></label>
+        <label>Chi phí lãi vay<input type="number" id="hcLai" min="0" inputmode="decimal"></label>
+        <label>Tài sản ngắn hạn<input type="number" id="hcTsnh" min="0" inputmode="decimal"></label>
+        <label>Tồn kho<input type="number" id="hcTk" min="0" inputmode="decimal"></label>
+        <label>Nợ ngắn hạn<input type="number" id="hcNnh" min="1" inputmode="decimal"></label>
+      </div>
+      <ul class="check" id="hcList" aria-live="polite"></ul>
+      <div class="verdict" id="hcVerdict"></div>
+    </div>
+  </section>
+
+  <!-- 4.4 -->
+  <section class="chapter" id="van-hanh">
+    <div class="chapter-head"><span class="tag">4.4</span><h2>Vận hành: đồng tiền đi một vòng mất bao lâu</h2></div>
+    <div class="panel talk">
+      <div class="say pig"><span class="char" data-char="pig:worried"></span><p class="bubble">Công ty bán được hàng mà vẫn thiếu tiền mặt. Lạ thật!</p></div>
+      <div class="say owl right"><p class="bubble">Vì tiền bị kẹt trong kho và trong túi khách hàng. Siêu thị lớn thì ngược lại: bán xong thu tiền ngay, mãi sau mới trả nhà cung cấp.</p><span class="char" data-char="owl:talk"></span></div>
+    </div>
+    <div class="tbl-wrap">
+      <table class="tbl">
+        <thead><tr><th>Chỉ số</th><th>Công thức</th><th>Ý nghĩa</th></tr></thead>
+        <tbody>
+          <tr><td>Số ngày tồn kho</td><td>Tồn kho bình quân / Giá vốn × 365</td><td>Hàng nằm kho bao nhiêu ngày</td></tr>
+          <tr><td>Số ngày thu tiền</td><td>Phải thu bình quân / Doanh thu × 365</td><td>Bao lâu thu được tiền từ khách hàng</td></tr>
+          <tr><td>Số ngày trả tiền</td><td>Phải trả người bán bình quân / Giá vốn × 365</td><td>Bao lâu mới phải trả nhà cung cấp</td></tr>
+          <tr><td>Chu kỳ tiền mặt</td><td>Ngày tồn kho + Ngày thu tiền − Ngày trả tiền</td><td>Càng ngắn càng tốt; âm là rất tốt (siêu thị lớn thường âm)</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="panel toy">
+      <div class="toy-title"><h3>Hành trình của một đồng tiền</h3><span class="pill">Kéo thử</span></div>
+      <div class="tabs" role="group" aria-label="Mẫu doanh nghiệp" id="ccTabs">
+        <button class="opt" type="button" data-v="90,60,45">Nhà máy (giả định)</button>
+        <button class="opt" type="button" data-v="30,2,50">Siêu thị lớn (giả định)</button>
+      </div>
+      <div class="controls">
+        <div class="ctl"><label for="ccDio">Số ngày tồn kho <output id="ccDioOut"></output></label><input id="ccDio" type="range" min="0" max="180" step="1" value="90"></div>
+        <div class="ctl"><label for="ccDso">Số ngày thu tiền <output id="ccDsoOut"></output></label><input id="ccDso" type="range" min="0" max="120" step="1" value="60"></div>
+        <div class="ctl"><label for="ccDpo">Số ngày trả tiền <output id="ccDpoOut"></output></label><input id="ccDpo" type="range" min="0" max="180" step="1" value="45"></div>
+      </div>
+      <div class="chart-box"><svg id="ccChart" viewBox="0 0 640 170" role="img" aria-label="Dòng thời gian tồn kho, thu tiền, trả tiền và chu kỳ tiền mặt"></svg></div>
+      <div class="legend"><span><i style="background:var(--gold)"></i>Hàng nằm kho</span><span><i style="background:var(--save)"></i>Chờ khách trả tiền</span><span><i style="background:var(--pig)"></i>Được nợ nhà cung cấp</span></div>
+      <div class="result">
+        <div class="stat" id="ccBox"><div class="k">Chu kỳ tiền mặt</div><div class="v" id="ccRes"></div></div>
+      </div>
+      <div class="say pig"><span class="char" id="ccPig"></span><p class="bubble" id="ccSay"></p></div>
+    </div>
+  </section>
+
+  <!-- 4.5 -->
+  <section class="chapter" id="dinh-gia">
+    <div class="chapter-head"><span class="tag">4.5</span><h2>Định giá: đắt hay rẻ?</h2></div>
+    <div class="panel talk">
+      <div class="say pig"><span class="char" data-char="pig:wow"></span><p class="bubble">Cổ phiếu 50.000 đ, cổ phiếu kia 10.000 đ. Cái 10.000 đ rẻ hơn chứ!</p></div>
+      <div class="say owl right"><p class="bubble">Giá một cổ phiếu chẳng nói lên đắt rẻ. Phải xem con trả bao nhiêu cho <b>mỗi đồng lợi nhuận</b>, mỗi đồng tài sản, mỗi đồng doanh thu.</p><span class="char" data-char="owl:talk"></span></div>
+    </div>
+    <div class="tbl-wrap">
+      <table class="tbl">
+        <thead><tr><th>Chỉ số</th><th>Công thức</th><th>Cách hiểu</th><th>Hợp với</th></tr></thead>
+        <tbody>
+          <tr><td>EPS</td><td>LNST của cổ đông công ty mẹ / Số cổ phiếu lưu hành bình quân</td><td>Lợi nhuận trên mỗi cổ phiếu</td><td>Mọi công ty</td></tr>
+          <tr><td>P/E</td><td>Giá / EPS</td><td>Trả bao nhiêu đồng cho 1 đồng lợi nhuận mỗi năm</td><td>Công ty có lợi nhuận ổn định</td></tr>
+          <tr><td>P/B</td><td>Giá / Giá trị sổ sách mỗi cổ phiếu (BVPS = Vốn chủ / Số cổ phiếu)</td><td>Trả gấp bao nhiêu lần giá trị sổ sách</td><td>Ngân hàng, chứng khoán, bảo hiểm</td></tr>
+          <tr><td>P/S</td><td>Vốn hóa / Doanh thu</td><td>Dùng khi công ty chưa có lãi</td><td>Công ty tăng trưởng, chưa có lãi</td></tr>
+          <tr><td>EV/EBITDA</td><td>(Vốn hóa + Nợ vay − Tiền) / EBITDA</td><td>Định giá có tính đến nợ</td><td>So sánh các công ty có cơ cấu nợ khác nhau</td></tr>
+          <tr><td>PEG</td><td>P/E / Tốc độ tăng trưởng EPS (%)</td><td>&lt; 1 là rẻ so với tăng trưởng (theo Peter Lynch)</td><td>Công ty tăng trưởng</td></tr>
+          <tr><td>Tỷ suất cổ tức</td><td>Cổ tức tiền mặt mỗi cổ phiếu / Giá</td><td>Lợi suất nhận bằng tiền mặt</td><td>Công ty trả cổ tức đều</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="panel toy">
+      <div class="toy-title"><h3>Máy soi P/E</h3><span class="pill">Kéo thử</span></div>
+      <p><b>Ví dụ:</b> giá cổ phiếu 50.000 đ, EPS 4.000 đ, EPS tăng 20%/năm, lãi tiết kiệm 5%. Kéo để xem các con số đổi ra sao.</p>
+      <div class="controls">
+        <div class="ctl"><label for="peP">Giá cổ phiếu <output id="pePOut"></output></label><input id="peP" type="range" min="5000" max="150000" step="500" value="50000"></div>
+        <div class="ctl"><label for="peE">EPS <output id="peEOut"></output></label><input id="peE" type="range" min="500" max="15000" step="100" value="4000"></div>
+        <div class="ctl"><label for="peG">Tăng trưởng EPS/năm <output id="peGOut"></output></label><input id="peG" type="range" min="0" max="40" step="1" value="20"></div>
+        <div class="ctl"><label for="peS">Lãi tiết kiệm/năm <output id="peSOut"></output></label><input id="peS" type="range" min="0" max="10" step="0.5" value="5"></div>
+      </div>
+      <div class="result">
+        <div class="stat"><div class="k">P/E = Giá / EPS</div><div class="v" id="peRes"></div></div>
+        <div class="stat" id="peEyBox"><div class="k">Lợi suất lợi nhuận = 1 / (P/E)</div><div class="v" id="peEy"></div></div>
+        <div class="stat" id="pePegBox"><div class="k">PEG = P/E / tăng trưởng</div><div class="v" id="pePeg"></div></div>
+      </div>
+      <div class="say owl"><span class="char" data-char="owl:talk"></span><p class="bubble" id="peSay"></p></div>
+    </div>
+    <div class="callout">
+      <strong>Đọc ví dụ gốc</strong>
+      <ul class="plain">
+        <li>P/E = 50.000 / 4.000 = <b>12,5 lần</b>, nghĩa là nếu lợi nhuận đi ngang, mất 12,5 năm lợi nhuận để "hoàn vốn".</li>
+        <li>Nghịch đảo P/E là lợi suất lợi nhuận = 1 / 12,5 = <b>8%</b>. Hãy so con số này với lãi tiết kiệm. Nếu lãi tiết kiệm là 5%, cổ phiếu phải bù thêm rủi ro bằng tăng trưởng.</li>
+        <li>Nếu EPS tăng trưởng 20%/năm thì PEG = 12,5 / 20 = <b>0,63</b>, tức rẻ so với tốc độ tăng trưởng.</li>
+      </ul>
+    </div>
+    <div class="callout warn">
+      <strong>Bẫy P/E thấp</strong>
+      <p>P/E rất thấp (3–5 lần) thường là vì thị trường tin lợi nhuận sẽ giảm, hoặc lợi nhuận năm đó có yếu tố một lần. Với doanh nghiệp chu kỳ (thép, phân bón), P/E thấp nhất thường rơi vào <b>đỉnh</b> chu kỳ, tức thời điểm nguy hiểm nhất để mua.</p>
+    </div>
+
+    <div class="panel toy">
+      <div class="toy-title"><h3>Chọn đúng thước đo</h3><span class="pill">Trò chơi</span></div>
+      <p>Mỗi tình huống hợp với một chỉ số định giá. Bấm chỉ số bạn sẽ dùng trước tiên.</p>
+      <div id="vgGame"></div>
+    </div>
+
+    <div class="panel quiz">
+      <div class="mcq q" data-answer="2" data-right="Chính xác. Với doanh nghiệp chu kỳ, lợi nhuận đỉnh làm P/E trông rất thấp, đúng lúc giá thép sắp quay đầu. P/E thấp nhất thường rơi vào đỉnh chu kỳ." data-wrong="Cẩn thận bẫy P/E thấp. Ở doanh nghiệp chu kỳ, lợi nhuận đang ở đỉnh khiến P/E trông rẻ.">
+        <h3>Giá thép đang cao kỷ lục, một công ty thép có P/E chỉ 4 lần. Heo Đất nên nghĩ gì?</h3>
+        <div class="opts">
+          <button class="opt" type="button">Rẻ quá, mua ngay</button>
+          <button class="opt" type="button">P/E thấp luôn là dấu hiệu tốt</button>
+          <button class="opt" type="button">Có thể đang ở đỉnh chu kỳ, đây là lúc nguy hiểm nhất để mua</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4.6 -->
+  <section class="chapter" id="dcf">
+    <div class="chapter-head"><span class="tag">4.6</span><h2>DCF: kéo tiền tương lai về hôm nay</h2></div>
+    <div class="panel talk">
+      <div class="say pig"><span class="char" data-char="pig:happy"></span><p class="bubble">P/E chỉ là so sánh tương đối. Có cách nào tính thẳng ra công ty đáng giá bao nhiêu không thầy?</p></div>
+      <div class="say owl right"><p class="bubble">Có: chiết khấu dòng tiền. Giá trị doanh nghiệp bằng tổng mọi dòng tiền tự do nó tạo ra trong tương lai, quy về hiện tại. Một đồng năm sau kém giá hơn một đồng hôm nay.</p><span class="char" data-char="owl:talk"></span></div>
+    </div>
+    <div class="chalk" aria-label="Công thức DCF">
+      <span class="f">Giá trị DN = Σ FCF<sub>t</sub> / (1 + WACC)<sup>t</sup> + Giá trị cuối kỳ / (1 + WACC)<sup>n</sup></span>
+      <span class="f">Giá trị cuối kỳ = FCF<sub>n</sub> × (1 + g) / (WACC − g)</span>
+      <small>WACC: chi phí vốn (lợi suất tối thiểu bạn đòi hỏi) · g: tốc độ tăng trưởng dài hạn sau năm n</small>
+    </div>
+
+    <div class="panel stack">
+      <h3>Ví dụ từng bước (một công ty giả định)</h3>
+      <ul class="plain">
+        <li>FCF năm gần nhất: 1.000 tỷ, dự phóng tăng 10%/năm trong 5 năm</li>
+        <li>Sau đó tăng trưởng mãi mãi g = 3%/năm</li>
+        <li>WACC = 12%</li>
+        <li>Tiền ròng (tiền trừ nợ vay) = 500 tỷ; số cổ phiếu = 500 triệu</li>
+      </ul>
+      <div class="tbl-wrap">
+        <table class="tbl">
+          <thead><tr><th>Năm</th><th class="r">FCF (tỷ)</th><th class="r">Hệ số chiết khấu 1/(1,12)^t</th><th class="r">Giá trị hiện tại (tỷ)</th></tr></thead>
+          <tbody>
+            <tr><td>1</td><td class="r">1.100</td><td class="r">0,893</td><td class="r">982</td></tr>
+            <tr><td>2</td><td class="r">1.210</td><td class="r">0,797</td><td class="r">965</td></tr>
+            <tr><td>3</td><td class="r">1.331</td><td class="r">0,712</td><td class="r">947</td></tr>
+            <tr><td>4</td><td class="r">1.464</td><td class="r">0,636</td><td class="r">930</td></tr>
+            <tr><td>5</td><td class="r">1.611</td><td class="r">0,567</td><td class="r">914</td></tr>
+            <tr><td><b>Cộng 5 năm</b></td><td></td><td></td><td class="r"><b>4.738</b></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <ul class="plain">
+        <li>Giá trị cuối kỳ = 1.611 × 1,03 / (0,12 − 0,03) ≈ 18.432 tỷ → quy về hiện tại: 18.432 × 0,567 ≈ <b>10.459 tỷ</b></li>
+        <li>Giá trị doanh nghiệp = 4.738 + 10.459 = 15.197 tỷ</li>
+        <li>Giá trị vốn chủ = 15.197 + 500 (tiền ròng) = 15.697 tỷ</li>
+        <li><b>Giá trị nội tại mỗi cổ phiếu = 15.697 tỷ / 500 triệu ≈ 31.400 đ</b></li>
+      </ul>
+    </div>
+
+    <div class="panel toy">
+      <div class="toy-title"><h3>Cỗ máy DCF</h3><span class="pill">Kéo thử</span></div>
+      <p>Mặc định là đúng ví dụ trên. Máy dùng hệ số chiết khấu không làm tròn nên có thể lệch ví dụ 1 tỷ.</p>
+      <div class="controls">
+        <div class="ctl"><label for="dcF">FCF năm gần nhất <output id="dcFOut"></output></label><input id="dcF" type="range" min="100" max="5000" step="50" value="1000"></div>
+        <div class="ctl"><label for="dcGr">Tăng trưởng FCF 5 năm tới <output id="dcGrOut"></output></label><input id="dcGr" type="range" min="0" max="25" step="1" value="10"></div>
+        <div class="ctl"><label for="dcW">WACC <output id="dcWOut"></output></label><input id="dcW" type="range" min="6" max="20" step="0.5" value="12"></div>
+        <div class="ctl"><label for="dcG">Tăng trưởng mãi mãi g <output id="dcGOut"></output></label><input id="dcG" type="range" min="0" max="6" step="0.5" value="3"></div>
+        <div class="ctl"><label for="dcC">Tiền ròng (tỷ đồng, âm nếu nợ nhiều hơn tiền)</label><input id="dcC" type="number" min="-100000" max="100000" step="100" value="500" inputmode="decimal"></div>
+        <div class="ctl"><label for="dcSh">Số cổ phiếu (triệu)</label><input id="dcSh" type="number" min="1" max="100000" value="500" inputmode="decimal"></div>
+      </div>
+      <div class="tbl-wrap">
+        <table class="tbl" id="dcTable"></table>
+      </div>
+      <div class="result">
+        <div class="stat"><div class="k">Giá trị doanh nghiệp</div><div class="v" id="dcEv"></div></div>
+        <div class="stat" id="dcTvBox"><div class="k">Phần do giá trị cuối kỳ</div><div class="v" id="dcTv"></div></div>
+        <div class="stat money"><div class="k">Giá trị nội tại mỗi cổ phiếu</div><div class="v" id="dcPs"></div></div>
+      </div>
+      <div class="chart-box"><svg id="dcChart" viewBox="0 0 640 250" role="img" aria-label="Giá trị hiện tại của từng năm và của giá trị cuối kỳ"></svg></div>
+      <div class="legend"><span><i style="background:var(--save)"></i>Giá trị hiện tại FCF từng năm</span><span><i style="background:var(--money)"></i>Giá trị hiện tại của giá trị cuối kỳ</span></div>
+      <h3>Bảng độ nhạy (giá trị mỗi cổ phiếu, đ)</h3>
+      <div class="tbl-wrap"><table class="tbl" id="dcSens"></table></div>
+      <p class="note">Ô viền xanh là WACC 12%, g 3%. Ô hồng là giả định đang chọn ở thanh trượt (nếu nằm trong bảng).</p>
+      <div class="say owl"><span class="char" id="dcOwl"></span><p class="bubble" id="dcSay"></p></div>
+    </div>
+    <div class="callout warn">
+      <strong>Độ nhạy</strong>
+      <p>Chỉ cần tăng WACC từ 12% lên 13%, giá trị giảm còn khoảng 28.200 đ (−10%). Giá trị cuối kỳ chiếm khoảng 70% tổng giá trị. Bài học: DCF rất nhạy với giả định. Hãy dùng nó để hiểu <b>thị trường đang kỳ vọng gì</b> ở mức giá hiện tại, đừng coi kết quả là chân lý.</p>
+    </div>
+  </section>
+
+  <!-- 4.7 -->
+  <section class="chapter" id="bien-an-toan">
+    <div class="chapter-head"><span class="tag">4.7</span><h2>Biên an toàn: chừa chỗ cho sai số</h2></div>
+    <div class="panel talk">
+      <div class="say pig"><span class="char" data-char="pig:proud"></span><p class="bubble">Em tính ra 31.400 đ. Giá đang 30.000 đ, rẻ hơn rồi, mua thôi!</p></div>
+      <div class="say owl right"><p class="bubble">Con vừa thấy đổi 1% WACC là lệch 10%. Ước tính của con chắc chắn có sai số, nên phải mua <b>rẻ hơn hẳn</b> giá trị nội tại.</p><span class="char" data-char="owl:stern"></span></div>
+    </div>
+    <div class="chalk" aria-label="Công thức biên an toàn">
+      <span>Biên an toàn (margin of safety): khoảng cách giữa giá trị nội tại bạn ước tính và giá bạn trả</span>
+      <span class="f">Biên an toàn = 1 − Giá thị trường / Giá trị nội tại</span>
+    </div>
+    <div class="panel toy">
+      <div class="toy-title"><h3>Thước biên an toàn</h3><span class="pill">Kéo thử</span></div>
+      <div class="controls">
+        <div class="ctl"><label for="mosV">Giá trị nội tại ước tính (đ)</label><input id="mosV" type="number" min="1000" max="1000000" step="100" value="31400" inputmode="decimal"></div>
+        <div class="ctl"><label for="mosP">Giá thị trường <output id="mosPOut"></output></label><input id="mosP" type="range" min="5000" max="60000" step="500" value="22000"></div>
+      </div>
+      <p class="note">Giá trị nội tại tự cập nhật theo Cỗ máy DCF ở mục 4.6 (làm tròn đến trăm đồng); bạn cũng có thể gõ số khác.</p>
+      <div class="chart-box"><svg id="mosChart" viewBox="0 0 640 120" role="img" aria-label="Thước so sánh giá thị trường với giá trị nội tại"></svg></div>
+      <div class="legend"><span><i style="background:var(--money)"></i>Biên an toàn từ 33% trở lên</span><span><i style="background:var(--money-soft)"></i>Biên 25–33%</span><span><i style="background:var(--warn-soft)"></i>Biên dưới 25%</span></div>
+      <div class="result">
+        <div class="stat" id="mosBox"><div class="k">Biên an toàn</div><div class="v" id="mosRes"></div></div>
+        <div class="stat"><div class="k">Giá mua tối đa để có biên 25% / 33%</div><div class="v" id="mosMax"></div></div>
+      </div>
+      <div class="verdict" id="mosVerdict"></div>
+    </div>
+    <div class="callout good">
+      <strong>Theo ví dụ</strong>
+      <p>Trong ví dụ trên, nếu giá thị trường 22.000 đ thì biên an toàn = 1 − 22.000/31.400 ≈ <b>30%</b>. Graham khuyên chỉ mua khi biên an toàn từ 25–33% trở lên, vì ước tính của bạn chắc chắn có sai số.</p>
+    </div>
+  </section>
+
+  <!-- 4.8 -->
+  <section class="chapter" id="nganh">
+    <div class="chapter-head"><span class="tag">4.8</span><h2>Mỗi ngành một cặp kính riêng</h2></div>
+    <div class="panel talk">
+      <div class="say pig"><span class="char" data-char="pig:worried"></span><p class="bubble">Ngân hàng có ROA chỉ 1–2%, vậy là ngân hàng nào cũng kém hả thầy?</p></div>
+      <div class="say owl right"><p class="bubble">Không. Mỗi ngành có mô hình kinh doanh riêng nên có bộ chỉ số riêng. Đọc nhầm kính là kết luận sai.</p><span class="char" data-char="owl:smile"></span></div>
+    </div>
+    <div class="tbl-wrap">
+      <table class="tbl">
+        <thead><tr><th>Ngành</th><th>Chỉ số cần xem</th><th>Ý nghĩa</th></tr></thead>
+        <tbody>
+          <tr><td>Ngân hàng</td><td>NIM (biên lãi ròng), tỷ lệ nợ xấu (NPL), tỷ lệ bao phủ nợ xấu, CASA (tiền gửi không kỳ hạn), CAR (an toàn vốn), CIR (chi phí/thu nhập), P/B</td><td>NIM cao và CASA cao là lợi thế; NPL dưới 2% và bao phủ trên 100% là an toàn</td></tr>
+          <tr><td>Bất động sản</td><td>Quỹ đất (ha, vị trí, pháp lý), người mua trả tiền trước, tồn kho, nợ vay và trái phiếu, RNAV</td><td>Người mua trả tiền trước là doanh thu tương lai; pháp lý quan trọng hơn mọi chỉ số</td></tr>
+          <tr><td>Bán lẻ</td><td>Tăng trưởng doanh số cửa hàng hiện hữu (SSSG), doanh thu/cửa hàng, số cửa hàng mở mới, chu kỳ tiền mặt</td><td>SSSG dương mới là tăng trưởng thật, không chỉ nhờ mở thêm cửa hàng</td></tr>
+          <tr><td>Chứng khoán</td><td>Thị phần môi giới, dư nợ margin, danh mục tự doanh, P/B</td><td>Lợi nhuận phụ thuộc mạnh vào thanh khoản thị trường</td></tr>
+          <tr><td>Sản xuất chu kỳ (thép, phân bón, hóa chất)</td><td>Giá bán và giá nguyên liệu đầu vào, công suất, tồn kho</td><td>Định giá theo chu kỳ, cẩn thận với P/E thấp ở đỉnh chu kỳ</td></tr>
+          <tr><td>Công nghệ, dịch vụ</td><td>Tăng trưởng doanh thu, hợp đồng ký mới, tỷ lệ doanh thu định kỳ, biên lợi nhuận</td><td>Tăng trưởng là yếu tố định giá chính</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="panel toy">
+      <div class="toy-title"><h3>Chỉ số này của ngành nào?</h3><span class="pill">Trò chơi</span></div>
+      <p>Mỗi thẻ là một chỉ số đặc thù. Bấm ngành mà chỉ số đó thuộc về.</p>
+      <div id="igGame"></div>
+    </div>
+  </section>
+
+  <!-- BÀI TẬP -->
+  <section class="chapter" id="bai-tap">
+    <div class="chapter-head"><span class="tag">✓</span><h2>Bài tập: cho Heo ăn xu</h2></div>
+    <div class="panel toy">
+      <div class="feed">
+        <span class="char" id="feedPig"></span>
+        <div class="stack" style="gap:8px">
+          <strong id="feedText"></strong>
+          <div class="bar" aria-hidden="true"><div id="feedBar"></div></div>
+          <span class="note">Chỉ coi module là xong khi đã tick hết bài tập, không phải khi đọc xong. Tiến độ được lưu trên trình duyệt này.</span>
+        </div>
+      </div>
+      <ul class="tasks" id="tasks" data-module="04">
+        <li><label><input type="checkbox" id="t1"><span>Với công ty bạn đã chọn ở Module 3, tính đủ các chỉ số ở 4.1–4.5 cho 5 năm, ghi vào Excel</span></label></li>
+        <li><label><input type="checkbox" id="t2"><span>Làm phân tích DuPont: ROE của công ty đến từ biên lợi nhuận, vòng quay hay đòn bẩy?</span></label></li>
+        <li><label><input type="checkbox" id="t3"><span>So sánh P/E, P/B, ROE của công ty đó với 2 đối thủ cùng ngành</span></label></li>
+        <li><label><input type="checkbox" id="t4"><span>Tự làm lại ví dụ DCF trong Excel, sau đó thay WACC (10%, 12%, 14%) và g (2%, 3%, 4%) để thấy giá trị thay đổi ra sao</span></label></li>
+        <li><label><input type="checkbox" id="t5"><span>Viết một đoạn: "Ở giá hiện tại, thị trường đang kỳ vọng công ty tăng trưởng bao nhiêu? Kỳ vọng đó có hợp lý không?"</span></label></li>
+      </ul>
+    </div>
+    <a class="panel next" href="05-case-study-vinamilk.html">
+      <div class="stack" style="gap:4px">
+        <span class="eyebrow">Chương sau →</span>
+        <h3>Module 5: Case study: phân tích Vinamilk (VNM)</h3>
+        <span class="note">Đem cả hộp đồ nghề vừa học ra mổ xẻ một doanh nghiệp thật.</span>
+      </div>
+      <span class="char bob" data-char="owl:smile" style="width:72px"></span>
+    </a>
+    <p class="disclaimer">Giáo trình mang tính giáo dục, không phải khuyến nghị mua bán mã cổ phiếu nào. Mọi công ty và con số trong máy tính là giả định để minh họa; ngưỡng tham khảo chỉ là điểm khởi đầu, luôn so theo thời gian và theo ngành.</p>
+  </section>
+</main>
+
+<script src="assets/truyen.js"></script>
+<script>
+(function () {
+  var T = Truyen, $ = T.$, money = T.money, pct = T.pct, trim = T.trim, num = T.num;
+  function on(ids, fn) { ids.forEach(function (id) { $(id).addEventListener('input', fn); }); fn(); }
+  function press(group, el) { group.querySelectorAll('.opt').forEach(function (b) { b.setAttribute('aria-pressed', String(b === el)); }); }
+  function dong(v) { return num(v) + ' đ'; }
+  function x2(v) { return trim(v, 2) + ' lần'; }
+  function pint(v) { return Math.round(v) + '%'; } // Truyen.trim(x, 0) cắt mất số 0 của số nguyên (10 → "1")
+
+  // ---------- 4.1 DuPont ----------
+  var dpTabs = $('dpTabs');
+  function renderDp() {
+    var m = +$('dpM').value, t = +$('dpT').value, l = +$('dpL').value;
+    var roa = m * t, roe = roa * l, debt = l - 1;
+    $('dpMOut').textContent = pct(m); $('dpTOut').textContent = x2(t); $('dpLOut').textContent = x2(l);
+    $('dpEq').innerHTML = '<span class="chip">' + pct(m) + '<small>biên ròng</small></span><span class="arrow">×</span>' +
+      '<span class="chip">' + trim(t, 2) + '<small>vòng quay</small></span><span class="arrow">×</span>' +
+      '<span class="chip">' + trim(l, 2) + '<small>đòn bẩy</small></span><span class="arrow">=</span>' +
+      '<span class="chip res">' + pct(roe) + '<small>ROE</small></span>';
+    $('dpRoa').textContent = pct(roa);
+    $('dpRoe').textContent = pct(roe);
+    $('dpDebt').textContent = trim(debt, 2) + ' lần';
+    $('dpRoeBox').className = 'stat' + (roe > 15 ? ' money' : '');
+    $('dpDebtBox').className = 'stat' + (debt >= 2 ? ' warn' : debt <= 0.5 ? ' money' : '');
+    var lev = roe - roa, share = roe > 0 ? lev / roe * 100 : 0, say, mood;
+    if (debt >= 2) {
+      mood = 'stern';
+      say = 'Doanh nghiệp tự làm ra ROA ' + pct(roa) + ', phần còn lại (' + pint(share) + ' của ROE) là nhờ đòn bẩy. Nợ phải trả gấp ' + trim(debt, 2) + ' lần vốn chủ: kinh tế xấu là lãi vay đè lên lợi nhuận.';
+    } else if (m >= 10 && debt <= 0.5) {
+      mood = 'smile';
+      say = 'ROE ' + pct(roe) + ' chủ yếu đến từ biên lợi nhuận ' + pct(m) + ', gần như không vay nợ. Đây là ROE chất lượng cao, nếu nó bền vững qua nhiều năm.';
+    } else {
+      mood = 'talk';
+      say = 'ROE ' + pct(roe) + ', trong đó ' + pint(share) + ' là phần đòn bẩy cộng thêm vào ROA ' + pct(roa) + '. Xem tiếp xu hướng 5 năm và so với cùng ngành.';
+    }
+    $('dpOwl').innerHTML = T.owl(mood);
+    $('dpSay').textContent = say;
+    dpTabs.querySelectorAll('.opt').forEach(function (b) {
+      b.setAttribute('aria-pressed', String(+b.dataset.m === m && +b.dataset.t === t && +b.dataset.l === l));
+    });
+  }
+  dpTabs.querySelectorAll('.opt').forEach(function (b) {
+    b.addEventListener('click', function () {
+      $('dpM').value = b.dataset.m; $('dpT').value = b.dataset.t; $('dpL').value = b.dataset.l; renderDp();
+    });
+  });
+  on(['dpM', 'dpT', 'dpL'], renderDp);
+
+  // ---------- 4.2 CAGR ----------
+  function renderCg() {
+    var s = parseFloat($('cgS').value), e = parseFloat($('cgE').value), n = +$('cgN').value;
+    $('cgNOut').textContent = n + ' năm';
+    if (!(s > 0 && e > 0)) { $('cgRate').textContent = 'Nhập số dương'; $('cgSimple').textContent = '–'; $('cgSay').textContent = 'Giá trị đầu và cuối phải lớn hơn 0.'; $('cgChart').innerHTML = ''; return; }
+    var c = Math.pow(e / s, 1 / n) - 1, simple = (e / s - 1) / n;
+    $('cgRate').textContent = pct(c * 100) + '/năm';
+    $('cgSimple').textContent = pct(simple * 100) + '/năm';
+    var heo = s * Math.pow(1 + simple, n);
+    $('cgSay').innerHTML = 'Nếu lợi nhuận thật sự tăng kép ' + pct(simple * 100) + ' mỗi năm thì sau ' + n + ' năm phải lên <b>' + num(heo) + ' tỷ</b>, không phải ' + num(e) + ' tỷ. Con số đúng là CAGR <b>' + pct(c * 100) + '/năm</b>.';
+    var W = 640, H = 240, L = 64, R = 20, Tp = 14, B = 30;
+    var max = Math.max(e, heo, s), step = T.niceStep(max), top = Math.ceil(max / step) * step;
+    var x = function (k) { return L + (W - L - R) * k / n; };
+    var y = function (v) { return Tp + (H - Tp - B) * (1 - v / top); };
+    var g = '';
+    for (var tk = 0; tk <= top + 1e-9; tk += step) g += '<line x1="' + L + '" x2="' + (W - R) + '" y1="' + y(tk) + '" y2="' + y(tk) + '" stroke="var(--dot)" stroke-width="1.5"/><text x="' + (L - 8) + '" y="' + (y(tk) + 4) + '" text-anchor="end">' + num(tk) + '</text>';
+    var xs = n <= 8 ? 1 : 2;
+    for (var k = 0; k <= n; k += xs) g += '<text x="' + x(k) + '" y="' + (H - 8) + '" text-anchor="middle">năm ' + k + '</text>';
+    var a = [], b = [];
+    for (var i = 0; i <= n; i++) { a.push(x(i) + ',' + y(s * Math.pow(1 + c, i))); b.push(x(i) + ',' + y(s * Math.pow(1 + simple, i))); }
+    g += '<polyline points="' + b.join(' ') + '" fill="none" stroke="var(--warn)" stroke-width="3" stroke-dasharray="7 5"/>';
+    g += '<polyline points="' + a.join(' ') + '" fill="none" stroke="var(--money)" stroke-width="3.5"/>';
+    g += '<circle cx="' + x(n) + '" cy="' + y(e) + '" r="6" fill="var(--money)" stroke="var(--border)" stroke-width="2.5"/>';
+    g += '<circle cx="' + x(n) + '" cy="' + y(heo) + '" r="6" fill="var(--warn)" stroke="var(--border)" stroke-width="2.5"/>';
+    $('cgChart').innerHTML = g;
+  }
+  on(['cgS', 'cgE', 'cgN'], renderCg);
+
+  // ---------- 4.3 khám sức khỏe ----------
+  var hcIds = ['hcVnh', 'hcVdh', 'hcVc', 'hcTien', 'hcEbit', 'hcKh', 'hcLai', 'hcTsnh', 'hcTk', 'hcNnh'];
+  var hcPresets = [
+    [300, 200, 1000, 150, 300, 100, 50, 900, 250, 600],
+    [1500, 700, 1000, 100, 350, 150, 200, 800, 450, 900]
+  ];
+  var sector = 'sx';
+  function loadHc(p) {
+    hcIds.forEach(function (id, i) { $(id).value = hcPresets[p][i]; });
+    press($('hcTabs'), $('hcTabs').querySelector('[data-p="' + p + '"]'));
+    renderHc();
+  }
+  function renderHc() {
+    var v = {};
+    hcIds.forEach(function (id) { v[id] = parseFloat($(id).value) || 0; });
+    var debt = v.hcVnh + v.hcVdh, ebitda = v.hcEbit + v.hcKh;
+    var rows = [];
+    var de = v.hcVc > 0 ? debt / v.hcVc : NaN;
+    rows.push(['Nợ vay / Vốn chủ (D/E)', 'ngưỡng < 1 lần (sản xuất)', isNaN(de) ? '–' : x2(de),
+      isNaN(de) ? 'bad' : de < 1 ? 'ok' : sector === 'bds' ? 'mid' : 'bad',
+      isNaN(de) ? 'Vốn chủ ≤ 0' : de < 1 ? 'An toàn' : sector === 'bds' ? 'BĐS thường cao hơn, xem kỹ' : 'Vay nhiều']);
+    var nd = debt - v.hcTien;
+    if (nd <= 0) rows.push(['Nợ vay ròng / EBITDA', 'ngưỡng < 3 lần', 'Tiền > nợ', 'ok', 'Tiền nhiều hơn nợ vay']);
+    else if (ebitda <= 0) rows.push(['Nợ vay ròng / EBITDA', 'ngưỡng < 3 lần', '–', 'bad', 'EBITDA ≤ 0']);
+    else { var r = nd / ebitda; rows.push(['Nợ vay ròng / EBITDA', 'ngưỡng < 3 lần', x2(r), r < 3 ? 'ok' : 'bad', r < 3 ? 'Trả hết nợ trong ~' + trim(r, 1) + ' năm' : 'Cần ' + trim(r, 1) + ' năm để trả nợ']); }
+    var cur = v.hcNnh > 0 ? v.hcTsnh / v.hcNnh : NaN;
+    rows.push(['Thanh toán hiện hành', 'ngưỡng > 1,2 lần', isNaN(cur) ? '–' : x2(cur), cur > 1.2 ? 'ok' : 'bad', cur > 1.2 ? 'Đạt' : 'Dưới ngưỡng']);
+    var quick = v.hcNnh > 0 ? (v.hcTsnh - v.hcTk) / v.hcNnh : NaN;
+    rows.push(['Thanh toán nhanh', 'ngưỡng > 1 lần', isNaN(quick) ? '–' : x2(quick), quick > 1 ? 'ok' : 'bad', quick > 1 ? 'Đạt' : 'Phụ thuộc vào bán tồn kho']);
+    if (v.hcLai <= 0) rows.push(['Khả năng trả lãi vay', 'ngưỡng > 3 lần', 'Không lãi vay', 'ok', 'Không phải trả lãi']);
+    else { var cov = v.hcEbit / v.hcLai; rows.push(['Khả năng trả lãi vay', 'ngưỡng > 3 lần', x2(cov), cov > 3 ? 'ok' : 'bad', cov > 3 ? 'Đạt' : 'Lợi nhuận mỏng so với lãi']); }
+    $('hcList').innerHTML = rows.map(function (r) {
+      return '<li><span class="nm">' + r[0] + '<small>' + r[1] + '</small></span><span class="val">' + r[2] + '</span><span class="badge ' + r[3] + '">' + r[4] + '</span></li>';
+    }).join('');
+    var ok = rows.filter(function (r) { return r[3] === 'ok'; }).length, bad = rows.filter(function (r) { return r[3] === 'bad'; }).length;
+    var mood = bad === 0 ? 'proud' : bad <= 2 ? 'worried' : 'sad';
+    var h = bad === 0 ? 'Khỏe mạnh' : bad <= 2 ? 'Cần theo dõi' : 'Báo động đỏ';
+    var p = bad === 0 ? 'Cả năm chỉ số đều trong vùng an toàn tham khảo. Nhớ so tiếp với 5 năm trước và với công ty cùng ngành.'
+      : bad <= 2 ? 'Có chỉ số vượt ngưỡng. Chưa phải án tử, nhưng phải tìm hiểu lý do trong thuyết minh báo cáo.'
+      : 'Nhiều chỉ số cùng xấu: nợ nặng, thiếu tiền ngắn hạn. Khi kinh tế xấu, đây là kiểu công ty dễ gãy nhất.';
+    $('hcVerdict').innerHTML = '<span class="char">' + T.pig(mood) + '</span><div><span class="eyebrow">Đạt ' + ok + '/5 chỉ số · EBITDA = ' + num(ebitda) + ' tỷ</span><h3>' + h + '</h3><p>' + p + '</p></div>';
+  }
+  $('hcTabs').querySelectorAll('.opt').forEach(function (b) { b.addEventListener('click', function () { loadHc(+b.dataset.p); }); });
+  $('hcSector').querySelectorAll('.opt').forEach(function (b) {
+    b.addEventListener('click', function () { sector = b.dataset.s; press($('hcSector'), b); renderHc(); });
+  });
+  press($('hcSector'), $('hcSector').querySelector('[data-s="sx"]'));
+  hcIds.forEach(function (id) { $(id).addEventListener('input', function () { press($('hcTabs'), null); renderHc(); }); });
+  loadHc(0);
+
+  // ---------- 4.4 chu kỳ tiền mặt ----------
+  function renderCc() {
+    var a = +$('ccDio').value, b = +$('ccDso').value, c = +$('ccDpo').value, ccc = a + b - c;
+    $('ccDioOut').textContent = a + ' ngày'; $('ccDsoOut').textContent = b + ' ngày'; $('ccDpoOut').textContent = c + ' ngày';
+    $('ccRes').textContent = ccc + ' ngày';
+    $('ccBox').className = 'stat ' + (ccc < 0 ? 'money' : ccc > 90 ? 'warn' : '');
+    var W = 640, L = 150, R = 20, max = Math.max(a + b, c, 30), step = T.niceStep(max), top = Math.ceil(max / step) * step;
+    var x = function (d) { return L + (W - L - R) * d / top; };
+    var g = '';
+    for (var t = 0; t <= top + 1e-9; t += step) g += '<line x1="' + x(t) + '" x2="' + x(t) + '" y1="8" y2="132" stroke="var(--dot)" stroke-width="1.5"/><text x="' + x(t) + '" y="164" text-anchor="middle">' + t + ' ngày</text>';
+    g += '<text class="lbl" x="8" y="34">Mua hàng → thu tiền</text>';
+    g += '<rect x="' + x(0) + '" y="18" width="' + (x(a) - x(0)) + '" height="24" fill="var(--gold)" stroke="var(--border)" stroke-width="2"/>';
+    g += '<rect x="' + x(a) + '" y="18" width="' + (x(a + b) - x(a)) + '" height="24" fill="var(--save)" stroke="var(--border)" stroke-width="2"/>';
+    g += '<text class="lbl" x="8" y="76">Mua hàng → trả tiền</text>';
+    g += '<rect x="' + x(0) + '" y="60" width="' + (x(c) - x(0)) + '" height="24" fill="var(--pig)" stroke="var(--border)" stroke-width="2"/>';
+    var lo = Math.min(c, a + b), hi = Math.max(c, a + b), col = ccc < 0 ? 'var(--money)' : 'var(--warn)';
+    g += '<text class="lbl" x="8" y="118">Chu kỳ tiền mặt</text>';
+    if (ccc !== 0) {
+      g += '<line x1="' + x(lo) + '" x2="' + x(hi) + '" y1="112" y2="112" stroke="' + col + '" stroke-width="5"/>' +
+        '<line x1="' + x(lo) + '" x2="' + x(lo) + '" y1="100" y2="124" stroke="' + col + '" stroke-width="3"/>' +
+        '<line x1="' + x(hi) + '" x2="' + x(hi) + '" y1="100" y2="124" stroke="' + col + '" stroke-width="3"/>';
+      g += '<line x1="' + x(c) + '" x2="' + x(c) + '" y1="84" y2="100" stroke="var(--muted)" stroke-dasharray="3 3"/><line x1="' + x(a + b) + '" x2="' + x(a + b) + '" y1="42" y2="100" stroke="var(--muted)" stroke-dasharray="3 3"/>';
+    }
+    $('ccChart').innerHTML = g;
+    $('ccPig').innerHTML = T.pig(ccc < 0 ? 'proud' : ccc > 90 ? 'worried' : 'happy');
+    $('ccSay').textContent = ccc < 0
+      ? 'Chu kỳ âm ' + (-ccc) + ' ngày: thu tiền khách xong rồi mới phải trả nhà cung cấp. Nhà cung cấp đang cho mình vay không lãi!'
+      : ccc === 0 ? 'Vừa thu tiền khách là đến hạn trả nhà cung cấp, không cần ứng tiền.'
+      : 'Mỗi vòng, công ty phải tự ứng tiền trong ' + ccc + ' ngày (từ lúc trả nhà cung cấp đến lúc thu được tiền khách). Càng ngắn càng tốt.';
+    $('ccTabs').querySelectorAll('.opt').forEach(function (bt) { bt.setAttribute('aria-pressed', String(bt.dataset.v === a + ',' + b + ',' + c)); });
+  }
+  $('ccTabs').querySelectorAll('.opt').forEach(function (bt) {
+    bt.addEventListener('click', function () { var v = bt.dataset.v.split(','); $('ccDio').value = v[0]; $('ccDso').value = v[1]; $('ccDpo').value = v[2]; renderCc(); });
+  });
+  on(['ccDio', 'ccDso', 'ccDpo'], renderCc);
+
+  // ---------- 4.5 P/E ----------
+  function renderPe() {
+    var p = +$('peP').value, e = +$('peE').value, g = +$('peG').value, s = +$('peS').value;
+    $('pePOut').textContent = dong(p); $('peEOut').textContent = dong(e); $('peGOut').textContent = pct(g); $('peSOut').textContent = pct(s);
+    var pe = p / e, ey = 100 / pe, peg = g > 0 ? pe / g : NaN;
+    $('peRes').textContent = trim(pe, 1) + ' lần';
+    $('peEy').textContent = pct(ey);
+    $('peEyBox').className = 'stat ' + (ey > s ? 'money' : 'warn');
+    $('pePeg').textContent = isNaN(peg) ? 'Không tính' : trim(peg, 2);
+    $('pePegBox').className = 'stat ' + (isNaN(peg) ? '' : peg < 1 ? 'money' : 'warn');
+    var say = 'Trả ' + trim(pe, 1) + ' đồng cho 1 đồng lợi nhuận mỗi năm: nếu lợi nhuận đi ngang, mất ' + trim(pe, 1) + ' năm lợi nhuận để "hoàn vốn". ';
+    say += ey > s ? 'Lợi suất lợi nhuận ' + pct(ey) + ' cao hơn lãi tiết kiệm ' + pct(s) + ', nhưng phần chênh phải đủ bù rủi ro. '
+      : 'Lợi suất lợi nhuận ' + pct(ey) + ' không hơn lãi tiết kiệm ' + pct(s) + ': cổ phiếu phải bù bằng tăng trưởng. ';
+    say += isNaN(peg) ? 'EPS không tăng thì PEG không có ý nghĩa.' : peg < 1 ? 'PEG ' + trim(peg, 2) + ' < 1: rẻ so với tốc độ tăng trưởng (theo Peter Lynch).' : 'PEG ' + trim(peg, 2) + ' ≥ 1: không còn rẻ so với tăng trưởng.';
+    if (pe <= 5) say += ' P/E chỉ ' + trim(pe, 1) + ': coi chừng bẫy P/E thấp!';
+    $('peSay').textContent = say;
+  }
+  on(['peP', 'peE', 'peG', 'peS'], renderPe);
+
+  // ---------- trò phân loại dùng chung cho 4.5 và 4.8 ----------
+  function sortGame(root, choices, items) {
+    var i = 0, score = 0, answered = false;
+    function draw() {
+      var it = items[i];
+      root.innerHTML = '<div class="stack"><div class="game-card"><span class="eyebrow">Thẻ ' + (i + 1) + '/' + items.length + ' · Đúng ' + score + '</span><span class="big">' + it.q + '</span></div>' +
+        '<div class="opts">' + choices.map(function (c, k) { return '<button class="opt" type="button" data-k="' + k + '">' + c + '</button>'; }).join('') + '</div>' +
+        '<div class="mcq-fb" aria-live="polite"></div></div>';
+      answered = false;
+      root.querySelectorAll('.opt').forEach(function (b) {
+        b.addEventListener('click', function () {
+          var k = +b.dataset.k, ok = k === it.a;
+          root.querySelectorAll('.opt').forEach(function (o) { o.classList.remove('right', 'wrong'); });
+          b.classList.add(ok ? 'right' : 'wrong');
+          if (!answered && ok) score++;
+          answered = true;
+          var last = i === items.length - 1;
+          var fb = root.querySelector('.mcq-fb');
+          fb.innerHTML = '<span class="char">' + (ok ? T.pig('proud') : T.owl('stern')) + '</span><div class="stack" style="gap:6px"><p>' + (ok ? 'Đúng! ' : 'Chưa đúng. Đáp án: <b>' + choices[it.a] + '</b>. ') + it.why + '</p>' +
+            '<div><button class="opt" type="button" data-next>' + (last ? 'Chơi lại' : 'Thẻ tiếp →') + '</button></div></div>';
+          fb.querySelector('[data-next]').addEventListener('click', function () {
+            if (last) { i = 0; score = 0; } else i++;
+            draw();
+          });
+          if (last) root.querySelector('.game-card .eyebrow').textContent = 'Xong · Đúng lần đầu ' + score + '/' + items.length;
+        });
+      });
+    }
+    draw();
+  }
+  sortGame($('vgGame'), ['P/E', 'P/B', 'P/S', 'EV/EBITDA', 'PEG', 'Tỷ suất cổ tức'], [
+    { q: 'Định giá một ngân hàng', a: 1, why: 'P/B hợp với ngân hàng, chứng khoán, bảo hiểm: trả gấp bao nhiêu lần giá trị sổ sách.' },
+    { q: 'Công ty tăng trưởng nhanh nhưng chưa có lãi', a: 2, why: 'Chưa có lãi thì không có P/E. P/S = Vốn hóa / Doanh thu dùng được khi công ty chưa có lãi.' },
+    { q: 'So hai công ty cùng ngành, một bên vay rất nhiều, một bên không vay', a: 3, why: 'EV/EBITDA cộng nợ vay và trừ tiền vào giá trị, nên so được các công ty có cơ cấu nợ khác nhau.' },
+    { q: 'Công ty lợi nhuận ổn định nhiều năm', a: 0, why: 'P/E hợp với công ty có lợi nhuận ổn định: trả bao nhiêu đồng cho 1 đồng lợi nhuận mỗi năm.' },
+    { q: 'Công ty tăng trưởng EPS nhanh, muốn biết P/E cao có xứng không', a: 4, why: 'PEG = P/E / tốc độ tăng trưởng EPS (%). Dưới 1 là rẻ so với tăng trưởng, theo Peter Lynch.' },
+    { q: 'Công ty trả cổ tức tiền mặt đều đặn mỗi năm', a: 5, why: 'Tỷ suất cổ tức = cổ tức tiền mặt mỗi cổ phiếu / giá: lợi suất nhận bằng tiền mặt.' }
+  ]);
+
+  // ---------- 4.6 DCF ----------
+  var mosSync = true;
+  function dcf(f0, gr, w, g, cash, sh) {
+    var f = f0, pv = 0, rows = [];
+    for (var t = 1; t <= 5; t++) { f *= 1 + gr; var d = 1 / Math.pow(1 + w, t); pv += f * d; rows.push([t, f, d, f * d]); }
+    var tv = f * (1 + g) / (w - g), pvtv = tv / Math.pow(1 + w, 5), ev = pv + pvtv, eq = ev + cash;
+    return { rows: rows, pv: pv, tv: tv, pvtv: pvtv, ev: ev, eq: eq, ps: eq * 1e9 / (sh * 1e6) };
+  }
+  function renderDcf() {
+    var f0 = +$('dcF').value, gr = +$('dcGr').value / 100, w = +$('dcW').value / 100, g = +$('dcG').value / 100;
+    var cash = parseFloat($('dcC').value) || 0, sh = parseFloat($('dcSh').value);
+    $('dcFOut').textContent = num(f0) + ' tỷ'; $('dcGrOut').textContent = pct(gr * 100);
+    $('dcWOut').textContent = pct(w * 100); $('dcGOut').textContent = pct(g * 100);
+    if (!(sh > 0) || w <= g) {
+      var msg = !(sh > 0) ? 'Nhập số cổ phiếu' : 'WACC phải lớn hơn g';
+      $('dcEv').textContent = '–'; $('dcTv').textContent = '–'; $('dcPs').textContent = msg;
+      $('dcTable').innerHTML = ''; $('dcChart').innerHTML = ''; $('dcSens').innerHTML = '';
+      $('dcOwl').innerHTML = T.owl('stern');
+      $('dcSay').textContent = w <= g ? 'Công thức giá trị cuối kỳ chia cho (WACC − g). Nếu g bằng hoặc vượt WACC, kết quả vô nghĩa: không công ty nào tăng trưởng nhanh hơn chi phí vốn mãi mãi.' : 'Cần số cổ phiếu lớn hơn 0.';
+      return;
+    }
+    var r = dcf(f0, gr, w, g, cash, sh);
+    var html = '<thead><tr><th>Năm</th><th class="r">FCF (tỷ)</th><th class="r">Hệ số 1/(1+WACC)^t</th><th class="r">Giá trị hiện tại (tỷ)</th></tr></thead><tbody>';
+    r.rows.forEach(function (x) { html += '<tr><td>' + x[0] + '</td><td class="r">' + num(x[1]) + '</td><td class="r">' + trim(x[2], 3) + '</td><td class="r">' + num(x[3]) + '</td></tr>'; });
+    html += '<tr><td><b>Cộng 5 năm</b></td><td></td><td></td><td class="r"><b>' + num(r.pv) + '</b></td></tr>';
+    html += '<tr><td>Cuối kỳ</td><td class="r">' + num(r.tv) + '</td><td class="r">' + trim(1 / Math.pow(1 + w, 5), 3) + '</td><td class="r">' + num(r.pvtv) + '</td></tr>';
+    html += '<tr><td>Tiền ròng</td><td></td><td></td><td class="r">' + (cash >= 0 ? '+' : '') + num(cash) + '</td></tr>';
+    html += '<tr><td><b>Giá trị vốn chủ</b></td><td></td><td></td><td class="r"><b>' + num(r.eq) + '</b></td></tr></tbody>';
+    $('dcTable').innerHTML = html;
+    var share = r.pvtv / r.ev * 100, ps100 = Math.round(r.ps / 100) * 100;
+    $('dcEv').textContent = num(r.ev) + ' tỷ';
+    $('dcTv').textContent = pint(share);
+    $('dcTvBox').className = 'stat' + (share >= 60 ? ' warn' : '');
+    $('dcPs').textContent = r.eq > 0 ? '≈ ' + dong(ps100) : 'Âm';
+
+    // biểu đồ cột
+    var W = 640, H = 250, L = 64, R = 16, Tp = 22, B = 30, n = 6;
+    var vals = r.rows.map(function (x) { return x[3]; }).concat([r.pvtv]);
+    var max = Math.max.apply(null, vals), step = T.niceStep(max), top = Math.ceil(max / step) * step;
+    var y = function (v) { return Tp + (H - Tp - B) * (1 - v / top); };
+    var slot = (W - L - R) / n, bw = slot * 0.6, g2 = '';
+    for (var tk = 0; tk <= top + 1e-9; tk += step) g2 += '<line x1="' + L + '" x2="' + (W - R) + '" y1="' + y(tk) + '" y2="' + y(tk) + '" stroke="var(--dot)" stroke-width="1.5"/><text x="' + (L - 8) + '" y="' + (y(tk) + 4) + '" text-anchor="end">' + num(tk) + '</text>';
+    vals.forEach(function (v, i) {
+      var cx = L + slot * i + slot / 2, last = i === n - 1;
+      g2 += '<rect x="' + (cx - bw / 2) + '" y="' + y(v) + '" width="' + bw + '" height="' + (y(0) - y(v)) + '" fill="' + (last ? 'var(--money)' : 'var(--save)') + '" stroke="var(--border)" stroke-width="2"/>';
+      g2 += '<text class="lbl" x="' + cx + '" y="' + (y(v) - 6) + '" text-anchor="middle">' + num(v) + '</text>';
+      g2 += '<text x="' + cx + '" y="' + (H - 8) + '" text-anchor="middle">' + (last ? 'Cuối kỳ' : 'Năm ' + (i + 1)) + '</text>';
+    });
+    $('dcChart').innerHTML = g2;
+
+    // bảng độ nhạy
+    var ws = [0.10, 0.12, 0.14], gs = [0.02, 0.03, 0.04];
+    var sh2 = '<thead><tr><th>WACC \\ g</th>' + gs.map(function (x) { return '<th class="r">' + pint(x * 100) + '</th>'; }).join('') + '</tr></thead><tbody>';
+    ws.forEach(function (wv) {
+      sh2 += '<tr><th>' + pint(wv * 100) + '</th>' + gs.map(function (gv) {
+        var cls = [];
+        if (Math.abs(wv - w) < 1e-9 && Math.abs(gv - g) < 1e-9) cls.push('hit');
+        if (wv === 0.12 && gv === 0.03) cls.push('base');
+        return '<td class="r ' + cls.join(' ') + '">' + num(dcf(f0, gr, wv, gv, cash, sh).ps) + '</td>';
+      }).join('') + '</tr>';
+    });
+    $('dcSens').innerHTML = sh2 + '</tbody>';
+
+    var up = dcf(f0, gr, w + 0.01, g, cash, sh), chg = (up.ps / r.ps - 1) * 100;
+    $('dcOwl').innerHTML = T.owl(share >= 60 ? 'stern' : 'talk');
+    $('dcSay').textContent = 'Giá trị cuối kỳ chiếm ' + pint(share) + ' giá trị doanh nghiệp, tức phần lớn kết quả nằm ở những năm rất xa. Tăng WACC thêm 1 điểm (' + pct(w * 100) + ' → ' + pct(w * 100 + 1) + ') là giá trị mỗi cổ phiếu còn ' + dong(Math.round(up.ps / 100) * 100) + ' (' + pint(chg).replace('-', '−') + ').';
+
+    if (mosSync && r.eq > 0) { $('mosV').value = ps100; renderMos(); }
+  }
+  on(['dcF', 'dcGr', 'dcW', 'dcG', 'dcC', 'dcSh'], renderDcf);
+
+  // ---------- 4.7 biên an toàn ----------
+  function renderMos() {
+    var V = parseFloat($('mosV').value), P = +$('mosP').value;
+    $('mosPOut').textContent = dong(P);
+    if (!(V > 0)) { $('mosRes').textContent = 'Nhập giá trị'; $('mosMax').textContent = '–'; $('mosChart').innerHTML = ''; $('mosVerdict').innerHTML = ''; return; }
+    var m = (1 - P / V) * 100;
+    $('mosRes').textContent = pct(m);
+    $('mosBox').className = 'stat ' + (m >= 25 ? 'money' : 'warn');
+    $('mosMax').textContent = num(Math.round(V * 0.75 / 100) * 100) + ' / ' + num(Math.round(V * 0.67 / 100) * 100);
+    var W = 640, L = 20, R = 20, top = Math.max(V, P) * 1.15;
+    var x = function (v) { return L + (W - L - R) * v / top; };
+    var g = '<rect x="' + x(0) + '" y="40" width="' + (x(V * 0.67) - x(0)) + '" height="26" fill="var(--money)"/>' +
+      '<rect x="' + x(V * 0.67) + '" y="40" width="' + (x(V * 0.75) - x(V * 0.67)) + '" height="26" fill="var(--money-soft)"/>' +
+      '<rect x="' + x(V * 0.75) + '" y="40" width="' + (x(top) - x(V * 0.75)) + '" height="26" fill="var(--warn-soft)"/>' +
+      '<rect x="' + x(0) + '" y="40" width="' + (x(top) - x(0)) + '" height="26" fill="none" stroke="var(--border)" stroke-width="2"/>';
+    g += '<line x1="' + x(V) + '" x2="' + x(V) + '" y1="32" y2="74" stroke="var(--border)" stroke-width="3"/><text class="lbl" x="' + x(V) + '" y="90" text-anchor="middle">Giá trị nội tại ' + num(V) + '</text>';
+    var anchor = x(P) < 120 ? 'start' : x(P) > W - 120 ? 'end' : 'middle';
+    g += '<path d="M' + x(P) + ' 38 l-8 -12 h16 z" fill="var(--pig-deep)" stroke="var(--border)" stroke-width="2"/><text class="lbl" x="' + x(P) + '" y="18" text-anchor="' + anchor + '">Giá ' + num(P) + '</text>';
+    $('mosChart').innerHTML = g;
+    var mood, h, p;
+    if (m < 0) { mood = 'sad'; h = 'Đắt hơn giá trị'; p = 'Giá thị trường cao hơn giá trị nội tại con ước tính. Không có biên an toàn nào cả.'; }
+    else if (m < 25) { mood = 'worried'; h = 'Đệm còn mỏng'; p = 'Biên ' + pct(m) + ' chưa tới 25%. Chỉ cần ước tính sai một chút (như đổi 1% WACC) là hết đệm.'; }
+    else if (m < 33) { mood = 'happy'; h = 'Vào vùng Graham'; p = 'Biên ' + pct(m) + ' nằm trong khoảng 25–33%. Graham khuyên chỉ mua khi biên an toàn từ mức này trở lên.'; }
+    else { mood = 'proud'; h = 'Đệm dày'; p = 'Biên ' + pct(m) + ', trên 33%. Nhưng nhớ hỏi: vì sao thị trường bán rẻ vậy? Có thể con đã bỏ sót rủi ro.'; }
+    $('mosVerdict').innerHTML = '<span class="char">' + T.pig(mood) + '</span><div><h3>' + h + '</h3><p>' + p + '</p></div>';
+  }
+  $('mosV').addEventListener('input', function () { mosSync = false; renderMos(); });
+  $('mosP').addEventListener('input', renderMos);
+  renderMos();
+
+  // ---------- 4.8 phân loại theo ngành ----------
+  sortGame($('igGame'), ['Ngân hàng', 'Bất động sản', 'Bán lẻ', 'Chứng khoán', 'Sản xuất chu kỳ', 'Công nghệ, dịch vụ'], [
+    { q: 'CASA (tiền gửi không kỳ hạn)', a: 0, why: 'CASA cao là lợi thế của ngân hàng: nguồn vốn rẻ. NIM cao và CASA cao là lợi thế; NPL dưới 2% và bao phủ trên 100% là an toàn.' },
+    { q: 'SSSG (tăng trưởng doanh số cửa hàng hiện hữu)', a: 2, why: 'SSSG dương mới là tăng trưởng thật của nhà bán lẻ, không chỉ nhờ mở thêm cửa hàng.' },
+    { q: 'Người mua trả tiền trước', a: 1, why: 'Với bất động sản, người mua trả tiền trước là doanh thu tương lai. Pháp lý quan trọng hơn mọi chỉ số.' },
+    { q: 'Dư nợ margin', a: 3, why: 'Công ty chứng khoán: lợi nhuận phụ thuộc mạnh vào thanh khoản thị trường.' },
+    { q: 'Giá bán và giá nguyên liệu đầu vào, công suất', a: 4, why: 'Thép, phân bón, hóa chất định giá theo chu kỳ. Cẩn thận với P/E thấp ở đỉnh chu kỳ.' },
+    { q: 'Tỷ lệ doanh thu định kỳ, hợp đồng ký mới', a: 5, why: 'Với công nghệ, dịch vụ, tăng trưởng là yếu tố định giá chính.' },
+    { q: 'NIM (biên lãi ròng) và NPL (nợ xấu)', a: 0, why: 'Bộ đôi quen thuộc của ngân hàng: NIM cao là lợi thế, NPL dưới 2% là an toàn.' },
+    { q: 'RNAV và quỹ đất (ha, vị trí, pháp lý)', a: 1, why: 'Bất động sản định giá theo quỹ đất và giá trị tài sản ròng điều chỉnh (RNAV).' }
+  ]);
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,745 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Heo Đất đi chợ cổ phiếu</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;800&family=Be+Vietnam+Pro:wght@400;600;700&family=Patrick+Hand&display=swap">
+<link rel="stylesheet" href="assets/truyen.css">
+<style>
+/* Riêng Module 2: thang rủi ro, dải giá trần/sàn, dòng thời gian phiên, sổ lệnh, lịch T+2 */
+.risk { display: flex; gap: 4px; align-items: flex-end; }
+.risk i { width: 14px; border: 2px solid var(--border); border-radius: 3px; background: var(--chip); display: inline-block; }
+.risk i:nth-child(1) { height: 10px; } .risk i:nth-child(2) { height: 15px; } .risk i:nth-child(3) { height: 20px; }
+.risk i:nth-child(4) { height: 25px; } .risk i:nth-child(5) { height: 30px; }
+.risk i.on { background: var(--money); }
+.risk.hot i.on { background: var(--warn); }
+.risk.mid i.on { background: var(--gold); }
+.prod-card { border: 3px dashed var(--border); border-radius: 10px; padding: 14px; display: grid; gap: 10px; }
+.prod-card dl { margin: 0; display: grid; grid-template-columns: max-content minmax(0, 1fr); gap: 6px 14px; }
+.prod-card dt { font-weight: 700; color: var(--muted); font-size: .9rem; }
+.prod-card dd { margin: 0; }
+.score { font-family: var(--f-display); font-weight: 800; }
+
+.band { position: relative; height: 64px; margin: 4px 8px 0; }
+.band .rail { position: absolute; left: 0; right: 0; top: 26px; height: 12px; border: 2.5px solid var(--border); border-radius: 999px;
+  background: linear-gradient(90deg, var(--warn-soft), var(--chip) 50%, var(--money-soft)); }
+.band .mk { position: absolute; top: 0; transform: translateX(-50%); display: grid; justify-items: center; font-size: .8rem; font-weight: 700; white-space: nowrap; }
+.band .mk b { display: block; width: 4px; height: 28px; background: var(--border); border-radius: 2px; margin-top: 2px; }
+.band .mk.lo { color: var(--warn); } .band .mk.hi { color: var(--money); }
+.band .mk span { font-variant-numeric: tabular-nums; }
+.lots { display: flex; flex-wrap: wrap; gap: 4px; }
+.lots i { width: 18px; height: 18px; border: 2px solid var(--border); border-radius: 4px; background: var(--money); display: inline-block; }
+.lots i.odd { background: var(--gold); width: 12px; }
+
+.day { display: flex; height: 44px; border: 3px solid var(--border); border-radius: 8px; overflow: hidden; position: relative; }
+.day > div { min-width: 0; border-right: 2px solid var(--border); }
+.day > div:last-child { border-right: 0; }
+.day .pin { position: absolute; top: -3px; bottom: -3px; width: 4px; margin-left: -2px; background: var(--pig-deep); border: 0; }
+.seg-ato, .seg-atc { background: var(--gold); }
+.seg-cont { background: var(--money); }
+.seg-lunch { background: var(--chip); background-image: repeating-linear-gradient(45deg, transparent 0 6px, var(--dot) 6px 10px); }
+.seg-put { background: var(--save); }
+.ticks { display: flex; justify-content: space-between; font-size: .78rem; color: var(--muted); font-variant-numeric: tabular-nums; }
+
+.book-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px; align-items: start; }
+@media (max-width: 620px) { .book-grid { grid-template-columns: 1fr; } }
+.ob td.hit { background: var(--money-soft); font-weight: 700; }
+.ob td.part { background: var(--owl-light); color: #1D2140; font-weight: 700; }
+.ob tr.side td { font-weight: 700; color: var(--muted); font-size: .82rem; background: var(--chip); }
+
+.week { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 6px; }
+.week div { border: 2.5px solid var(--border); border-radius: 8px; padding: 6px 4px; text-align: center; font-size: .85rem; min-height: 64px; display: grid; align-content: start; gap: 2px; background: var(--panel); }
+.week div.off { background: var(--chip); color: var(--muted); border-style: dashed; }
+.week div.t0 { background: var(--bubble-pig); }
+.week div.t1 { background: var(--bubble-owl); }
+.week div.t2 { background: var(--money-soft); box-shadow: 3px 3px 0 var(--hard); }
+.week b { font-family: var(--f-display); font-size: 1rem; }
+.week small { font-weight: 700; font-size: .72rem; line-height: 1.2; }
+@media (max-width: 480px) { .week { gap: 3px; } .week div { font-size: .72rem; padding: 4px 2px; } .week small { font-size: .62rem; } }
+
+.flow { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+</style>
+</head>
+<body>
+<main class="book">
+
+  <nav class="topnav"><a href="index.html">← Mục lục</a><span class="note">Module 2 / 9</span></nav>
+
+  <!-- MỞ ĐẦU -->
+  <header class="hero">
+    <div class="hero-title">
+      <span class="eyebrow">Module 2 · Tuần 3–5</span>
+      <h1>Heo Đất đi chợ cổ phiếu</h1>
+      <p class="sub">Thị trường chứng khoán vận hành ra sao: sản phẩm, sàn, phiên, lệnh, T+2, phí thuế và sự kiện doanh nghiệp. Bấm, kéo và đặt lệnh thử.</p>
+    </div>
+    <div class="strip">
+      <div class="panel">
+        <div class="say pig"><span class="char" data-char="pig:wow"></span><p class="bubble">Cổ phiếu chỉ là cái mã nhảy lên nhảy xuống trên bảng điện thôi mà thầy?</p></div>
+      </div>
+      <div class="panel">
+        <div class="say owl right"><p class="bubble">Không. Mua cổ phiếu là mua <b>một phần quyền sở hữu doanh nghiệp</b>.</p><span class="char" data-char="owl:stern"></span></div>
+      </div>
+      <div class="panel">
+        <div class="say pig"><span class="char" data-char="pig:worried"></span><p class="bubble">Thế sao hôm qua giá giảm mà công ty vẫn bình thường?</p></div>
+      </div>
+      <div class="panel">
+        <div class="say owl right"><p class="bubble">Ngắn hạn, giá đi theo cung cầu và tâm lý. Dài hạn, giá đi theo lợi nhuận của doanh nghiệp.</p><span class="char" data-char="owl:talk"></span></div>
+      </div>
+      <div class="panel wide">
+        <div class="say owl"><span class="char" data-char="owl:smile"></span><p class="bubble">Benjamin Graham tóm gọn thế này: <b>ngắn hạn thị trường là cái máy bỏ phiếu, dài hạn nó là cái cân</b>. Chương này dạy con luật chơi của cái chợ đó trước khi bỏ tiền vào.</p></div>
+      </div>
+    </div>
+  </header>
+
+  <!-- 2.1 -->
+  <section class="chapter" id="san-pham">
+    <div class="chapter-head"><span class="tag">2.1</span><h2>Quầy hàng nào cho heo mới?</h2></div>
+    <div class="panel talk">
+      <div class="say pig"><span class="char" data-char="pig:happy"></span><p class="bubble">Em nghe nói phái sinh lãi nhanh lắm. Em chơi luôn nhé?</p></div>
+      <div class="say owl right"><p class="bubble">Chợ này có năm quầy, rủi ro khác nhau rất xa. Con đoán thử từng quầy trước đã.</p><span class="char" data-char="owl:stern"></span></div>
+    </div>
+    <div class="panel toy">
+      <div class="toy-title"><h3>Heo hỏi: “Em mua cái này được không?”</h3><span class="pill">Đoán thử</span><span class="note score" id="prodScore"></span></div>
+      <div class="tabs" role="group" aria-label="Chọn sản phẩm" id="prodTabs"></div>
+      <div class="q">
+        <h3 id="prodQ"></h3>
+        <div class="opts" id="prodOpts"></div>
+      </div>
+      <div class="prod-card" id="prodCard"></div>
+    </div>
+    <div class="tbl-wrap">
+      <table class="tbl">
+        <thead><tr><th>Sản phẩm</th><th>Bản chất</th><th>Rủi ro</th><th>Người mới nên dùng?</th></tr></thead>
+        <tbody id="prodTable"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- 2.2 -->
+  <section class="chapter" id="san">
+    <div class="chapter-head"><span class="tag">2.2</span><h2>Ba cái chợ, ba hàng rào giá</h2></div>
+    <div class="panel talk">
+      <div class="say pig"><span class="char" data-char="pig:wow"></span><p class="bubble">Một ngày giá cổ phiếu tăng gấp đôi được không thầy?</p></div>
+      <div class="say owl right"><p class="bubble">Không được. Mỗi sàn có <b>biên độ</b>: giá trong ngày chỉ chạy giữa giá sàn và giá trần, tính từ <b>giá tham chiếu</b>. Trên HOSE, giá tham chiếu là giá đóng cửa phiên trước.</p><span class="char" data-char="owl:talk"></span></div>
+    </div>
+    <div class="tbl-wrap">
+      <table class="tbl">
+        <thead><tr><th>Sàn</th><th>Đặc điểm</th><th>Biên độ giá trong ngày</th><th>Bước giá</th></tr></thead>
+        <tbody>
+          <tr><td>HOSE (TP.HCM)</td><td>Doanh nghiệp lớn nhất; chỉ số VN-Index, VN30</td><td>±7%</td><td>10 đ (giá dưới 10.000), 50 đ (10.000–49.950), 100 đ (từ 50.000)</td></tr>
+          <tr><td>HNX (Hà Nội)</td><td>Doanh nghiệp vừa; chỉ số HNX-Index</td><td>±10%</td><td>100 đ</td></tr>
+          <tr><td>UPCoM</td><td>Doanh nghiệp chưa niêm yết chính thức, mức minh bạch thấp hơn</td><td>±15%</td><td>100 đ</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="note">Ngày giao dịch đầu tiên của mã mới niêm yết có biên độ rộng hơn: 20% ở HOSE, 30% ở HNX, 40% ở UPCoM.</p>
+
+    <div class="panel toy">
+      <div class="toy-title"><h3>Máy tính giá trần, giá sàn</h3><span class="pill">Thử ví dụ VNM</span></div>
+      <div class="tabs" role="group" aria-label="Chọn sàn" id="exTabs">
+        <button class="opt" type="button" data-ex="0" aria-pressed="true">HOSE</button>
+        <button class="opt" type="button" data-ex="1">HNX</button>
+        <button class="opt" type="button" data-ex="2">UPCoM</button>
+      </div>
+      <div class="controls">
+        <div class="ctl"><label for="refPrice">Giá tham chiếu (đ)</label><input id="refPrice" type="number" min="1000" max="1000000" step="100" value="60000" inputmode="numeric"></div>
+        <div class="ctl"><label for="firstDay" style="justify-content:flex-start;gap:10px;align-items:center"><input id="firstDay" type="checkbox" style="width:20px;height:20px;accent-color:var(--pig-deep)"> Ngày giao dịch đầu tiên của mã mới niêm yết</label></div>
+      </div>
+      <div class="result">
+        <div class="stat warn"><div class="k">Giá sàn</div><div class="v" id="floorOut"></div></div>
+        <div class="stat"><div class="k">Biên độ · bước giá</div><div class="v" id="bandOut"></div></div>
+        <div class="stat money"><div class="k">Giá trần</div><div class="v" id="ceilOut"></div></div>
+      </div>
+      <div class="band" aria-hidden="true">
+        <div class="rail"></div>
+        <div class="mk lo" style="left:0%"><span id="bandLo"></span><b></b></div>
+        <div class="mk" style="left:50%"><span id="bandRef"></span><b></b></div>
+        <div class="mk hi" style="left:100%"><span id="bandHi"></span><b></b></div>
+      </div>
+      <div class="say owl"><span class="char" data-char="owl:talk"></span><p class="bubble" id="bandSay"></p></div>
+      <p class="note">Máy này làm tròn theo bước giá về phía trong biên độ: giá trần làm tròn xuống, giá sàn làm tròn lên, để không vượt quá ±biên độ.</p>
+    </div>
+
+    <div class="panel toy">
+      <div class="toy-title"><h3>Lô chẵn hay lô lẻ?</h3></div>
+      <p>Một <b>lô chẵn là 100 cổ phiếu</b>. Lô lẻ (1–99 cổ phiếu) khớp trên bảng riêng, thường thanh khoản kém và giá kém hơn.</p>
+      <div class="ctl" style="max-width:420px"><label for="lotQty">Heo muốn mua <output id="lotQtyOut"></output></label><input id="lotQty" type="range" min="1" max="550" step="1" value="250"></div>
+      <div class="lots" id="lotViz" aria-hidden="true"></div>
+      <div class="result">
+        <div class="stat money"><div class="k">Bảng lô chẵn</div><div class="v" id="lotEven"></div></div>
+        <div class="stat"><div class="k">Bảng lô lẻ</div><div class="v" id="lotOdd"></div></div>
+      </div>
+      <div class="legend"><span><i style="background:var(--money)"></i>Lô chẵn 100 cổ phiếu</span><span><i style="background:var(--gold)"></i>10 cổ phiếu lô lẻ</span></div>
+    </div>
+  </section>
+
+  <!-- 2.3 -->
+  <section class="chapter" id="phien-lenh">
+    <div class="chapter-head"><span class="tag">2.3</span><h2>Giờ mở chợ và cách trả giá</h2></div>
+    <div class="panel talk">
+      <div class="say pig"><span class="char" data-char="pig:happy"></span><p class="bubble">12 giờ trưa em đặt lệnh mua, sao mãi không khớp?</p></div>
+      <div class="say owl right"><p class="bubble">Vì chợ đang nghỉ trưa. Mỗi khung giờ là một phiên, và mỗi phiên chỉ nhận vài loại lệnh. Kéo đồng hồ xem nào.</p><span class="char" data-char="owl:smile"></span></div>
+    </div>
+    <div class="panel toy">
+      <div class="toy-title"><h3>Đồng hồ phiên HOSE</h3><span class="pill">Kéo thử</span></div>
+      <div class="ctl"><label for="clock">Bây giờ là <output id="clockOut"></output></label><input id="clock" type="range" min="540" max="899" step="5" value="600"></div>
+      <div class="stack" style="gap:4px">
+        <div class="day" id="dayBar" aria-hidden="true"></div>
+        <div class="ticks"><span>9:00</span><span>10:00</span><span>11:00</span><span>12:00</span><span>13:00</span><span>14:00</span><span>15:00</span></div>
+      </div>
+      <div class="result">
+        <div class="stat"><div class="k" id="sessTime"></div><div class="v" id="sessName"></div></div>
+        <div class="stat money" id="sessOrdersBox"><div class="k">Lệnh dùng được</div><div class="v" id="sessOrders"></div></div>
+      </div>
+      <div class="legend"><span><i style="background:var(--gold)"></i>Khớp định kỳ (ATO/ATC)</span><span><i style="background:var(--money)"></i>Khớp liên tục</span><span><i style="background:var(--chip)"></i>Nghỉ trưa</span><span><i style="background:var(--save)"></i>Thỏa thuận</span></div>
+    </div>
+    <div class="tbl-wrap">
+      <table class="tbl">
+        <thead><tr><th>Giờ</th><th>Phiên</th><th>Lệnh dùng được</th></tr></thead>
+        <tbody id="sessTable"></tbody>
+      </table>
+    </div>
+    <div class="callout warn">
+      <strong>Lịch có thể khác, hãy kiểm tra lại</strong>
+      <p>HNX và UPCoM có lịch hơi khác: HNX không có phiên ATO, còn UPCoM khớp liên tục đến 15:00. Từ 05/05/2025, các sở chuyển sang hệ thống giao dịch KRX và một số quy định đã thay đổi (<a href="https://hdsd.dnse.com.vn/master/nhung-thay-doi-quan-trong-cua-he-thong-krx" target="_blank" rel="noopener">DNSE: những thay đổi của hệ thống KRX</a>). Kiểm tra lại lịch trên app công ty chứng khoán của bạn.</p>
+    </div>
+
+    <div class="cards">
+      <button class="flip" type="button"><span class="front">LO · lệnh giới hạn</span><span class="back">Mua với giá tối đa hoặc bán với giá tối thiểu do bạn đặt. Dùng lệnh này 95% thời gian vì bạn kiểm soát được giá.</span></button>
+      <button class="flip" type="button"><span class="front">ATO / ATC</span><span class="back">Mua hoặc bán bằng mọi giá tại giá mở cửa hoặc đóng cửa, được ưu tiên khớp trước lệnh LO.</span></button>
+      <button class="flip" type="button"><span class="front">Lệnh thị trường (MTL, MOK, MAK)</span><span class="back">Khớp ngay với giá tốt nhất đang có. Nhanh, nhưng có thể khớp giá xấu khi thanh khoản mỏng.</span></button>
+    </div>
+
+    <div class="panel toy">
+      <div class="toy-title"><h3>Đặt lệnh vào sổ lệnh mỏng</h3><span class="pill">Đặt lệnh thử</span></div>
+      <p>Sổ lệnh bên dưới là <b>minh họa</b> một mã ít người bán (không phải số liệu thật). Bước giá 100 đ vì giá từ 50.000 trở lên. Heo đặt lệnh mua và xem khớp ở giá nào.</p>
+      <div class="tabs" role="group" aria-label="Loại lệnh" id="ordTabs">
+        <button class="opt" type="button" data-t="lo">LO (lệnh giới hạn)</button>
+        <button class="opt" type="button" data-t="mkt" aria-pressed="true">Lệnh thị trường</button>
+      </div>
+      <div class="controls">
+        <div class="ctl"><label for="ordQty">Khối lượng mua <output id="ordQtyOut"></output></label><input id="ordQty" type="range" min="100" max="600" step="100" value="300"></div>
+        <div class="ctl" id="ordPriceCtl"><label for="ordPrice">Giá tối đa (LO) <output id="ordPriceOut"></output></label><input id="ordPrice" type="range" min="59800" max="62500" step="100" value="60300"></div>
+      </div>
+      <div class="book-grid">
+        <div class="tbl-wrap">
+          <table class="tbl ob">
+            <thead><tr><th>Giá (đ)</th><th class="r">Khối lượng chờ</th><th class="r">Heo khớp</th></tr></thead>
+            <tbody id="obBody"></tbody>
+          </table>
+        </div>
+        <div class="stack">
+          <div class="result">
+            <div class="stat money"><div class="k">Đã khớp</div><div class="v" id="ordFilled"></div></div>
+            <div class="stat"><div class="k">Giá khớp trung bình</div><div class="v" id="ordAvg"></div></div>
+          </div>
+          <div class="result">
+            <div class="stat"><div class="k">Tổng tiền (chưa phí)</div><div class="v" id="ordTotal"></div></div>
+            <div class="stat" id="ordLeftBox"><div class="k">Chưa khớp</div><div class="v" id="ordLeft"></div></div>
+          </div>
+        </div>
+      </div>
+      <div class="say pig"><span class="char" id="ordPig"></span><p class="bubble" id="ordSay"></p></div>
+    </div>
+
+    <div class="panel quiz">
+      <div class="mcq q" data-answer="2" data-right="Đúng. 12:00 đang nghỉ trưa (11:30–13:00). Phiên ATC chỉ nhận LO và ATC, nên từ 14:30 đến 14:45 lệnh ATC của con được ưu tiên khớp trước lệnh LO." data-wrong="Chưa đúng. Nhìn lại bảng phiên: ATC là khớp lệnh định kỳ đóng cửa, chỉ từ 14:30 đến 14:45.">
+        <h3>Heo muốn bán bằng mọi giá ở giá đóng cửa hôm nay. Đặt lệnh gì, vào lúc nào?</h3>
+        <div class="opts">
+          <button class="opt" type="button">Lệnh ATO lúc 9:05</button>
+          <button class="opt" type="button">Lệnh thị trường lúc 12:00</button>
+          <button class="opt" type="button">Lệnh ATC lúc 14:35</button>
+          <button class="opt" type="button">Lệnh LO lúc 14:50</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2.4 -->
+  <section class="chapter" id="t-cong-2">
+    <div class="chapter-head"><span class="tag">2.4</span><h2>T+2: cổ phiếu đi đường mất hai ngày</h2></div>
+    <div class="panel talk">
+      <div class="say pig"><span class="char" data-char="pig:proud"></span><p class="bubble">Sáng nay em mua, chiều giá lên, em bán chốt lời luôn!</p></div>
+      <div class="say owl right"><p class="bubble">Không bán được đâu. Cổ phiếu mua ngày T về tài khoản <b>chiều T+2</b>. Ở đây không thể “mua sáng bán chiều” như một số thị trường khác.</p><span class="char" data-char="owl:stern"></span></div>
+    </div>
+    <div class="panel toy">
+      <div class="toy-title"><h3>Lịch T+2 của Heo</h3><span class="pill">Chọn ngày</span></div>
+      <div class="tabs" role="group" aria-label="Mua hay bán" id="tSide">
+        <button class="opt" type="button" data-s="buy" aria-pressed="true">Heo mua</button>
+        <button class="opt" type="button" data-s="sell">Heo bán</button>
+      </div>
+      <div class="tabs" role="group" aria-label="Ngày giao dịch T" id="tDay">
+        <button class="opt" type="button" data-d="0" aria-pressed="true">Thứ Hai</button>
+        <button class="opt" type="button" data-d="1">Thứ Ba</button>
+        <button class="opt" type="button" data-d="2">Thứ Tư</button>
+        <button class="opt" type="button" data-d="3">Thứ Năm</button>
+        <button class="opt" type="button" data-d="4">Thứ Sáu</button>
+      </div>
+      <div class="week" id="tWeek"></div>
+      <div class="say owl"><span class="char" data-char="owl:talk"></span><p class="bubble" id="tSay"></p></div>
+      <p class="note">T+1, T+2 tính theo ngày làm việc: thứ Bảy, Chủ nhật không tính. Lịch này chưa tính ngày nghỉ lễ.</p>
+    </div>
+  </section>
+
+  <!-- 2.5 -->
+  <section class="chapter" id="phi-thue">
+    <div class="chapter-head"><span class="tag">2.5</span><h2>Phí và thuế: con mọt gặm mỗi vòng</h2></div>
+    <div class="panel talk">
+      <div class="say pig"><span class="char" data-char="pig:happy"></span><p class="bubble">Mua 60.000, bán 66.000, lãi 600.000 đồng tròn!</p></div>
+      <div class="say owl right"><p class="bubble">Chưa tròn đâu. Giả sử phí môi giới <b>0,15% mỗi chiều</b> và thuế <b>0,1% trên giá trị bán</b>. Tính lại nào.</p><span class="char" data-char="owl:talk"></span></div>
+    </div>
+    <div class="panel toy">
+      <div class="toy-title"><h3>Máy tính lãi ròng một vòng mua bán</h3><span class="pill">Đổi số thử</span></div>
+      <div class="controls">
+        <div class="ctl"><label for="feeQty">Số cổ phiếu</label><input id="feeQty" type="number" min="1" step="100" value="100" inputmode="numeric"></div>
+        <div class="ctl"><label for="feeBuy">Giá mua (đ)</label><input id="feeBuy" type="number" min="1" step="100" value="60000" inputmode="numeric"></div>
+        <div class="ctl"><label for="feeSell">Giá bán (đ)</label><input id="feeSell" type="number" min="1" step="100" value="66000" inputmode="numeric"></div>
+        <div class="ctl"><label for="feeRate">Phí môi giới mỗi chiều <output id="feeRateOut"></output></label><input id="feeRate" type="range" min="0" max="0.5" step="0.05" value="0.15"></div>
+      </div>
+      <div class="tbl-wrap">
+        <table class="tbl">
+          <thead><tr><th>Bước</th><th>Phép tính</th><th class="r">Số tiền (đ)</th></tr></thead>
+          <tbody id="feeTable"></tbody>
+        </table>
+      </div>
+      <div class="result">
+        <div class="stat"><div class="k">Lãi trước phí, thuế</div><div class="v" id="feeGross"></div></div>
+        <div class="stat warn"><div class="k">Phí + thuế</div><div class="v" id="feeCost"></div></div>
+        <div class="stat money" id="feeNetBox"><div class="k">Lãi ròng</div><div class="v" id="feeNet"></div></div>
+      </div>
+      <p class="note">Thuế thu nhập cá nhân 0,1% tính trên giá trị bán, kể cả khi bán lỗ.</p>
+    </div>
+
+    <div class="panel toy">
+      <div class="toy-title"><h3>Lướt sóng bao nhiêu vòng một năm?</h3></div>
+      <div class="chalk" aria-label="Chi phí một vòng">
+        <span>Một vòng mua bán:</span>
+        <span class="f">0,15% + 0,15% + 0,1% ≈ 0,4% giá trị</span>
+      </div>
+      <div class="ctl" style="max-width:420px"><label for="rounds">Số vòng mua bán/năm <output id="roundsOut"></output></label><input id="rounds" type="range" min="1" max="100" step="1" value="50"></div>
+      <div class="result">
+        <div class="stat warn"><div class="k">Phí và thuế ăn mất (so với vốn)</div><div class="v" id="roundsCost"></div></div>
+      </div>
+      <div class="say pig"><span class="char" id="roundsPig"></span><p class="bubble" id="roundsSay"></p></div>
+      <p class="note">Tính gần đúng: số vòng × 0,4%, giả định mỗi vòng quay toàn bộ vốn với giá mua bằng giá bán. Phí môi giới thực tế tùy công ty chứng khoán.</p>
+    </div>
+  </section>
+
+  <!-- 2.6 -->
+  <section class="chapter" id="su-kien">
+    <div class="chapter-head"><span class="tag">2.6</span><h2>Giá “sập” mà không mất tiền</h2></div>
+    <div class="panel talk">
+      <div class="say pig"><span class="char" data-char="pig:sad"></span><p class="bubble">Thầy ơi! Sáng nay cổ phiếu của em giảm từ 60.000 xuống 50.000. Sập rồi!</p></div>
+      <div class="say owl right"><p class="bubble">Hôm nay là <b>ngày giao dịch không hưởng quyền (GDKHQ)</b>. Giá tham chiếu được điều chỉnh giảm, nhưng tổng tài sản của con không đổi. Đếm lại số cổ phiếu xem.</p><span class="char" data-char="owl:smile"></span></div>
+    </div>
+    <div class="callout">
+      <strong>Muốn nhận quyền thì mua khi nào?</strong>
+      <p>Bạn phải mua <b>trước ngày GDKHQ</b> (và giữ đến hết ngày liền trước đó). Mua đúng ngày GDKHQ thì không được nhận quyền.</p>
+    </div>
+    <div class="panel toy">
+      <div class="toy-title"><h3>Máy điều chỉnh giá ngày GDKHQ</h3><span class="pill">Heo giữ 100 cổ phiếu</span></div>
+      <div class="tabs" role="group" aria-label="Loại sự kiện" id="evTabs">
+        <button class="opt" type="button" data-e="0" aria-pressed="true">Cổ tức tiền mặt</button>
+        <button class="opt" type="button" data-e="1">Cổ tức cổ phiếu, cổ phiếu thưởng</button>
+        <button class="opt" type="button" data-e="2">Phát hành quyền mua</button>
+      </div>
+      <div class="controls" id="evCtl">
+        <div class="ctl"><label for="evPrice">Giá trước GDKHQ (đ)</label><input id="evPrice" type="number" min="1000" step="100" value="60000" inputmode="numeric"></div>
+        <div class="ctl" data-for="0"><label for="evCash">Cổ tức tiền mặt mỗi cổ phiếu <output id="evCashOut"></output></label><input id="evCash" type="range" min="500" max="5000" step="500" value="2000"></div>
+        <div class="ctl" data-for="1"><label for="evRatio">Tỷ lệ chia cổ phiếu <output id="evRatioOut"></output></label><input id="evRatio" type="range" min="5" max="50" step="5" value="20"></div>
+        <div class="ctl" data-for="2"><label for="evN">Tỷ lệ quyền <output id="evNOut"></output></label><select id="evN"><option value="2">2:1</option><option value="4">4:1</option><option value="5" selected>5:1</option><option value="10">10:1</option></select></div>
+        <div class="ctl" data-for="2"><label for="evIssue">Giá phát hành (đ)</label><input id="evIssue" type="number" min="100" step="100" value="10000" inputmode="numeric"></div>
+      </div>
+      <div class="chalk" id="evFormula"></div>
+      <div class="result">
+        <div class="stat"><div class="k">Trước: tài sản của Heo</div><div class="v" id="evBefore"></div></div>
+        <div class="stat money"><div class="k">Giá tham chiếu mới</div><div class="v" id="evRef"></div></div>
+        <div class="stat"><div class="k">Sau: tài sản của Heo</div><div class="v" id="evAfter"></div></div>
+      </div>
+      <div class="say owl"><span class="char" data-char="owl:talk"></span><p class="bubble" id="evSay"></p></div>
+    </div>
+    <div class="tbl-wrap">
+      <table class="tbl">
+        <thead><tr><th>Sự kiện</th><th>Ví dụ</th><th>Giá tham chiếu sau điều chỉnh</th></tr></thead>
+        <tbody>
+          <tr><td>Cổ tức tiền mặt</td><td>2.000 đ/cổ phiếu, giá 60.000</td><td>60.000 − 2.000 = 58.000. Bạn nhận 2.000 đ, trừ thuế 5%</td></tr>
+          <tr><td>Cổ tức bằng cổ phiếu, cổ phiếu thưởng</td><td>Tỷ lệ 20%, giá 60.000</td><td>60.000 / 1,2 = 50.000. 100 cổ phiếu thành 120</td></tr>
+          <tr><td>Phát hành quyền mua</td><td>Tỷ lệ 5:1, giá phát hành 10.000, giá thị trường 60.000</td><td>(60.000 + 10.000 × 0,2) / 1,2 ≈ 51.667</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p><b>Các sự kiện khác cần theo dõi</b> (bấm để lật):</p>
+    <div class="cards">
+      <button class="flip" type="button"><span class="front">Đại hội đồng cổ đông thường niên</span><span class="back">Thường vào tháng 3–5, nơi công bố kế hoạch kinh doanh năm.</span></button>
+      <button class="flip" type="button"><span class="front">Báo cáo tài chính quý</span><span class="back">Hạn công bố: 20 ngày sau khi kết thúc quý với báo cáo riêng, 30 ngày với báo cáo hợp nhất.</span></button>
+      <button class="flip" type="button"><span class="front">Cổ đông nội bộ, cổ phiếu quỹ</span><span class="back">Theo dõi giao dịch của cổ đông nội bộ và việc doanh nghiệp mua cổ phiếu quỹ.</span></button>
+    </div>
+    <div class="panel quiz">
+      <div class="mcq q" data-answer="1" data-right="Chính xác. Muốn nhận cổ tức phải mua trước ngày GDKHQ và giữ đến hết ngày liền trước đó. Mua đúng ngày GDKHQ là đã muộn." data-wrong="Chưa đúng. Ngày GDKHQ là ngày giao dịch <b>không</b> hưởng quyền: mua vào hôm đó thì không nhận được cổ tức.">
+        <h3>Ngày GDKHQ cổ tức của một mã là thứ Năm. Heo phải mua muộn nhất vào ngày nào để được nhận cổ tức?</h3>
+        <div class="opts">
+          <button class="opt" type="button">Thứ Năm, đúng ngày GDKHQ</button>
+          <button class="opt" type="button">Thứ Tư, ngày liền trước GDKHQ</button>
+          <button class="opt" type="button">Ngày nào cũng được, miễn trước ngày trả cổ tức</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2.7 -->
+  <section class="chapter" id="ben-tham-gia">
+    <div class="chapter-head"><span class="tag">2.7</span><h2>Ai đứng trong chợ?</h2></div>
+    <div class="panel talk">
+      <div class="say pig"><span class="char" data-char="pig:worried"></span><p class="bubble">Em đặt lệnh trên app, thế cổ phiếu của em ai giữ ạ?</p></div>
+      <div class="say owl right"><p class="bubble">Mỗi bên một việc. Lệnh của con đi qua công ty chứng khoán, khớp ở sở giao dịch, rồi VSDC lưu ký và thanh toán. Tất cả dưới mắt UBCKNN.</p><span class="char" data-char="owl:talk"></span></div>
+    </div>
+    <div class="flow" aria-label="Đường đi của một lệnh">
+      <span class="chip">Heo</span><span class="arrow">→</span><span class="chip">Công ty chứng khoán</span><span class="arrow">→</span><span class="chip">Sở giao dịch</span><span class="arrow">→</span><span class="chip">VSDC</span><span class="note">· UBCKNN giám sát cả chợ</span>
+    </div>
+    <div class="cards">
+      <button class="flip" type="button"><span class="front">UBCKNN</span><span class="back">Ủy ban Chứng khoán Nhà nước: cơ quan quản lý, xử phạt vi phạm.</span></button>
+      <button class="flip" type="button"><span class="front">Sở giao dịch (HOSE, HNX)</span><span class="back">Nơi khớp lệnh.</span></button>
+      <button class="flip" type="button"><span class="front">VSDC</span><span class="back">Lưu ký cổ phiếu, thanh toán bù trừ.</span></button>
+      <button class="flip" type="button"><span class="front">Công ty chứng khoán</span><span class="back">Nơi bạn mở tài khoản, đặt lệnh, vay margin.</span></button>
+      <button class="flip" type="button"><span class="front">Nhà đầu tư</span><span class="back">Nhà đầu tư nước ngoài, tổ chức trong nước và cá nhân. Ở Việt Nam, nhà đầu tư cá nhân chiếm phần lớn giá trị giao dịch, nên thị trường biến động mạnh và dễ bị tâm lý đám đông chi phối.</span></button>
+    </div>
+    <div class="panel quiz">
+      <div class="mcq q" data-answer="3" data-right="Đúng. VSDC lưu ký cổ phiếu và thanh toán bù trừ." data-wrong="Chưa đúng. Công ty chứng khoán là nơi con đặt lệnh, sở giao dịch khớp lệnh, UBCKNN quản lý. Lưu ký là việc của VSDC.">
+        <h3>Bên nào lưu ký cổ phiếu và thanh toán bù trừ?</h3>
+        <div class="opts">
+          <button class="opt" type="button">UBCKNN</button>
+          <button class="opt" type="button">Sở giao dịch HOSE</button>
+          <button class="opt" type="button">Công ty chứng khoán</button>
+          <button class="opt" type="button">VSDC</button>
+        </div>
+      </div>
+      <div class="mcq q" data-answer="0" data-right="Đúng. Ở Việt Nam nhà đầu tư cá nhân chiếm phần lớn giá trị giao dịch, nên giá dễ bị tâm lý đám đông kéo đi. Đó là cái máy bỏ phiếu của Graham." data-wrong="Chưa đúng. Gợi ý: ai chiếm phần lớn giá trị giao dịch ở Việt Nam?">
+        <h3>Vì sao thị trường Việt Nam biến động mạnh và dễ bị tâm lý đám đông chi phối?</h3>
+        <div class="opts">
+          <button class="opt" type="button">Nhà đầu tư cá nhân chiếm phần lớn giá trị giao dịch</button>
+          <button class="opt" type="button">Không có biên độ giá</button>
+          <button class="opt" type="button">Chỉ có nhà đầu tư nước ngoài giao dịch</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BÀI TẬP -->
+  <section class="chapter" id="bai-tap">
+    <div class="chapter-head"><span class="tag">✓</span><h2>Bài tập: cho Heo ăn xu</h2></div>
+    <div class="panel toy">
+      <div class="feed">
+        <span class="char" id="feedPig"></span>
+        <div class="stack" style="gap:8px">
+          <strong id="feedText"></strong>
+          <div class="bar" aria-hidden="true"><div id="feedBar"></div></div>
+          <span class="note">Chỉ coi module là xong khi đã tick hết bài tập, không phải khi đọc xong. Tiến độ được lưu trên trình duyệt này.</span>
+        </div>
+      </div>
+      <ul class="tasks" id="tasks" data-module="02">
+        <li><label><input type="checkbox" id="t1"><span>Mở tài khoản tại một công ty chứng khoán; so sánh phí giao dịch và lãi margin của 3 công ty</span></label></li>
+        <li><label><input type="checkbox" id="t2"><span>Xem bảng giá trong 5 phiên liên tiếp và giải thích được các cột: tham chiếu, trần, sàn, dư mua, dư bán, khớp lệnh, khối ngoại</span></label></li>
+        <li><label><input type="checkbox" id="t3"><span>Tìm một mã sắp GDKHQ cổ tức, tự tính giá tham chiếu sau điều chỉnh rồi kiểm tra lại vào đúng ngày đó</span></label></li>
+        <li><label><input type="checkbox" id="t4"><span>Đặt thử một lệnh LO 100 chứng chỉ quỹ ETF (số tiền nhỏ) và theo dõi quá trình T+2</span></label></li>
+        <li><label><input type="checkbox" id="t5"><span>Tính tổng chi phí nếu bạn mua bán 10 lần/tháng với vốn 100 triệu</span></label></li>
+      </ul>
+    </div>
+    <a class="panel next" href="03-doc-bao-cao-tai-chinh.html">
+      <div class="stack" style="gap:4px">
+        <span class="eyebrow">Chương sau →</span>
+        <h3>Module 3: Đọc báo cáo tài chính</h3>
+        <span class="note">Dài hạn thị trường là cái cân. Học cách tự cân một doanh nghiệp.</span>
+      </div>
+      <span class="char bob" data-char="owl:smile" style="width:72px"></span>
+    </a>
+    <p class="disclaimer">Giáo trình mang tính giáo dục, không phải khuyến nghị mua bán mã cổ phiếu nào. Sổ lệnh và các con số trong máy tính là minh họa; biên độ, bước giá, lịch phiên, phí và thuế có thể thay đổi theo quy định, hãy kiểm tra lại với sở giao dịch và công ty chứng khoán của bạn.</p>
+  </section>
+</main>
+
+<script src="assets/truyen.js"></script>
+<script>
+(function () {
+  var T = Truyen, $ = T.$, money = T.money, num = T.num, trim = T.trim;
+  function vnd(x) { return num(x) + ' đ'; }
+  function press(group, el) { group.querySelectorAll('.opt').forEach(function (b) { b.setAttribute('aria-pressed', String(b === el)); }); }
+
+  // ---------- 2.1 sản phẩm ----------
+  var verdicts = ['Có, bắt đầu từ đây', 'Có, sau khi học thêm', 'Thận trọng', 'Chưa', 'Không'];
+  var prods = [
+    { name: 'Chứng chỉ quỹ mở, ETF', full: 'Chứng chỉ quỹ mở, ETF (ví dụ quỹ mô phỏng VN30)', what: 'Mua cả một rổ cổ phiếu, có người quản lý', risk: 'Trung bình, đã đa dạng hóa', lvl: 2, ans: 0, use: 'Có, nên bắt đầu từ đây' },
+    { name: 'Cổ phiếu riêng lẻ', full: 'Cổ phiếu riêng lẻ', what: 'Một phần sở hữu của một công ty', risk: 'Trung bình đến cao', lvl: 3, ans: 1, use: 'Có, sau khi học Module 3–5' },
+    { name: 'Trái phiếu doanh nghiệp', full: 'Trái phiếu doanh nghiệp', what: 'Cho doanh nghiệp vay, nhận lãi cố định', risk: 'Tùy nhà phát hành; có thể mất vốn nếu doanh nghiệp vỡ nợ', lvl: 3, ans: 2, use: 'Thận trọng, chỉ chọn nhà phát hành uy tín' },
+    { name: 'Chứng quyền (CW)', full: 'Chứng quyền có bảo đảm (CW)', what: 'Quyền mua cổ phiếu ở giá xác định, có thời hạn', risk: 'Cao, có thể về 0 khi đáo hạn', lvl: 4, ans: 3, use: 'Chưa' },
+    { name: 'Phái sinh', full: 'Phái sinh (hợp đồng tương lai VN30)', what: 'Đặt cược chỉ số lên hay xuống, có đòn bẩy', risk: 'Rất cao', lvl: 5, ans: 4, use: 'Không' }
+  ];
+  var guesses = T.store('heo-dat:m02:prod') || {};
+  var curProd = 0;
+  function riskBars(l) {
+    var cls = l >= 4 ? 'hot' : l === 3 ? 'mid' : '', h = '<span class="risk ' + cls + '" aria-label="Mức rủi ro ' + l + '/5">';
+    for (var i = 1; i <= 5; i++) h += '<i class="' + (i <= l ? 'on' : '') + '"></i>';
+    return h + '</span>';
+  }
+  $('prodTable').innerHTML = prods.map(function (p) {
+    return '<tr><td>' + p.full + '</td><td>' + p.what + '</td><td>' + p.risk + '</td><td>' + p.use + '</td></tr>';
+  }).join('');
+  $('prodTabs').innerHTML = prods.map(function (p, i) { return '<button class="opt" type="button" data-i="' + i + '">' + p.name + '</button>'; }).join('');
+  $('prodOpts').innerHTML = verdicts.map(function (v, i) { return '<button class="opt" type="button" data-v="' + i + '">' + v + '</button>'; }).join('');
+  function renderProd() {
+    var p = prods[curProd], g = guesses[curProd];
+    press($('prodTabs'), $('prodTabs').children[curProd]);
+    $('prodQ').textContent = 'Người mới có nên dùng: ' + p.full + '?';
+    $('prodOpts').querySelectorAll('.opt').forEach(function (b, i) {
+      b.classList.remove('right', 'wrong');
+      b.setAttribute('aria-pressed', 'false');
+      if (g != null) {
+        if (i === p.ans) b.classList.add('right');
+        if (i === g && g !== p.ans) b.classList.add('wrong');
+        if (i === g) b.setAttribute('aria-pressed', 'true');
+      }
+    });
+    var card = $('prodCard');
+    if (g == null) {
+      card.innerHTML = '<div class="say pig"><span class="char">' + T.pig('wow') + '</span><p class="bubble">Em đoán trước đã, thầy đừng nói!</p></div>';
+    } else {
+      var ok = g === p.ans;
+      card.innerHTML = '<div class="say ' + (ok ? 'pig' : 'owl') + '"><span class="char">' + (ok ? T.pig('proud') : T.owl('stern')) + '</span><p class="bubble">' +
+        (ok ? 'Đoán đúng!' : 'Chưa đúng. Đáp án: <b>' + p.use + '</b>.') + '</p></div>' +
+        '<dl><dt>Sản phẩm</dt><dd>' + p.full + '</dd><dt>Bản chất</dt><dd>' + p.what + '</dd><dt>Rủi ro</dt><dd>' + riskBars(p.lvl) + ' ' + p.risk + '</dd><dt>Người mới?</dt><dd><b>' + p.use + '</b></dd></dl>';
+    }
+    var done = 0, right = 0;
+    prods.forEach(function (q, i) { if (guesses[i] != null) { done++; if (guesses[i] === q.ans) right++; } });
+    $('prodScore').textContent = done ? 'Đúng ' + right + '/' + done + ' (đã đoán ' + done + '/5)' : '';
+  }
+  $('prodTabs').querySelectorAll('.opt').forEach(function (b) { b.addEventListener('click', function () { curProd = +b.dataset.i; renderProd(); }); });
+  $('prodOpts').querySelectorAll('.opt').forEach(function (b) {
+    b.addEventListener('click', function () { guesses[curProd] = +b.dataset.v; T.store('heo-dat:m02:prod', guesses); renderProd(); });
+  });
+  renderProd();
+
+  // ---------- 2.2 trần/sàn ----------
+  var exs = [
+    { name: 'HOSE', band: 7, first: 20 },
+    { name: 'HNX', band: 10, first: 30 },
+    { name: 'UPCoM', band: 15, first: 40 }
+  ];
+  var curEx = 0;
+  function tickOf(ex, p) { return ex === 0 ? (p < 10000 ? 10 : p < 50000 ? 50 : 100) : 100; }
+  function limits(ex, ref, b) {
+    var hiRaw = ref * (100 + b) / 100, loRaw = ref * (100 - b) / 100;
+    var th = tickOf(ex, hiRaw), tl = tickOf(ex, loRaw);
+    return { hi: Math.floor(ref * (100 + b) / (100 * th)) * th, lo: Math.ceil(ref * (100 - b) / (100 * tl)) * tl, th: th, tl: tl };
+  }
+  function renderBand() {
+    var ref = Math.round(+$('refPrice').value), ex = exs[curEx], first = $('firstDay').checked;
+    if (!(ref >= 1000)) { $('ceilOut').textContent = $('floorOut').textContent = '—'; $('bandSay').textContent = 'Nhập giá tham chiếu từ 1.000 đ trở lên.'; return; }
+    var b = first ? ex.first : ex.band, L = limits(curEx, ref, b);
+    $('ceilOut').textContent = vnd(L.hi);
+    $('floorOut').textContent = vnd(L.lo);
+    $('bandOut').textContent = '±' + b + '% · ' + (L.th === L.tl ? L.th + ' đ' : L.tl + '/' + L.th + ' đ');
+    $('bandLo').textContent = num(L.lo); $('bandRef').textContent = 'TC ' + num(ref); $('bandHi').textContent = num(L.hi);
+    $('bandSay').innerHTML = 'Trên ' + ex.name + (first ? ', ngày đầu niêm yết' : '') + ', giá tham chiếu ' + vnd(ref) + ' thì hôm nay giá chỉ chạy từ <b>' + vnd(L.lo) + '</b> (−' + b + '%) đến <b>' + vnd(L.hi) + '</b> (+' + b + '%). ' +
+      'Đặt lệnh ngoài khoảng này sẽ bị từ chối.';
+  }
+  $('exTabs').querySelectorAll('.opt').forEach(function (b) { b.addEventListener('click', function () { curEx = +b.dataset.ex; press($('exTabs'), b); renderBand(); }); });
+  $('refPrice').addEventListener('input', renderBand);
+  $('firstDay').addEventListener('change', renderBand);
+  renderBand();
+
+  function renderLots() {
+    var q = +$('lotQty').value, even = Math.floor(q / 100) * 100, odd = q % 100, h = '';
+    $('lotQtyOut').textContent = q + ' cổ phiếu';
+    $('lotEven').textContent = even ? num(even) + ' cp (' + even / 100 + ' lô)' : '0';
+    $('lotOdd').textContent = odd + ' cp';
+    for (var i = 0; i < even / 100; i++) h += '<i></i>';
+    for (var j = 0; j < Math.ceil(odd / 10); j++) h += '<i class="odd"></i>';
+    $('lotViz').innerHTML = h;
+  }
+  $('lotQty').addEventListener('input', renderLots); renderLots();
+
+  // ---------- 2.3 phiên ----------
+  var sess = [
+    { from: 540, to: 555, time: '9:00–9:15', name: 'Khớp lệnh định kỳ mở cửa (ATO)', short: 'ATO mở cửa', orders: 'LO, ATO', cls: 'seg-ato' },
+    { from: 555, to: 690, time: '9:15–11:30', name: 'Khớp lệnh liên tục buổi sáng', short: 'Liên tục sáng', orders: 'LO, lệnh thị trường (MTL, MOK, MAK)', cls: 'seg-cont' },
+    { from: 690, to: 780, time: '11:30–13:00', name: 'Nghỉ trưa', short: 'Nghỉ trưa', orders: '—', cls: 'seg-lunch' },
+    { from: 780, to: 870, time: '13:00–14:30', name: 'Khớp lệnh liên tục buổi chiều', short: 'Liên tục chiều', orders: 'LO, lệnh thị trường', cls: 'seg-cont' },
+    { from: 870, to: 885, time: '14:30–14:45', name: 'Khớp lệnh định kỳ đóng cửa (ATC)', short: 'ATC đóng cửa', orders: 'LO, ATC', cls: 'seg-atc' },
+    { from: 885, to: 900, time: '14:45–15:00', name: 'Thỏa thuận sau giờ', short: 'Thỏa thuận', orders: 'Giao dịch thỏa thuận', cls: 'seg-put' }
+  ];
+  $('sessTable').innerHTML = sess.map(function (s) { return '<tr><td>' + s.time + '</td><td>' + s.name + '</td><td>' + s.orders + '</td></tr>'; }).join('');
+  $('dayBar').innerHTML = sess.map(function (s) { return '<div class="' + s.cls + '" style="flex:' + (s.to - s.from) + ' 1 0"></div>'; }).join('') + '<div class="pin" id="dayPin"></div>';
+  function hm(m) { var h = Math.floor(m / 60), mm = m % 60; return h + ':' + (mm < 10 ? '0' : '') + mm; }
+  function renderClock() {
+    var m = +$('clock').value, s = sess.filter(function (x) { return m >= x.from && m < x.to; })[0];
+    $('clockOut').textContent = hm(m);
+    $('dayPin').style.left = ((m - 540) / 360 * 100) + '%';
+    $('sessTime').textContent = 'Phiên ' + s.time;
+    $('sessName').textContent = s.short;
+    $('sessOrders').textContent = s.orders;
+    $('sessOrdersBox').className = 'stat ' + (s.orders === '—' ? 'warn' : 'money');
+  }
+  $('clock').addEventListener('input', renderClock); renderClock();
+
+  // sổ lệnh minh họa
+  var asks = [[62500, 300], [61000, 200], [60300, 100], [60000, 100]];
+  var bids = [[59800, 200], [59500, 300]];
+  var ordType = 'mkt';
+  function match(qty, limit) {
+    var left = qty, fills = [];
+    for (var i = asks.length - 1; i >= 0 && left > 0; i--) {
+      var a = asks[i];
+      if (limit != null && a[0] > limit) break;
+      var f = Math.min(left, a[1]);
+      fills.push([a[0], f]); left -= f;
+    }
+    var filled = qty - left, cost = fills.reduce(function (s, f) { return s + f[0] * f[1]; }, 0);
+    return { fills: fills, filled: filled, left: left, cost: cost, avg: filled ? cost / filled : 0 };
+  }
+  function renderOrder() {
+    var qty = +$('ordQty').value, lim = ordType === 'lo' ? +$('ordPrice').value : null, r = match(qty, lim);
+    $('ordQtyOut').textContent = qty + ' cp';
+    $('ordPriceOut').textContent = vnd(+$('ordPrice').value);
+    $('ordPriceCtl').hidden = ordType !== 'lo';
+    var got = {}; r.fills.forEach(function (f) { got[f[0]] = f[1]; });
+    var rows = '<tr class="side"><td colspan="3">Bên bán (giá chào bán)</td></tr>' + asks.map(function (a) {
+      var g = got[a[0]] || 0, cls = g === 0 ? '' : g === a[1] ? 'hit' : 'part';
+      return '<tr><td class="' + cls + '">' + num(a[0]) + '</td><td class="r ' + cls + '">' + a[1] + '</td><td class="r ' + cls + '">' + (g || '') + '</td></tr>';
+    }).join('') + '<tr class="side"><td colspan="3">Bên mua (giá chờ mua)</td></tr>' + bids.map(function (b) {
+      return '<tr><td>' + num(b[0]) + '</td><td class="r">' + b[1] + '</td><td class="r"></td></tr>';
+    }).join('');
+    $('obBody').innerHTML = rows;
+    $('ordFilled').textContent = r.filled + ' cp';
+    $('ordAvg').textContent = r.filled ? vnd(Math.round(r.avg)) : '—';
+    $('ordTotal').textContent = r.filled ? vnd(r.cost) : '0 đ';
+    $('ordLeft').textContent = r.left + ' cp';
+    $('ordLeftBox').className = 'stat' + (r.left ? ' warn' : '');
+    var worst = r.fills.length ? r.fills[r.fills.length - 1][0] : 0, say, mood;
+    if (ordType === 'mkt') {
+      mood = worst > 60000 ? 'worried' : 'happy';
+      say = worst > 60000
+        ? 'Khớp ngay, nhưng giá đắt dần: lần khớp cuối ở ' + vnd(worst) + ', trung bình ' + vnd(Math.round(r.avg)) + ', cao hơn giá chào tốt nhất 60.000 đ. Thanh khoản mỏng là vậy đó!'
+        : 'Chỉ 100 cổ phiếu nên khớp gọn ở giá tốt nhất 60.000 đ. Thử tăng khối lượng xem giá trung bình bị đẩy lên ra sao.';
+    } else {
+      mood = r.left ? 'wow' : 'happy';
+      say = r.filled === 0
+        ? 'Giá ' + vnd(lim) + ' thấp hơn mọi giá chào bán, nên lệnh nằm chờ trong sổ. Em không trả quá giá mình đặt.'
+        : r.left
+          ? 'Khớp ' + r.filled + ' cp, giá không vượt ' + vnd(lim) + '. Còn ' + r.left + ' cp nằm chờ người bán hạ giá. Chậm hơn, nhưng em kiểm soát được giá.'
+          : 'Khớp đủ ' + r.filled + ' cp, trung bình ' + vnd(Math.round(r.avg)) + ', không bao giờ quá ' + vnd(lim) + '.';
+    }
+    $('ordPig').innerHTML = T.pig(mood);
+    $('ordSay').innerHTML = say;
+  }
+  $('ordTabs').querySelectorAll('.opt').forEach(function (b) { b.addEventListener('click', function () { ordType = b.dataset.t; press($('ordTabs'), b); renderOrder(); }); });
+  ['ordQty', 'ordPrice'].forEach(function (id) { $(id).addEventListener('input', renderOrder); });
+  renderOrder();
+
+  // ---------- 2.4 T+2 ----------
+  var dnames = ['T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'CN'];
+  var dfull = ['thứ Hai', 'thứ Ba', 'thứ Tư', 'thứ Năm', 'thứ Sáu'];
+  var side = 'buy', tday = 0;
+  function renderT() {
+    // hai tuần, bắt đầu từ thứ Hai tuần này; T+1, T+2 tính theo ngày làm việc
+    var tags = {}, k = 0, html = '', t2Idx = -1;
+    for (var i = tday; i < 14 && k <= 2; i++) {
+      if (i % 7 >= 5) continue;
+      tags[i] = k; if (k === 2) t2Idx = i; k++;
+    }
+    var lbl = side === 'buy'
+      ? ['Đặt mua', 'Đang thanh toán', 'Chiều: cổ phiếu về, bán được']
+      : ['Đặt bán', 'Chờ tiền', 'Tiền về'];
+    for (var d = 0; d < 14; d++) {
+      var off = d % 7 >= 5, tg = tags[d];
+      html += '<div class="' + (off ? 'off' : tg === 0 ? 't0' : tg === 1 ? 't1' : tg === 2 ? 't2' : '') + '"><b>' + dnames[d % 7] + '</b>' +
+        (tg != null ? '<small>T' + (tg ? '+' + tg : '') + '</small><small>' + lbl[tg] + '</small>' : off ? '<small>nghỉ</small>' : '') + '</div>';
+    }
+    $('tWeek').innerHTML = html;
+    var t2day = dfull[t2Idx % 7] + (t2Idx >= 7 ? ' tuần sau' : '');
+    $('tSay').innerHTML = side === 'buy'
+      ? 'Mua ' + dfull[tday] + ' (ngày T) thì cổ phiếu về tài khoản <b>chiều ' + t2day + '</b> (T+2), và con bán được từ lúc đó.' + (t2Idx >= 7 ? ' Thứ Bảy, Chủ nhật không tính là ngày giao dịch.' : '')
+      : 'Bán ' + dfull[tday] + ' (ngày T) thì tiền về <b>' + t2day + '</b> (T+2). Muốn dùng sớm hơn có thể <b>ứng trước tiền bán</b>, chịu phí.';
+  }
+  $('tSide').querySelectorAll('.opt').forEach(function (b) { b.addEventListener('click', function () { side = b.dataset.s; press($('tSide'), b); renderT(); }); });
+  $('tDay').querySelectorAll('.opt').forEach(function (b) { b.addEventListener('click', function () { tday = +b.dataset.d; press($('tDay'), b); renderT(); }); });
+  renderT();
+
+  // ---------- 2.5 phí thuế ----------
+  function fmtPct(x) { return trim(x, 2) + '%'; }
+  function renderFee() {
+    var q = Math.round(+$('feeQty').value), pb = +$('feeBuy').value, ps = +$('feeSell').value, f = +$('feeRate').value, tax = 0.1;
+    $('feeRateOut').textContent = fmtPct(f);
+    if (!(q > 0 && pb > 0 && ps > 0)) { $('feeTable').innerHTML = '<tr><td colspan="3">Nhập số cổ phiếu và giá lớn hơn 0.</td></tr>'; return; }
+    var buy = q * pb, sell = q * ps, fb = buy * f / 100, fs = sell * f / 100, tx = sell * tax / 100;
+    var gross = sell - buy, cost = fb + fs + tx, net = gross - cost;
+    var rows = [
+      ['Mua ' + num(q) + ' cổ phiếu giá ' + num(pb), num(q) + ' × ' + num(pb), buy],
+      ['Phí mua', fmtPct(f) + ' × ' + num(buy), fb],
+      ['Bán ' + num(q) + ' cổ phiếu giá ' + num(ps), num(q) + ' × ' + num(ps), sell],
+      ['Phí bán', fmtPct(f) + ' × ' + num(sell), fs],
+      ['Thuế thu nhập cá nhân khi bán', '0,1% × ' + num(sell), tx]
+    ];
+    $('feeTable').innerHTML = rows.map(function (r) { return '<tr><td>' + r[0] + '</td><td>' + r[1] + '</td><td class="r">' + num(r[2]) + '</td></tr>'; }).join('') +
+      '<tr><td><b>Lãi ròng</b></td><td>' + num(gross) + ' − ' + num(fb) + ' − ' + num(fs) + ' − ' + num(tx) + '</td><td class="r"><b>' + num(net) + '</b></td></tr>';
+    $('feeGross').textContent = money(gross);
+    $('feeCost').textContent = money(cost);
+    $('feeNet').textContent = money(net);
+    $('feeNetBox').className = 'stat ' + (net < 0 ? 'warn' : 'money');
+  }
+  ['feeQty', 'feeBuy', 'feeSell', 'feeRate'].forEach(function (id) { $(id).addEventListener('input', renderFee); });
+  renderFee();
+
+  function renderRounds() {
+    var n = +$('rounds').value, c = n * 0.4;
+    $('roundsOut').textContent = n + ' vòng';
+    $('roundsCost').textContent = '≈ ' + trim(c, 1) + '% vốn';
+    $('roundsPig').innerHTML = T.pig(c >= 20 ? 'sad' : c >= 8 ? 'worried' : 'happy');
+    $('roundsSay').textContent = c >= 20
+      ? 'Ối! ' + n + ' vòng mà riêng phí và thuế đã ăn khoảng ' + trim(c, 1) + '% vốn. Em phải lãi hơn chừng đó mới hòa vốn. Lướt sóng liên tục khó có lãi là vì thế.'
+      : c >= 8
+        ? n + ' vòng tốn khoảng ' + trim(c, 1) + '% vốn mỗi năm. Vẫn là một con mọt to.'
+        : 'Ít giao dịch thì phí nhỏ: khoảng ' + trim(c, 1) + '% vốn mỗi năm.';
+  }
+  $('rounds').addEventListener('input', renderRounds); renderRounds();
+
+  // ---------- 2.6 GDKHQ ----------
+  var curEv = 0, HOLD = 100;
+  function renderEv() {
+    document.querySelectorAll('#evCtl [data-for]').forEach(function (c) { c.hidden = +c.dataset.for !== curEv; });
+    var p = +$('evPrice').value, cash = +$('evCash').value, r = +$('evRatio').value, n = +$('evN').value, ip = +$('evIssue').value;
+    $('evCashOut').textContent = vnd(cash); $('evRatioOut').textContent = r + '%'; $('evNOut').textContent = n + ':1';
+    if (!(p > 0)) { $('evRef').textContent = '—'; return; }
+    var before = HOLD * p, ref, after, f, say;
+    if (curEv === 0) {
+      ref = p - cash;
+      var got = HOLD * cash, tax = got * 0.05;
+      after = HOLD * ref + got;
+      f = '<span class="f">' + num(p) + ' − ' + num(cash) + ' = ' + num(ref) + '</span><small>Giá mới = giá cũ − cổ tức tiền mặt</small>';
+      $('evAfter').textContent = vnd(after);
+      say = HOLD + ' cổ phiếu × ' + vnd(ref) + ' = ' + vnd(HOLD * ref) + ', cộng ' + vnd(got) + ' cổ tức = <b>' + vnd(after) + '</b>, đúng bằng trước. Cổ tức bị trừ thuế 5% (' + vnd(tax) + '), con thực nhận ' + vnd(got - tax) + '.';
+    } else if (curEv === 1) {
+      var k = 1 + r / 100, sh = HOLD * k;
+      ref = p / k; after = sh * ref;
+      f = '<span class="f">' + num(p) + ' / ' + trim(k, 2) + ' ≈ ' + num(ref) + '</span><small>Giá mới = giá cũ / (1 + tỷ lệ chia)</small>';
+      $('evAfter').textContent = vnd(Math.round(after));
+      say = HOLD + ' cổ phiếu thành <b>' + trim(sh, 1) + '</b>. ' + trim(sh, 1) + ' × ' + vnd(Math.round(ref)) + ' ≈ <b>' + vnd(Math.round(after)) + '</b>. Bánh được cắt thành nhiều miếng hơn, không to thêm.';
+    } else {
+      var a = 1 / n, kk = 1 + a, nw = HOLD * a, pay = nw * ip;
+      ref = (p + ip * a) / kk; after = (HOLD + nw) * ref;
+      f = '<span class="f">(' + num(p) + ' + ' + num(ip) + ' × ' + trim(a, 2) + ') / ' + trim(kk, 2) + ' ≈ ' + num(ref) + '</span><small>Giá mới = (giá thị trường + giá phát hành × tỷ lệ) / (1 + tỷ lệ)</small>';
+      $('evAfter').textContent = vnd(Math.round(after));
+      say = 'Tỷ lệ ' + n + ':1 nghĩa là ' + n + ' cổ phiếu cũ được mua thêm 1 cổ phiếu mới (tỷ lệ ' + trim(a, 2) + '). Nếu Heo nộp ' + vnd(pay) + ' mua thêm ' + trim(nw, 1) + ' cổ phiếu: ' + trim(HOLD + nw, 1) + ' × ' + vnd(Math.round(ref)) + ' ≈ <b>' + vnd(Math.round(after)) + '</b> = ' + vnd(before) + ' cũ + ' + vnd(pay) + ' vừa nộp.';
+    }
+    $('evFormula').innerHTML = f;
+    $('evBefore').textContent = vnd(before);
+    $('evRef').textContent = vnd(Math.round(ref));
+    $('evSay').innerHTML = say;
+  }
+  $('evTabs').querySelectorAll('.opt').forEach(function (b) { b.addEventListener('click', function () { curEv = +b.dataset.e; press($('evTabs'), b); renderEv(); }); });
+  ['evPrice', 'evCash', 'evRatio', 'evN', 'evIssue'].forEach(function (id) { $(id).addEventListener('input', renderEv); });
+  renderEv();
+})();
+</script>
+</body>
+</html>

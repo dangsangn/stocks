@@ -1,0 +1,742 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Heo Đất mổ xẻ Vinamilk</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;800&family=Be+Vietnam+Pro:wght@400;600;700&family=Patrick+Hand&display=swap">
+<link rel="stylesheet" href="assets/truyen.css">
+<style>
+/* Riêng case study Vinamilk: thanh tiến trình 7 bước, biểu đồ cột tự vẽ, trò phân loại */
+.road { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 6px; }
+.road a {
+  text-decoration: none; display: grid; gap: 2px; justify-items: center; text-align: center;
+  border: 2.5px solid var(--border); border-radius: 10px; background: var(--chip); padding: 8px 4px;
+  font-size: .78rem; font-weight: 600; line-height: 1.2;
+}
+.road a:hover { transform: translateY(-2px); background: var(--bubble-owl); }
+.road .n { font-family: var(--f-display); font-weight: 800; font-size: 1.4rem; line-height: 1; }
+@media (max-width: 620px) { .road { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+
+.chart-box svg .lbl { fill: var(--ink); font-weight: 700; }
+.chart-box svg .lbl-in { fill: #1D2140; font-weight: 700; }
+.chart-box svg .seg { cursor: pointer; }
+.chart-box svg .seg:hover, .chart-box svg .seg.on { stroke-width: 4; }
+
+.sort { display: grid; gap: 10px; }
+.sort-item { display: grid; gap: 8px; border: 2.5px solid var(--border); border-radius: 10px; padding: 10px 12px; background: var(--panel); }
+.sort-item.ok { background: var(--money-soft); border-color: var(--money); }
+.sort-item.no { background: var(--warn-soft); border-color: var(--warn); }
+.sort-item .opts .opt { padding: 4px 12px; font-size: .9rem; }
+.kv { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; }
+.kv ol { margin: 0; padding-left: 1.2em; display: grid; gap: 6px; }
+</style>
+</head>
+<body>
+<main class="book">
+
+  <nav class="topnav"><a href="index.html">← Mục lục</a><span class="note">Case study 4b</span></nav>
+
+  <!-- MỞ ĐẦU -->
+  <header class="hero">
+    <div class="hero-title">
+      <span class="eyebrow">Case study · Tuần 17–18</span>
+      <h1>Heo Đất mổ xẻ hộp sữa Vinamilk</h1>
+      <p class="sub">Đọc báo cáo tài chính 2024 của Vinamilk (VNM) theo đúng quy trình 7 bước. Bấm, kéo và phân loại để tự rút ra kết luận.</p>
+    </div>
+    <div class="strip">
+      <div class="panel">
+        <div class="say pig"><span class="char" data-char="pig:wow"></span><p class="bubble">Vinamilk ai cũng biết, sữa ngon thế thì cổ phiếu chắc tăng mạnh lắm thầy nhỉ?</p></div>
+      </div>
+      <div class="panel">
+        <div class="say owl right"><p class="bubble">Sữa ngon chưa chắc cổ phiếu tăng nhanh. Mở báo cáo tài chính ra rồi hẵng nói.</p><span class="char" data-char="owl:stern"></span></div>
+      </div>
+      <div class="panel">
+        <div class="say pig"><span class="char" data-char="pig:worried"></span><p class="bubble">Ơ, doanh thu năm 2024 chỉ tăng có 2,3% thôi ạ?</p></div>
+      </div>
+      <div class="panel">
+        <div class="say owl right"><p class="bubble">Đúng. Nhưng ROE khoảng 26%, gần như không nợ vay, dòng tiền kinh doanh còn lớn hơn lợi nhuận.</p><span class="char" data-char="owl:talk"></span></div>
+      </div>
+      <div class="panel wide">
+        <div class="say owl"><span class="char" data-char="owl:talk"></span><p class="bubble">Kết luận sau khi đọc BCTC 2024: Vinamilk <b>rất khỏe về tài chính nhưng tăng trưởng chậm</b>. ROE khoảng 26%, gần như không có nợ vay đáng kể, dòng tiền kinh doanh lớn hơn lợi nhuận, trả cổ tức cao. Đổi lại, doanh thu chỉ tăng 2,3%. Đây là hình mẫu của một <b>cổ phiếu phòng thủ, trả cổ tức đều</b>, không phải cổ phiếu tăng trưởng.</p></div>
+      </div>
+    </div>
+  </header>
+
+  <!-- LỘ TRÌNH + NGUỒN -->
+  <section class="chapter" id="lo-trinh">
+    <div class="chapter-head"><span class="tag">0</span><h2>Bản đồ 7 bước và nguồn số liệu</h2></div>
+    <div class="panel toy">
+      <p>Bài này đi qua đúng quy trình 7 bước ở <a href="03-doc-bao-cao-tai-chinh.html">Module 3, mục 3.9</a>. Bấm một bước để nhảy tới.</p>
+      <nav class="road" aria-label="Bảy bước phân tích">
+        <a href="#buoc-1"><span class="n">1</span>Hiểu doanh nghiệp</a>
+        <a href="#buoc-2"><span class="n">2</span>Kết quả kinh doanh</a>
+        <a href="#buoc-3"><span class="n">3</span>Cân đối kế toán</a>
+        <a href="#buoc-4"><span class="n">4</span>Lưu chuyển tiền tệ</a>
+        <a href="#buoc-5"><span class="n">5</span>Chỉ số chính</a>
+        <a href="#buoc-6"><span class="n">6</span>Định giá</a>
+        <a href="#buoc-7"><span class="n">7</span>Tổng kết</a>
+      </nav>
+      <div class="callout">
+        <strong>Nguồn số liệu</strong>
+        <p>BCTC hợp nhất 2024 của Vinamilk, theo tổng hợp của <a href="https://www.dsc.com.vn/kien-thuc/phan-tich-bao-cao-tai-chinh-vinamilk" target="_blank" rel="noopener">DSC: Phân tích báo cáo tài chính Vinamilk</a> và <a href="https://mekongasean.vn/vinamilk-lai-rong-cao-nhat-trong-3-nam-gan-day-37827.html" target="_blank" rel="noopener">Mekong ASEAN</a>. Số năm 2023 có dấu "≈" được suy ra từ tốc độ tăng trưởng nên chỉ là xấp xỉ. Trước khi ra quyết định thật, hãy đối chiếu với BCTC gốc trên <a href="https://www.vinamilk.com.vn" target="_blank" rel="noopener">vinamilk.com.vn</a> hoặc trang công bố thông tin của HOSE.</p>
+        <p><b>Đơn vị: tỷ đồng, trừ khi ghi khác.</b></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- BƯỚC 1 -->
+  <section class="chapter" id="buoc-1">
+    <div class="chapter-head"><span class="tag">B1</span><h2>Hiểu con bò trước khi đếm sữa</h2></div>
+    <div class="panel talk">
+      <div class="say pig"><span class="char" data-char="pig:happy"></span><p class="bubble">Em mở ngay bảng lợi nhuận nhé thầy!</p></div>
+      <div class="say owl right"><p class="bubble">Chưa. Bước 1 là hiểu doanh nghiệp trước khi xem số: bán gì, bán ở đâu, ai là chủ.</p><span class="char" data-char="owl:stern"></span></div>
+    </div>
+    <div class="cards">
+      <button class="flip" type="button"><span class="front">Kinh doanh gì?</span><span class="back">Sữa nước, sữa chua, sữa bột, sữa đặc, đồ uống. Có hệ thống trang trại bò sữa và nhà máy trong nước.</span></button>
+      <button class="flip" type="button"><span class="front">Bán ở đâu?</span><span class="back">Năm 2024, nội địa chiếm 82% doanh thu (50.799 tỷ, +0,4%), xuất khẩu và chi nhánh nước ngoài chiếm 18% (10.983 tỷ, +12,6%).</span></button>
+      <button class="flip" type="button"><span class="front">Cổ đông lớn?</span><span class="back">SCIC (đại diện vốn nhà nước) và F&amp;N (Fraser &amp; Neave, Singapore) cùng nắm hơn một nửa cổ phần. Kiểm tra tỷ lệ chính xác trong báo cáo thường niên.</span></button>
+    </div>
+    <div class="panel toy">
+      <div class="toy-title"><h3>Chiếc bánh doanh thu 2024</h3><span class="pill">Kéo thử</span></div>
+      <p>Thanh dưới vẽ đúng tỷ lệ doanh thu nội địa và xuất khẩu năm 2024. Kéo số năm để xem điều gì xảy ra <em>nếu</em> hai tốc độ tăng của năm 2024 (+0,4% và +12,6%) cứ giữ nguyên. Đây chỉ là phép tính giả định, không phải dự báo.</p>
+      <div class="ctl" style="max-width:420px"><label for="mixYears">Số năm giữ nguyên tốc độ 2024 <output id="mixYearsOut"></output></label><input id="mixYears" type="range" min="0" max="5" step="1" value="0"></div>
+      <div class="chart-box"><svg id="mixChart" viewBox="0 0 640 110" role="img" aria-label="Thanh tỷ trọng doanh thu nội địa và xuất khẩu"></svg></div>
+      <div class="legend"><span><i style="background:var(--save)"></i>Nội địa</span><span><i style="background:var(--money)"></i>Xuất khẩu và chi nhánh nước ngoài</span></div>
+      <div class="result">
+        <div class="stat"><div class="k">Doanh thu nội địa</div><div class="v" id="mixDom"></div></div>
+        <div class="stat money"><div class="k">Xuất khẩu và nước ngoài</div><div class="v" id="mixExp"></div></div>
+        <div class="stat"><div class="k">Tỷ trọng xuất khẩu</div><div class="v" id="mixShare"></div></div>
+      </div>
+      <div class="say owl"><span class="char" data-char="owl:talk"></span><p class="bubble" id="mixSay"></p></div>
+    </div>
+  </section>
+
+  <!-- BƯỚC 2 -->
+  <section class="chapter" id="buoc-2">
+    <div class="chapter-head"><span class="tag">B2</span><h2>Kết quả kinh doanh: lãi phình nhanh hơn doanh thu</h2></div>
+    <div class="panel talk">
+      <div class="say pig"><span class="char" data-char="pig:proud"></span><p class="bubble">Lợi nhuận gộp tăng 5,8% mà doanh thu chỉ tăng 2,3%. Ban lãnh đạo giỏi quá!</p></div>
+      <div class="say owl right"><p class="bubble">Một phần là nhờ giá sữa bột nguyên liệu nhập khẩu giảm. Đó là gió thuận <b>từ bên ngoài</b>. Gió đổi chiều thì biên co lại.</p><span class="char" data-char="owl:stern"></span></div>
+    </div>
+    <div class="tbl-wrap">
+      <table class="tbl">
+        <thead><tr><th>Chỉ tiêu</th><th class="r">2024</th><th>So với 2023</th></tr></thead>
+        <tbody>
+          <tr><td>Doanh thu thuần</td><td class="r">61.783</td><td>+2,3%</td></tr>
+          <tr><td>Lợi nhuận gộp</td><td class="r">25.970</td><td>+5,8%</td></tr>
+          <tr><td>Biên lợi nhuận gộp</td><td class="r">42,0%</td><td>+1,4 điểm % (2023 ≈ 40,7%)</td></tr>
+          <tr><td>Chi phí bán hàng</td><td class="r">13.453</td><td>+3,3%</td></tr>
+          <tr><td>Lợi nhuận sau thuế</td><td class="r">9.453</td><td>Biên lợi nhuận ròng 15,3%</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="panel toy">
+      <div class="toy-title"><h3>Ai chạy nhanh nhất? Tốc độ tăng 2024 so với 2023</h3></div>
+      <div class="chart-box"><svg id="growthChart" viewBox="0 0 640 230" role="img" aria-label="Biểu đồ cột ngang tốc độ tăng trưởng các chỉ tiêu năm 2024"></svg></div>
+      <p class="note">Cột vẽ đúng tỷ lệ. Doanh thu nội địa gần như đứng yên; tăng trưởng chủ yếu đến từ xuất khẩu.</p>
+    </div>
+
+    <div class="panel toy">
+      <div class="toy-title"><h3>Cách một chuyên gia đọc bảng này</h3></div>
+      <ol class="plain">
+        <li><b>Lợi nhuận gộp tăng nhanh hơn doanh thu (5,8% so với 2,3%).</b> Biên gộp được mở rộng nhờ giá sữa bột nguyên liệu nhập khẩu giảm và cơ cấu sản phẩm tốt hơn. Đây là yếu tố <b>bên ngoài</b>: nếu giá nguyên liệu tăng trở lại, biên sẽ co lại. Hãy theo dõi giá sữa bột thế giới (chỉ số Global Dairy Trade).</li>
+        <li><b>Chi phí bán hàng chiếm 21,8% doanh thu</b> (13.453 / 61.783), là khoản chi lớn nhất sau giá vốn. Với ngành hàng tiêu dùng, đây là chi phí quảng cáo, khuyến mãi và phân phối để giữ thị phần. Nếu tỷ lệ này tăng mà doanh thu không tăng tương ứng, đó là dấu hiệu cạnh tranh gay gắt.</li>
+        <li><b>Biên ròng 15,3%</b> là rất cao với một doanh nghiệp sản xuất hàng tiêu dùng.</li>
+        <li><b>Điểm yếu rõ ràng:</b> doanh thu nội địa gần như đứng yên (+0,4%). Tăng trưởng chủ yếu đến từ xuất khẩu.</li>
+      </ol>
+    </div>
+
+    <div class="panel toy">
+      <div class="toy-title"><h3>Núm vặn giá sữa bột</h3><span class="pill">Kéo thử</span></div>
+      <p>Giữ nguyên doanh thu 61.783 tỷ, chỉ đổi biên lợi nhuận gộp. Kéo sang trái giống như giá nguyên liệu tăng trở lại. Phép tính minh họa độ nhạy, giả định mọi thứ khác không đổi.</p>
+      <div class="ctl" style="max-width:420px"><label for="gm">Biên lợi nhuận gộp <output id="gmOut"></output></label><input id="gm" type="range" min="38" max="46" step="0.1" value="42"></div>
+      <div class="result">
+        <div class="stat"><div class="k">Lợi nhuận gộp</div><div class="v" id="gmGross"></div></div>
+        <div class="stat" id="gmDeltaBox"><div class="k">Chênh lệch so với 25.970 tỷ</div><div class="v" id="gmDelta"></div></div>
+        <div class="stat"><div class="k">Chênh lệch bằng bao nhiêu % LNST 9.453 tỷ</div><div class="v" id="gmShare"></div></div>
+      </div>
+      <div class="say pig"><span class="char" id="gmPig"></span><p class="bubble" id="gmSay"></p></div>
+    </div>
+
+    <div class="panel quiz">
+      <div class="mcq q" data-answer="2" data-right="Đúng. Biên gộp mở rộng chủ yếu nhờ giá sữa bột nguyên liệu giảm, một yếu tố bên ngoài. Theo dõi chỉ số Global Dairy Trade để biết gió có đổi chiều không." data-wrong="Chưa đúng. Hãy nhìn vào nguyên nhân biên gộp mở rộng: phần lớn đến từ giá nguyên liệu, thứ công ty không kiểm soát.">
+        <h3>Vì sao chuyên gia chưa vội khen biên gộp 42,0% của năm 2024?</h3>
+        <div class="opts">
+          <button class="opt" type="button">Vì doanh thu giảm</button>
+          <button class="opt" type="button">Vì chi phí bán hàng bằng 0</button>
+          <button class="opt" type="button">Vì nó nhờ giá sữa bột nguyên liệu giảm, có thể đảo chiều</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BƯỚC 3 -->
+  <section class="chapter" id="buoc-3">
+    <div class="chapter-head"><span class="tag">B3</span><h2>Cân đối kế toán: két sắt đầy tiền gửi</h2></div>
+    <div class="panel talk">
+      <div class="say pig"><span class="char" data-char="pig:wow"></span><p class="bubble">Hơn 40% tài sản là tiền gửi ngân hàng! Vậy thì quá an toàn rồi, tốt quá còn gì.</p></div>
+      <div class="say owl right"><p class="bubble">An toàn thì có. Nhưng đó là con dao hai lưỡi: tiền nằm im chỉ sinh lãi vài phần trăm, nghĩa là công ty chưa tìm được chỗ đầu tư hấp dẫn hơn.</p><span class="char" data-char="owl:talk"></span></div>
+    </div>
+    <div class="tbl-wrap">
+      <table class="tbl">
+        <thead><tr><th>Chỉ tiêu (31/12/2024)</th><th class="r">Giá trị</th><th>Tỷ trọng / ghi chú</th></tr></thead>
+        <tbody>
+          <tr><td>Tổng tài sản</td><td class="r">56.993</td><td>+5,1% so với đầu năm</td></tr>
+          <tr><td>Tài sản ngắn hạn</td><td class="r">37.502</td><td>65,8% tổng tài sản</td></tr>
+          <tr><td>Trong đó: đầu tư ngắn hạn (chủ yếu tiền gửi có kỳ hạn)</td><td class="r">23.260</td><td>40,8% tổng tài sản</td></tr>
+          <tr><td>Trong đó: hàng tồn kho</td><td class="r">5.635</td><td>−7,4%</td></tr>
+          <tr><td>Nợ phải trả</td><td class="r">19.827</td><td>34,8% tổng tài sản</td></tr>
+          <tr><td>Trong đó: nợ dài hạn</td><td class="r">1.327</td><td>Rất nhỏ</td></tr>
+          <tr><td>Vốn chủ sở hữu</td><td class="r">37.166</td><td>65,2% tổng tài sản, +3,9%</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="panel toy">
+      <div class="toy-title"><h3>Hai cột cân bằng: tài sản = nợ + vốn chủ</h3><span class="pill">Bấm từng khối</span></div>
+      <p>Hai cột cao bằng nhau (56.993 tỷ) và vẽ đúng tỷ lệ. Khối "khác" và "tài sản dài hạn" là phần còn lại, tính bằng phép trừ từ bảng trên.</p>
+      <div class="chart-box"><svg id="bsChart" viewBox="0 0 640 340" role="img" aria-label="Biểu đồ cột chồng tài sản và nguồn vốn của Vinamilk cuối năm 2024"></svg></div>
+      <div class="callout" id="bsDetail"></div>
+      <div class="result">
+        <div class="stat money"><div class="k">Hệ số thanh toán hiện hành</div><div class="v">≈ 2,03 lần</div></div>
+        <div class="stat money"><div class="k">Tiền gửi trừ toàn bộ nợ phải trả</div><div class="v">+3.433 tỷ</div></div>
+      </div>
+    </div>
+
+    <div class="panel toy">
+      <div class="toy-title"><h3>Cách đọc</h3></div>
+      <ul class="plain">
+        <li><b>Hơn 40% tài sản là tiền gửi ngân hàng.</b> Đây là con dao hai lưỡi: rất an toàn, nhưng cũng cho thấy công ty <b>không tìm được cơ hội đầu tư</b> đủ hấp dẫn để dùng số tiền này. Khoản tiền gửi này chỉ sinh lãi vài phần trăm, kéo ROE xuống.</li>
+        <li><b>Tồn kho giảm 7,4% trong khi doanh thu tăng:</b> tốt, hàng bán ra nhanh hơn, không bị ứ đọng.</li>
+        <li><b>Nợ phải trả chủ yếu là nợ ngắn hạn</b> (khoảng 18.500 tỷ). Cần đọc thuyết minh để tách phần vay ngân hàng khỏi phần phải trả người bán. Tiền gửi 23.260 tỷ đã lớn hơn toàn bộ nợ phải trả, nên rủi ro thanh khoản gần như bằng 0.</li>
+        <li><b>Hệ số thanh toán hiện hành ≈ 2,03 lần</b> (37.502 / khoảng 18.500). Rất an toàn.</li>
+      </ul>
+      <div class="chalk" aria-label="Công thức hệ số thanh toán hiện hành">
+        <span>Hệ số thanh toán hiện hành</span>
+        <span class="f">= TS ngắn hạn / Nợ ngắn hạn</span>
+        <small>= 37.502 / khoảng 18.500 ≈ 2,03 lần</small>
+      </div>
+    </div>
+  </section>
+
+  <!-- BƯỚC 4 -->
+  <section class="chapter" id="buoc-4">
+    <div class="chapter-head"><span class="tag">B4</span><h2>Lưu chuyển tiền tệ: lãi có thành tiền thật không?</h2></div>
+    <div class="panel talk">
+      <div class="say pig"><span class="char" data-char="pig:worried"></span><p class="bubble">Thầy dặn lợi nhuận có thể là "lãi trên giấy". Vinamilk có bị vậy không ạ?</p></div>
+      <div class="say owl right"><p class="bubble">Đặt dòng tiền kinh doanh cạnh lợi nhuận sau thuế là biết: 9.686 so với 9.453. Tiền vào còn nhiều hơn lãi báo cáo.</p><span class="char" data-char="owl:smile"></span></div>
+    </div>
+    <div class="tbl-wrap">
+      <table class="tbl">
+        <thead><tr><th>Chỉ tiêu</th><th class="r">2024</th></tr></thead>
+        <tbody>
+          <tr><td>Dòng tiền từ hoạt động kinh doanh (CFO)</td><td class="r">9.686 (+22,8%)</td></tr>
+          <tr><td>Chi mua sắm tài sản cố định (capex)</td><td class="r">1.704</td></tr>
+          <tr><td><b>Dòng tiền tự do (FCF = CFO − capex)</b></td><td class="r"><b>7.982</b></td></tr>
+          <tr><td>Cổ tức đã trả bằng tiền</td><td class="r">6.047 (+55%)</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="panel toy">
+      <div class="toy-title"><h3>Thác nước dòng tiền</h3><span class="pill">Bấm từng bước</span></div>
+      <div class="tabs" role="group" aria-label="Các bước thác nước dòng tiền" id="wfTabs"></div>
+      <div class="chart-box"><svg id="wfChart" viewBox="0 0 640 280" role="img" aria-label="Biểu đồ thác nước từ lợi nhuận sau thuế tới dòng tiền tự do và cổ tức"></svg></div>
+      <div class="say owl"><span class="char" data-char="owl:talk"></span><p class="bubble" id="wfSay"></p></div>
+      <div class="result">
+        <div class="stat money"><div class="k">CFO / LNST</div><div class="v">≈ 1,02 lần</div></div>
+        <div class="stat money"><div class="k">Capex / CFO</div><div class="v">≈ 18%</div></div>
+        <div class="stat"><div class="k">Cổ tức tiền mặt / FCF</div><div class="v">≈ 76%</div></div>
+      </div>
+      <p class="note">Cột cuối "FCF còn lại sau cổ tức" (7.982 − 6.047 = 1.935 tỷ) là phép trừ từ bảng trên, chỉ để minh họa.</p>
+    </div>
+
+    <div class="panel toy">
+      <div class="toy-title"><h3>Cách đọc</h3></div>
+      <ul class="plain">
+        <li><b>CFO / LNST = 9.686 / 9.453 ≈ 1,02 lần.</b> Lợi nhuận được chuyển thành tiền gần như 100%. Đây là dấu hiệu lợi nhuận "thật", chất lượng cao.</li>
+        <li><b>Capex chỉ bằng khoảng 18% CFO.</b> Công ty không cần đầu tư nhiều để duy trì kinh doanh, nên dư rất nhiều tiền.</li>
+        <li><b>Cổ tức tiền mặt bằng khoảng 76% FCF.</b> Công ty trả cổ tức bằng tiền thật kiếm được, không phải đi vay để trả. Mức trả cao bền vững chừng nào FCF còn giữ được.</li>
+        <li>Kiểu dòng tiền <b>CFO (+), CFI (−), CFF (−)</b> là kiểu của doanh nghiệp trưởng thành, khỏe mạnh (xem <a href="03-doc-bao-cao-tai-chinh.html">Module 3, mục 3.4</a>).</li>
+      </ul>
+    </div>
+
+    <div class="panel quiz">
+      <div class="mcq q" data-answer="0" data-right="Chính xác. Tiền kinh doanh dương, tiền đầu tư âm vì vẫn mua máy móc, tiền tài chính âm vì trả cổ tức. Đó là chân dung doanh nghiệp trưởng thành, khỏe mạnh." data-wrong="Chưa đúng. Vinamilk thu tiền từ kinh doanh, chi ra để đầu tư (capex) và chi ra để trả cổ tức. Thử ghép dấu lại xem.">
+        <h3>Kiểu dấu dòng tiền nào khớp với Vinamilk năm 2024?</h3>
+        <div class="opts">
+          <button class="opt" type="button">CFO (+), CFI (−), CFF (−)</button>
+          <button class="opt" type="button">CFO (−), CFI (−), CFF (+)</button>
+          <button class="opt" type="button">CFO (−), CFI (+), CFF (+)</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BƯỚC 5 -->
+  <section class="chapter" id="buoc-5">
+    <div class="chapter-head"><span class="tag">B5</span><h2>Chỉ số chính: ROE cao mà không cần vay</h2></div>
+    <div class="panel talk">
+      <div class="say pig"><span class="char" data-char="pig:happy"></span><p class="bubble">ROE gần 26%! Chắc công ty vay nhiều để khuếch đại lãi, giống bài công ty B ở Module 4?</p></div>
+      <div class="say owl right"><p class="bubble">Ngược lại. Tách ROE bằng DuPont, con sẽ thấy đòn bẩy chỉ 1,53 lần. Sức mạnh nằm ở biên lợi nhuận.</p><span class="char" data-char="owl:talk"></span></div>
+    </div>
+    <div class="tbl-wrap">
+      <table class="tbl">
+        <thead><tr><th>Chỉ số</th><th>Phép tính</th><th class="r">Kết quả</th><th>Đánh giá</th></tr></thead>
+        <tbody>
+          <tr><td>ROE</td><td>9.453 / vốn chủ bình quân (≈ 35.785 đầu năm và 37.166 cuối năm → ≈ 36.475)</td><td class="r">≈ 25,9%</td><td>Rất cao, gần như không dùng đòn bẩy</td></tr>
+          <tr><td>ROA</td><td>9.453 / tổng tài sản bình quân (≈ 54.230 và 56.993 → ≈ 55.610)</td><td class="r">≈ 17,0%</td><td>Rất cao</td></tr>
+          <tr><td>Biên lợi nhuận ròng</td><td>9.453 / 61.783</td><td class="r">15,3%</td><td>Cao trong ngành hàng tiêu dùng</td></tr>
+          <tr><td>Tài sản / Vốn chủ (đòn bẩy)</td><td>56.993 / 37.166</td><td class="r">≈ 1,53 lần</td><td>Thấp</td></tr>
+          <tr><td>Tăng trưởng doanh thu</td><td></td><td class="r">2,3%</td><td>Thấp, thậm chí thấp hơn lạm phát</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="chalk" aria-label="Công thức DuPont của Vinamilk">
+      <span>DuPont:</span>
+      <span class="f">ROE = biên ròng × vòng quay tài sản × đòn bẩy</span>
+      <small>≈ 15,3% × 1,11 (≈ 61.783 / 55.610) × 1,53 ≈ 26%</small>
+    </div>
+
+    <div class="panel toy">
+      <div class="toy-title"><h3>Máy tách ROE (DuPont)</h3><span class="pill">Kéo thử</span></div>
+      <div class="tabs" role="group" aria-label="Chọn bộ số" id="dpTabs">
+        <button class="opt" type="button" data-p="0" aria-pressed="true">Vinamilk 2024</button>
+        <button class="opt" type="button" data-p="1">Công ty giả định: cùng ROE nhờ vay nợ</button>
+      </div>
+      <div class="controls">
+        <div class="ctl"><label for="dpM">Biên ròng <output id="dpMOut"></output></label><input id="dpM" type="range" min="1" max="25" step="0.1" value="15.3"></div>
+        <div class="ctl"><label for="dpT">Vòng quay tài sản <output id="dpTOut"></output></label><input id="dpT" type="range" min="0.3" max="2.5" step="0.01" value="1.11"></div>
+        <div class="ctl"><label for="dpL">Đòn bẩy (tài sản / vốn chủ) <output id="dpLOut"></output></label><input id="dpL" type="range" min="1" max="6" step="0.01" value="1.53"></div>
+      </div>
+      <div class="result">
+        <div class="stat money" id="dpBox"><div class="k">ROE</div><div class="v" id="dpRoe"></div></div>
+        <div class="stat"><div class="k">ROA = biên ròng × vòng quay</div><div class="v" id="dpRoa"></div></div>
+      </div>
+      <div class="say owl"><span class="char" id="dpOwl"></span><p class="bubble" id="dpSay"></p></div>
+    </div>
+
+    <div class="callout good">
+      <strong>Kết luận DuPont</strong>
+      <p>ROE cao của Vinamilk đến từ <b>biên lợi nhuận</b>, không phải từ vay nợ. Đây là ROE chất lượng cao (xem lại ví dụ công ty A và B ở <a href="04-chi-so-va-dinh-gia.html">Module 4</a>).</p>
+    </div>
+
+    <div class="panel quiz">
+      <div class="mcq q" data-answer="1" data-right="Đúng. Đòn bẩy 1,53 lần là thấp; biên ròng 15,3% mới là động cơ chính của ROE." data-wrong="Chưa đúng. Nhìn lại ba thừa số: đòn bẩy chỉ 1,53 lần và vòng quay 1,11 lần, đều bình thường.">
+        <h3>ROE khoảng 26% của Vinamilk chủ yếu đến từ đâu?</h3>
+        <div class="opts">
+          <button class="opt" type="button">Đòn bẩy nợ vay cao</button>
+          <button class="opt" type="button">Biên lợi nhuận ròng cao</button>
+          <button class="opt" type="button">Doanh thu tăng trưởng nhanh</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BƯỚC 6 -->
+  <section class="chapter" id="buoc-6">
+    <div class="chapter-head"><span class="tag">B6</span><h2>Định giá: hộp sữa này đáng bao nhiêu?</h2></div>
+    <div class="panel talk">
+      <div class="say pig"><span class="char" data-char="pig:wow"></span><p class="bubble">Công ty khỏe thế thì giá nào em cũng mua!</p></div>
+      <div class="say owl right"><p class="bubble">Công ty tốt mua giá quá cao vẫn là khoản đầu tư tồi. Ta quy mọi thứ về mỗi cổ phiếu rồi so với giá. Giá ở đây là <b>giả định</b> để minh họa.</p><span class="char" data-char="owl:stern"></span></div>
+    </div>
+    <div class="panel toy">
+      <p>Vinamilk có khoảng <b>2.090 triệu cổ phiếu</b> lưu hành.</p>
+      <ul class="plain">
+        <li>EPS ≈ 9.453 tỷ / 2.090 triệu ≈ <b>4.520 đ</b>. Đây là con số xấp xỉ, vì EPS chuẩn dùng lợi nhuận của cổ đông công ty mẹ, có thể trừ thêm quỹ khen thưởng phúc lợi. Lấy EPS chính thức trên BCTC.</li>
+        <li>Giá trị sổ sách mỗi cổ phiếu ≈ 37.166 tỷ / 2.090 triệu ≈ <b>17.800 đ</b></li>
+        <li>Cổ tức tiền đã trả năm 2024 ≈ 6.047 tỷ / 2.090 triệu ≈ <b>2.890 đ/cổ phiếu</b></li>
+      </ul>
+      <p><b>Giả sử</b> giá thị trường là 60.000 đ (con số minh họa; hãy tra giá hiện tại trên bảng giá):</p>
+      <div class="tbl-wrap">
+        <table class="tbl">
+          <thead><tr><th>Chỉ số</th><th>Kết quả với giá 60.000 đ</th></tr></thead>
+          <tbody>
+            <tr><td>P/E</td><td>60.000 / 4.520 ≈ 13,3 lần</td></tr>
+            <tr><td>P/B</td><td>60.000 / 17.800 ≈ 3,4 lần</td></tr>
+            <tr><td>Tỷ suất cổ tức</td><td>2.890 / 60.000 ≈ 4,8%/năm</td></tr>
+            <tr><td>Lợi suất lợi nhuận (1/PE)</td><td>≈ 7,5%/năm</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="panel toy">
+      <div class="toy-title"><h3>Bàn định giá của Heo Đất</h3><span class="pill">Kéo thử</span></div>
+      <p>Đổi giá giả định và mức tăng trưởng lợi nhuận giả định. Tổng lợi nhuận kỳ vọng ở đây tính thô bằng tỷ suất cổ tức cộng tốc độ tăng lợi nhuận.</p>
+      <div class="controls">
+        <div class="ctl"><label for="vPrice">Giá giả định <output id="vPriceOut"></output></label><input id="vPrice" type="range" min="30000" max="120000" step="1000" value="60000"></div>
+      </div>
+      <div class="tabs" role="group" aria-label="Kịch bản tăng trưởng lợi nhuận" id="vTabs">
+        <button class="opt" type="button" data-g="2">Bi quan: +2%/năm</button>
+        <button class="opt" type="button" data-g="3" aria-pressed="true">Cơ sở: +3%/năm</button>
+        <button class="opt" type="button" data-g="4">Lạc quan: +4%/năm</button>
+      </div>
+      <div class="result">
+        <div class="stat"><div class="k">P/E</div><div class="v" id="vPE"></div></div>
+        <div class="stat"><div class="k">P/B</div><div class="v" id="vPB"></div></div>
+        <div class="stat money"><div class="k">Tỷ suất cổ tức</div><div class="v" id="vDY"></div></div>
+        <div class="stat"><div class="k">Lợi suất lợi nhuận (1/PE)</div><div class="v" id="vEY"></div></div>
+      </div>
+      <div class="chart-box"><svg id="vChart" viewBox="0 0 640 90" role="img" aria-label="Thanh tổng lợi nhuận kỳ vọng gồm cổ tức và tăng trưởng"></svg></div>
+      <div class="legend"><span><i style="background:var(--money)"></i>Tỷ suất cổ tức</span><span><i style="background:var(--gold)"></i>Tăng trưởng lợi nhuận giả định</span></div>
+      <div class="say pig"><span class="char" id="vPig"></span><p class="bubble" id="vSay"></p></div>
+      <p class="note">Ba kịch bản +2%, +3%, +4% là giả định của trang này để minh họa câu "tăng trưởng lợi nhuận vốn thấp (vài phần trăm)", không phải dự báo.</p>
+    </div>
+
+    <div class="callout">
+      <strong>Diễn giải</strong>
+      <p>Với giá 60.000 đ, nhà đầu tư nhận khoảng 4,8% cổ tức mỗi năm cộng với tăng trưởng lợi nhuận vốn thấp (vài phần trăm). Tổng lợi nhuận kỳ vọng khoảng 7–9%/năm, cao hơn tiết kiệm một chút và rủi ro thấp hơn nhiều cổ phiếu khác. Nếu bạn cần tăng trưởng mạnh, VNM ở mức giá này không phải lựa chọn; nếu bạn cần cổ tức ổn định, nó đáng cân nhắc.</p>
+    </div>
+  </section>
+
+  <!-- BƯỚC 7 -->
+  <section class="chapter" id="buoc-7">
+    <div class="chapter-head"><span class="tag">B7</span><h2>Tổng kết: 3 mạnh, 3 yếu, 3 câu hỏi</h2></div>
+    <div class="panel talk">
+      <div class="say owl"><span class="char" data-char="owl:talk"></span><p class="bubble">Cuối mỗi case study, con phải tóm được trong 9 dòng: 3 điểm mạnh, 3 điểm yếu, 3 câu hỏi còn bỏ ngỏ.</p></div>
+      <div class="say pig right"><p class="bubble">Để em tự xếp thử trước rồi thầy chấm nhé!</p><span class="char" data-char="pig:proud"></span></div>
+    </div>
+    <div class="panel toy">
+      <div class="toy-title"><h3>Xếp 9 ý vào đúng ngăn</h3><span class="pill">Phân loại</span></div>
+      <div class="sort" id="sort"></div>
+      <div class="result">
+        <div class="stat money"><div class="k">Xếp đúng</div><div class="v" id="sortScore"></div></div>
+      </div>
+      <div class="tabs"><button class="opt" type="button" id="sortReset">Xếp lại từ đầu</button></div>
+    </div>
+    <div class="kv">
+      <div class="callout good">
+        <strong>Điểm mạnh</strong>
+        <ol>
+          <li>ROE khoảng 26% chủ yếu nhờ biên lợi nhuận cao, không phụ thuộc vào vay nợ</li>
+          <li>Lợi nhuận chuyển thành tiền gần như 100%, FCF dồi dào, trả cổ tức tiền mặt cao</li>
+          <li>Bảng cân đối rất an toàn: tiền gửi lớn hơn tổng nợ phải trả</li>
+        </ol>
+      </div>
+      <div class="callout warn">
+        <strong>Điểm yếu</strong>
+        <ol>
+          <li>Doanh thu nội địa gần như không tăng, ngành sữa trong nước đã bão hòa và cạnh tranh gay gắt</li>
+          <li>Biên lợi nhuận phụ thuộc vào giá sữa bột nguyên liệu nhập khẩu và tỷ giá</li>
+          <li>Tiền mặt lớn nằm im, chưa có chiến lược tái đầu tư hấp dẫn</li>
+        </ol>
+      </div>
+      <div class="callout">
+        <strong>Câu hỏi cần tìm hiểu tiếp</strong>
+        <ol>
+          <li>Kế hoạch tái cấu trúc kênh phân phối và tung sản phẩm mới có giúp doanh thu nội địa tăng trở lại không? (Theo dõi BCTC quý 2025–2026)</li>
+          <li>Xuất khẩu tăng 12,6% có bền vững không? Thị trường nào đóng góp chính?</li>
+          <li>Cổ đông nhà nước (SCIC) có kế hoạch thoái vốn không, và nếu có thì ảnh hưởng thế nào đến chiến lược?</li>
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <!-- BÀI TẬP -->
+  <section class="chapter" id="bai-tap">
+    <div class="chapter-head"><span class="tag">✓</span><h2>Bài tập case study: cho Heo ăn xu</h2></div>
+    <div class="panel toy">
+      <div class="feed">
+        <span class="char" id="feedPig"></span>
+        <div class="stack" style="gap:8px">
+          <strong id="feedText"></strong>
+          <div class="bar" aria-hidden="true"><div id="feedBar"></div></div>
+          <span class="note">Chỉ coi case study là xong khi đã tick hết bài tập, không phải khi đọc xong. Tiến độ được lưu trên trình duyệt này.</span>
+        </div>
+      </div>
+      <ul class="tasks" id="tasks" data-module="05">
+        <li><label><input type="checkbox" id="t1"><span>Tải BCTC hợp nhất <b>năm 2025</b> đã kiểm toán của Vinamilk và lập lại toàn bộ 7 bước với số mới</span></label></li>
+        <li><label><input type="checkbox" id="t2"><span>Đối chiếu các số trong bài này với BCTC 2024 gốc. Có số nào khác không? Vì sao?</span></label></li>
+        <li><label><input type="checkbox" id="t3"><span>Tìm EPS chính thức và lợi nhuận của cổ đông công ty mẹ năm 2024 trên BCTC gốc</span></label></li>
+        <li><label><input type="checkbox" id="t4"><span>Tra giá VNM hiện tại, tính lại P/E, P/B, tỷ suất cổ tức</span></label></li>
+        <li><label><input type="checkbox" id="t5"><span>Làm case study tương tự cho 1 đối thủ hoặc 1 công ty ở ngành khác (ví dụ FPT, MWG) rồi so sánh với VNM</span></label></li>
+        <li><label><input type="checkbox" id="t6"><span>Viết kết luận một trang: "Tôi có mua VNM ở giá hiện tại không? Vì sao?"</span></label></li>
+      </ul>
+    </div>
+    <a class="panel next" href="06-phan-tich-doanh-nghiep.html">
+      <div class="stack" style="gap:4px">
+        <span class="eyebrow">Chương sau →</span>
+        <h3>Module 5: Phân tích doanh nghiệp (định tính)</h3>
+        <span class="note">Con số kể chuyện quá khứ. Hào kinh tế và ban lãnh đạo kể chuyện tương lai.</span>
+      </div>
+      <span class="char bob" data-char="owl:smile" style="width:72px"></span>
+    </a>
+    <p class="disclaimer">Giáo trình mang tính giáo dục, không phải khuyến nghị mua bán mã cổ phiếu nào, kể cả VNM. Số liệu là BCTC hợp nhất 2024 theo tổng hợp của DSC và Mekong ASEAN; giá 60.000 đ, các kịch bản tăng trưởng và phép chiếu doanh thu trong trang chỉ là giả định minh họa. Hãy đối chiếu với BCTC gốc trước khi ra quyết định.</p>
+  </section>
+</main>
+
+<script src="assets/truyen.js"></script>
+<script>
+(function () {
+  var T = Truyen, $ = T.$, num = T.num, trim = T.trim, pct = T.pct;
+  function esc(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;'); }
+  function rect(x, y, w, h, fill, extra, sw) {
+    return '<rect x="' + x + '" y="' + y + '" width="' + Math.max(0, w) + '" height="' + Math.max(0, h) + '" fill="' + fill + '" stroke="var(--border)" stroke-width="' + (sw || 2) + '"' + (extra || '') + '/>';
+  }
+  function text(x, y, s, anchor, cls) {
+    return '<text x="' + x + '" y="' + y + '" text-anchor="' + (anchor || 'start') + '"' + (cls ? ' class="' + cls + '"' : '') + '>' + esc(s) + '</text>';
+  }
+
+  // ---------- B1: cơ cấu doanh thu ----------
+  var DOM = 50799, EXP = 10983, G_DOM = 0.004, G_EXP = 0.126;
+  function renderMix() {
+    var n = +$('mixYears').value;
+    var d = DOM * Math.pow(1 + G_DOM, n), e = EXP * Math.pow(1 + G_EXP, n), tot = d + e;
+    $('mixYearsOut').textContent = n === 0 ? 'năm 2024 (số thật)' : '+' + n + ' năm (giả định)';
+    $('mixDom').textContent = (n ? '≈ ' : '') + num(d) + ' tỷ';
+    $('mixExp').textContent = (n ? '≈ ' : '') + num(e) + ' tỷ';
+    var share = e / tot * 100;
+    $('mixShare').textContent = n === 0 ? '18%' : '≈ ' + pct(share, 0);
+    var L = 10, W = 620, wd = W * d / tot, y = 30, h = 46;
+    var g = rect(L, y, wd, h, 'var(--save)') + rect(L + wd, y, W - wd, h, 'var(--money)');
+    g += text(L + 8, y + 29, 'Nội địa ' + (n === 0 ? '82%' : pct(100 - share, 0)), 'start', 'lbl-in');
+    g += text(L + W - 8, y + 29, (n === 0 ? '18%' : pct(share, 0)), 'end', 'lbl-in');
+    g += text(L, 20, n === 0 ? 'Năm 2024 · tổng ' + num(tot) + ' tỷ (đã làm tròn)' : 'Giả định sau ' + n + ' năm · tổng ≈ ' + num(tot) + ' tỷ', 'start');
+    g += text(L, 100, n === 0 ? 'Nội địa +0,4% · Xuất khẩu +12,6% so với 2023' : 'Cả công ty tăng ≈ ' + pct((tot / (DOM + EXP) - 1) * 100) + ' so với 2024, sau ' + n + ' năm', 'start');
+    $('mixChart').innerHTML = g;
+    $('mixSay').innerHTML = n === 0
+      ? 'Nội địa là "con bò" chính: 82% doanh thu, nhưng chỉ tăng 0,4%. Phần tăng trưởng đến từ 18% xuất khẩu.'
+      : 'Dù xuất khẩu tăng 12,6% mỗi năm, sau ' + n + ' năm nó vẫn chỉ chiếm khoảng <b>' + pct(share, 0) + '</b>. Phần lớn doanh thu vẫn phụ thuộc thị trường nội địa đứng yên. Còn liệu 12,6% có bền vững không là câu hỏi ở bước 7.';
+  }
+  $('mixYears').addEventListener('input', renderMix);
+  renderMix();
+
+  // ---------- B2: tốc độ tăng ----------
+  (function () {
+    var rows = [
+      ['Doanh thu nội địa', 0.4, 'var(--save)'],
+      ['Doanh thu thuần', 2.3, 'var(--save)'],
+      ['Chi phí bán hàng', 3.3, 'var(--warn)'],
+      ['Lợi nhuận gộp', 5.8, 'var(--money)'],
+      ['Xuất khẩu và nước ngoài', 12.6, 'var(--money)']
+    ];
+    var L = 180, R = 60, W = 640, top = 14, rowH = 40, max = 14;
+    var x = function (v) { return L + (W - L - R) * v / max; };
+    var g = '';
+    for (var t = 0; t <= max; t += 2) {
+      g += '<line x1="' + x(t) + '" x2="' + x(t) + '" y1="' + top + '" y2="' + (top + rows.length * rowH) + '" stroke="var(--dot)" stroke-width="1.5"/>';
+      g += text(x(t), top + rows.length * rowH + 16, t + '%', 'middle');
+    }
+    rows.forEach(function (r, i) {
+      var y = top + i * rowH + 8;
+      g += text(L - 10, y + 17, r[0], 'end');
+      g += rect(x(0), y, x(r[1]) - x(0), 24, r[2]);
+      g += text(x(r[1]) + 6, y + 17, '+' + trim(r[1], 1) + '%', 'start', 'lbl');
+    });
+    $('growthChart').innerHTML = g;
+  })();
+
+  // ---------- B2: núm vặn biên gộp ----------
+  var REV = 61783, GP = 25970, NI = 9453;
+  function renderGm() {
+    var m = +$('gm').value, gp = REV * m / 100, dlt = gp - GP;
+    $('gmOut').textContent = trim(m, 1) + '%';
+    var near = Math.abs(dlt) < 31;
+    if (near) { gp = GP; dlt = 0; }
+    $('gmGross').textContent = (near ? '' : '≈ ') + num(gp) + ' tỷ';
+    $('gmDelta').textContent = near ? '≈ 0' : (dlt > 0 ? '+' : '−') + num(Math.abs(dlt)) + ' tỷ';
+    $('gmDeltaBox').className = 'stat ' + (near ? '' : dlt > 0 ? 'money' : 'warn');
+    $('gmShare').textContent = near ? '≈ 0%' : (dlt > 0 ? '+' : '−') + pct(Math.abs(dlt) / NI * 100, 0);
+    $('gmPig').innerHTML = T.pig(near ? 'happy' : dlt > 0 ? 'proud' : 'worried');
+    $('gmSay').innerHTML = near
+      ? 'Đây là năm 2024: biên gộp 42,0%. Mỗi 1 điểm % biên gộp tương đương khoảng <b>' + num(REV / 100) + ' tỷ</b> lợi nhuận gộp.'
+      : dlt < 0
+        ? 'Ối! Biên gộp chỉ giảm về ' + trim(m, 1) + '% là mất khoảng ' + num(-dlt) + ' tỷ lợi nhuận gộp, bằng ' + pct(-dlt / NI * 100, 0) + ' LNST cả năm (chưa tính thuế). Em phải theo dõi Global Dairy Trade thôi.'
+        : 'Nguyên liệu rẻ thêm thì lãi gộp tăng ' + num(dlt) + ' tỷ. Nhưng đó là may mắn bên ngoài, không phải tài năng bên trong.';
+  }
+  $('gm').addEventListener('input', renderGm);
+  renderGm();
+
+  // ---------- B3: cân đối kế toán ----------
+  (function () {
+    var TA = 56993, CA = 37502, DEP = 23260, INV = 5635, LIAB = 19827, LTL = 1327, EQ = 37166;
+    var STL = LIAB - LTL, OTH = CA - DEP - INV, NCA = TA - CA;
+    var left = [
+      ['Đầu tư ngắn hạn (chủ yếu tiền gửi có kỳ hạn)', DEP, 'var(--money)', '23.260 tỷ, 40,8% tổng tài sản. Rất an toàn, nhưng chỉ sinh lãi vài phần trăm và kéo ROE xuống. Nó cho thấy công ty chưa tìm được cơ hội đầu tư đủ hấp dẫn.'],
+      ['Hàng tồn kho', INV, 'var(--gold)', '5.635 tỷ, giảm 7,4% trong khi doanh thu tăng: tốt, hàng bán ra nhanh hơn, không bị ứ đọng.'],
+      ['TS ngắn hạn khác', OTH, 'var(--save)', 'Phần còn lại của tài sản ngắn hạn: 37.502 − 23.260 − 5.635 = ' + num(OTH) + ' tỷ. Tổng tài sản ngắn hạn 37.502 tỷ, bằng 65,8% tổng tài sản.'],
+      ['Tài sản dài hạn', NCA, 'var(--owl)', 'Phần còn lại: 56.993 − 37.502 = ' + num(NCA) + ' tỷ (nhà máy, trang trại, máy móc…).']
+    ];
+    var right = [
+      ['Nợ ngắn hạn (khoảng)', STL, 'var(--warn)', 'Khoảng 18.500 tỷ (19.827 − 1.327). Cần đọc thuyết minh để tách vay ngân hàng khỏi phải trả người bán. Tiền gửi 23.260 tỷ đã lớn hơn toàn bộ nợ phải trả 19.827 tỷ, nên rủi ro thanh khoản gần như bằng 0.'],
+      ['Nợ dài hạn', LTL, 'var(--pig)', '1.327 tỷ: rất nhỏ. Tổng nợ phải trả 19.827 tỷ, bằng 34,8% tổng tài sản.'],
+      ['Vốn chủ sở hữu', EQ, 'var(--money)', '37.166 tỷ, 65,2% tổng tài sản, tăng 3,9% trong năm. Đòn bẩy tài sản/vốn chủ chỉ ≈ 1,53 lần.']
+    ];
+    var segs = [];
+    var Tp = 20, B = 30, H = 340, hh = H - Tp - B;
+    var y = function (v) { return Tp + hh * v / TA; };
+    function col(list, x0, w, title) {
+      var g = text(x0 + w / 2, 14, title, 'middle', 'lbl'), acc = 0;
+      list.forEach(function (s) {
+        var idx = segs.length; segs.push(s);
+        var y0 = y(acc), y1 = y(acc + s[1]);
+        g += rect(x0, y0, w, y1 - y0, s[2], ' class="seg" data-i="' + idx + '" tabindex="0" role="button" aria-label="' + esc(s[0]) + '"');
+        if (y1 - y0 >= 22) {
+          g += '<text x="' + (x0 + 8) + '" y="' + ((y0 + y1) / 2 + 5) + '" class="lbl-in" pointer-events="none">' + esc(s[0].length > 30 ? 'Tiền gửi / đầu tư NH' : s[0]) + ' · ' + num(s[1]) + '</text>';
+        } else {
+          g += '<text x="' + (x0 + w + 6) + '" y="' + ((y0 + y1) / 2 + 4) + '" pointer-events="none">' + esc(s[0]) + ' · ' + num(s[1]) + '</text>';
+        }
+        acc += s[1];
+      });
+      return g;
+    }
+    var g = col(left, 20, 260, 'Tài sản · 56.993') + col(right, 330, 170, 'Nợ + vốn chủ · 56.993');
+    g += text(320, H - 8, 'Đơn vị: tỷ đồng, 31/12/2024', 'middle');
+    $('bsChart').innerHTML = g;
+    function show(i) {
+      var s = segs[i];
+      document.querySelectorAll('#bsChart .seg').forEach(function (r) { r.classList.toggle('on', +r.dataset.i === i); });
+      $('bsDetail').innerHTML = '<strong>' + esc(s[0]) + '</strong><p>' + s[3] + '</p>';
+    }
+    document.querySelectorAll('#bsChart .seg').forEach(function (r) {
+      r.addEventListener('click', function () { show(+r.dataset.i); });
+      r.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); show(+r.dataset.i); } });
+    });
+    show(0);
+  })();
+
+  // ---------- B4: thác nước dòng tiền ----------
+  (function () {
+    var bars = [
+      { k: 'LNST', v: 9453, from: 0, to: 9453, c: 'var(--save)', say: 'Báo cáo kết quả kinh doanh ghi lợi nhuận sau thuế 9.453 tỷ. Đây là "lãi trên giấy". Bấm tiếp để xem có bao nhiêu tiền thật.' },
+      { k: 'CFO', v: 9686, from: 0, to: 9686, c: 'var(--money)', say: 'Dòng tiền kinh doanh 9.686 tỷ, tăng 22,8%. CFO / LNST = 9.686 / 9.453 ≈ 1,02 lần: lợi nhuận được chuyển thành tiền gần như 100%. Lợi nhuận "thật", chất lượng cao.' },
+      { k: '− Capex', v: -1704, from: 9686, to: 7982, c: 'var(--warn)', say: 'Chi mua sắm tài sản cố định chỉ 1.704 tỷ, khoảng 18% CFO. Công ty không cần đầu tư nhiều để duy trì kinh doanh.' },
+      { k: 'FCF', v: 7982, from: 0, to: 7982, c: 'var(--money)', say: 'Dòng tiền tự do FCF = CFO − capex = 9.686 − 1.704 = 7.982 tỷ. Đây là tiền công ty được tự do dùng.' },
+      { k: '− Cổ tức', v: -6047, from: 7982, to: 1935, c: 'var(--gold)', say: 'Cổ tức đã trả bằng tiền 6.047 tỷ (tăng 55%), khoảng 76% FCF. Trả bằng tiền thật kiếm được, không phải đi vay. Mức trả cao bền vững chừng nào FCF còn giữ được.' },
+      { k: 'Còn lại', v: 1935, from: 0, to: 1935, c: 'var(--save)', say: 'FCF còn lại sau cổ tức khoảng 7.982 − 6.047 = 1.935 tỷ. Kiểu dòng tiền CFO (+), CFI (−), CFF (−) là kiểu của doanh nghiệp trưởng thành, khỏe mạnh.' }
+    ];
+    var step = 0;
+    var tabs = $('wfTabs');
+    tabs.innerHTML = bars.map(function (b, i) { return '<button class="opt" type="button" data-i="' + i + '">' + (i + 1) + '. ' + b.k + '</button>'; }).join('');
+    var W = 640, H = 280, L = 60, R = 10, Tp = 16, Bt = 34, max = 10000;
+    var y = function (v) { return Tp + (H - Tp - Bt) * (1 - v / max); };
+    var bw = (W - L - R) / bars.length;
+    function render() {
+      var g = '';
+      for (var t = 0; t <= max; t += 2500) {
+        g += '<line x1="' + L + '" x2="' + (W - R) + '" y1="' + y(t) + '" y2="' + y(t) + '" stroke="var(--dot)" stroke-width="1.5"/>';
+        g += text(L - 8, y(t) + 4, num(t), 'end');
+      }
+      bars.forEach(function (b, i) {
+        var x0 = L + i * bw + 10, w = bw - 20;
+        g += text(x0 + w / 2, H - 12, b.k, 'middle', i === step ? 'lbl' : '');
+        if (i > step) return;
+        var hi = Math.max(b.from, b.to), lo = Math.min(b.from, b.to);
+        g += rect(x0, y(hi), w, y(lo) - y(hi), b.c, '', i === step ? 4 : 2);
+        g += text(x0 + w / 2, y(hi) - 6, (b.v < 0 ? '−' : '') + num(Math.abs(b.v)), 'middle', 'lbl');
+        if (i < bars.length - 1 && i < step) {
+          var nx = L + (i + 1) * bw + 10;
+          g += '<line x1="' + (x0 + w) + '" x2="' + nx + '" y1="' + y(b.to) + '" y2="' + y(b.to) + '" stroke="var(--muted)" stroke-width="1.5" stroke-dasharray="4 3"/>';
+        }
+      });
+      $('wfChart').innerHTML = g;
+      $('wfSay').textContent = bars[step].say;
+      tabs.querySelectorAll('.opt').forEach(function (o) { o.setAttribute('aria-pressed', String(+o.dataset.i === step)); });
+    }
+    tabs.querySelectorAll('.opt').forEach(function (o) { o.addEventListener('click', function () { step = +o.dataset.i; render(); }); });
+    render();
+  })();
+
+  // ---------- B5: DuPont ----------
+  var presets = [[15.3, 1.11, 1.53], [5.1, 1.11, 4.6]];
+  function setPreset(p) {
+    $('dpM').value = presets[p][0]; $('dpT').value = presets[p][1]; $('dpL').value = presets[p][2];
+    document.querySelectorAll('#dpTabs .opt').forEach(function (b) { b.setAttribute('aria-pressed', String(+b.dataset.p === p)); });
+    renderDp();
+  }
+  function renderDp() {
+    var m = +$('dpM').value, t = +$('dpT').value, l = +$('dpL').value;
+    var roa = m * t, roe = roa * l;
+    $('dpMOut').textContent = trim(m, 1) + '%';
+    $('dpTOut').textContent = trim(t, 2) + ' lần';
+    $('dpLOut').textContent = trim(l, 2) + ' lần';
+    $('dpRoe').textContent = '≈ ' + pct(roe);
+    $('dpRoa').textContent = '≈ ' + pct(roa);
+    var risky = l >= 3;
+    $('dpBox').className = 'stat ' + (risky ? 'warn' : 'money');
+    $('dpOwl').innerHTML = T.owl(risky ? 'stern' : 'smile');
+    var isVnm = m === 15.3 && t === 1.11 && l === 1.53;
+    $('dpSay').innerHTML = isVnm
+      ? 'Vinamilk 2024: 15,3% × 1,11 × 1,53 ≈ <b>26%</b>. Đòn bẩy thấp, ROE đến từ biên lợi nhuận. ROE chất lượng cao.'
+      : risky
+        ? 'ROE ' + pct(roe) + ' nhưng đòn bẩy tới ' + trim(l, 2) + ' lần: phần lớn sức mạnh đến từ tiền đi vay. Khi kinh doanh xấu đi, nợ sẽ khuếch đại cả khoản lỗ.'
+        : 'Đòn bẩy ' + trim(l, 2) + ' lần là thấp. ROE ' + pct(roe) + ' chủ yếu nhờ khả năng sinh lời của chính hoạt động kinh doanh.';
+  }
+  ['dpM', 'dpT', 'dpL'].forEach(function (id) {
+    $(id).addEventListener('input', function () {
+      document.querySelectorAll('#dpTabs .opt').forEach(function (b) { b.setAttribute('aria-pressed', 'false'); });
+      renderDp();
+    });
+  });
+  document.querySelectorAll('#dpTabs .opt').forEach(function (b) { b.addEventListener('click', function () { setPreset(+b.dataset.p); }); });
+  setPreset(0);
+
+  // ---------- B6: định giá ----------
+  var EPS = 4520, BVPS = 17800, DPS = 2890, gScen = 3;
+  function renderVal() {
+    var p = +$('vPrice').value;
+    var pe = p / EPS, pb = p / BVPS, dy = DPS / p * 100, ey = EPS / p * 100, tot = dy + gScen;
+    $('vPriceOut').textContent = num(p) + ' đ';
+    $('vPE').textContent = '≈ ' + trim(pe, 1) + ' lần';
+    $('vPB').textContent = '≈ ' + trim(pb, 1) + ' lần';
+    $('vDY').textContent = '≈ ' + pct(dy) + '/năm';
+    $('vEY').textContent = '≈ ' + pct(ey) + '/năm';
+    var L = 10, W = 560, max = 15, sx = function (v) { return L + W * v / max; };
+    var g = text(L, 16, 'Tổng lợi nhuận kỳ vọng thô ≈ ' + pct(tot) + '/năm', 'start', 'lbl');
+    g += rect(sx(0), 26, sx(dy) - sx(0), 30, 'var(--money)') + rect(sx(dy), 26, sx(tot) - sx(dy), 30, 'var(--gold)');
+    for (var t = 0; t <= max; t += 5) g += text(sx(t), 76, t + '%', 'middle');
+    $('vChart').innerHTML = g;
+    $('vPig').innerHTML = T.pig(tot >= 7 ? 'happy' : 'worried');
+    $('vSay').innerHTML = 'Ở giá ' + num(p) + ' đ, em nhận khoảng <b>' + pct(dy) + '</b> cổ tức mỗi năm, cộng tăng trưởng giả định ' + gScen + '% là ≈ <b>' + pct(tot) + '/năm</b>. ' +
+      (tot >= 9 ? 'Giá càng thấp, cùng một dòng cổ tức càng đáng tiền hơn.' : tot >= 7 ? 'Khớp với vùng 7–9%/năm trong bài: hợp người cần cổ tức ổn định, không hợp người cần tăng trưởng mạnh.' : 'Giá cao quá thì phần cổ tức teo lại. Công ty tốt mua đắt vẫn cho lợi nhuận mỏng.');
+  }
+  $('vPrice').addEventListener('input', renderVal);
+  document.querySelectorAll('#vTabs .opt').forEach(function (b) {
+    b.addEventListener('click', function () {
+      gScen = +b.dataset.g;
+      document.querySelectorAll('#vTabs .opt').forEach(function (o) { o.setAttribute('aria-pressed', String(o === b)); });
+      renderVal();
+    });
+  });
+  renderVal();
+
+  // ---------- B7: xếp 9 ý ----------
+  var CATS = ['Điểm mạnh', 'Điểm yếu', 'Câu hỏi'];
+  var items = [
+    [0, 'ROE khoảng 26% chủ yếu nhờ biên lợi nhuận cao, không phụ thuộc vào vay nợ'],
+    [1, 'Doanh thu nội địa gần như không tăng, ngành sữa trong nước đã bão hòa và cạnh tranh gay gắt'],
+    [2, 'Xuất khẩu tăng 12,6% có bền vững không? Thị trường nào đóng góp chính?'],
+    [0, 'Lợi nhuận chuyển thành tiền gần như 100%, FCF dồi dào, trả cổ tức tiền mặt cao'],
+    [2, 'Cổ đông nhà nước (SCIC) có kế hoạch thoái vốn không, và nếu có thì ảnh hưởng thế nào đến chiến lược?'],
+    [1, 'Biên lợi nhuận phụ thuộc vào giá sữa bột nguyên liệu nhập khẩu và tỷ giá'],
+    [0, 'Bảng cân đối rất an toàn: tiền gửi lớn hơn tổng nợ phải trả'],
+    [2, 'Kế hoạch tái cấu trúc kênh phân phối và tung sản phẩm mới có giúp doanh thu nội địa tăng trở lại không? (Theo dõi BCTC quý 2025–2026)'],
+    [1, 'Tiền mặt lớn nằm im, chưa có chiến lược tái đầu tư hấp dẫn']
+  ];
+  var picks = [];
+  function renderSort() {
+    $('sort').innerHTML = items.map(function (it, i) {
+      var p = picks[i], cls = p == null ? '' : p === it[0] ? ' ok' : ' no';
+      return '<div class="sort-item' + cls + '"><span>' + esc(it[1]) + '</span><div class="opts">' +
+        CATS.map(function (c, j) { return '<button class="opt" type="button" data-i="' + i + '" data-c="' + j + '" aria-pressed="' + (p === j) + '">' + c + '</button>'; }).join('') +
+        (p != null && p !== it[0] ? '<span class="note">Gợi ý: đây là ' + CATS[it[0]].toLowerCase() + '.</span>' : '') +
+        '</div></div>';
+    }).join('');
+    var done = 0, ok = 0;
+    picks.forEach(function (p, i) { if (p != null) { done++; if (p === items[i][0]) ok++; } });
+    $('sortScore').textContent = ok + '/' + items.length + (done ? '' : ' (chưa xếp)');
+    $('sort').querySelectorAll('.opt').forEach(function (b) {
+      b.addEventListener('click', function () { picks[+b.dataset.i] = +b.dataset.c; renderSort(); });
+    });
+  }
+  $('sortReset').addEventListener('click', function () { picks = []; renderSort(); });
+  renderSort();
+})();
+</script>
+</body>
+</html>

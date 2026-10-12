@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>TÊN VUI CỦA CHƯƠNG</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;800&family=Be+Vietnam+Pro:wght@400;600;700&family=Patrick+Hand&display=swap">
+<link rel="stylesheet" href="assets/truyen.css">
+<style>
+/* Chỉ CSS cho đồ chơi riêng của trang này; chỉ dùng token của kit */
+</style>
+</head>
+<body>
+<main class="book">
+
+  <nav class="topnav"><a href="index.html">← Mục lục</a><span class="note">Module N / 9</span></nav>
+
+  <header class="hero">
+    <div class="hero-title">
+      <span class="eyebrow">Module N · Tuần A–B</span>
+      <h1>Tên vui của chương</h1>
+      <p class="sub">Một câu nói chương này dạy gì.</p>
+    </div>
+    <div class="strip">
+      <div class="panel"><div class="say pig"><span class="char" data-char="pig:wow"></span><p class="bubble">Heo mở đầu bằng một câu hỏi hoặc một ý định sai.</p></div></div>
+      <div class="panel"><div class="say owl right"><p class="bubble">Cú đáp ngắn gọn.</p><span class="char" data-char="owl:stern"></span></div></div>
+      <div class="panel wide"><div class="say owl"><span class="char" data-char="owl:talk"></span><p class="bubble">Thông điệp chính của chương, có <b>con số cụ thể</b>.</p></div></div>
+    </div>
+  </header>
+
+  <section class="chapter" id="muc-1">
+    <div class="chapter-head"><span class="tag">N.1</span><h2>Tên mục</h2></div>
+    <div class="panel talk">
+      <div class="say pig"><span class="char" data-char="pig:happy"></span><p class="bubble">…</p></div>
+      <div class="say owl right"><p class="bubble">…</p><span class="char" data-char="owl:talk"></span></div>
+    </div>
+    <div class="panel toy">
+      <div class="toy-title"><h3>Tên đồ chơi</h3><span class="pill">Kéo thử</span></div>
+      <div class="controls">
+        <div class="ctl"><label for="x">Nhãn <output id="xOut"></output></label><input id="x" type="range" min="0" max="10" step="1" value="5"></div>
+      </div>
+      <div class="result">
+        <div class="stat money"><div class="k">Kết quả</div><div class="v" id="xRes"></div></div>
+      </div>
+    </div>
+    <div class="panel quiz">
+      <div class="mcq q" data-answer="1" data-right="Giải thích vì sao đúng." data-wrong="Gợi ý vì sao sai.">
+        <h3>Câu hỏi?</h3>
+        <div class="opts">
+          <button class="opt" type="button">Đáp án A</button>
+          <button class="opt" type="button">Đáp án B (đúng)</button>
+          <button class="opt" type="button">Đáp án C</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="chapter" id="bai-tap">
+    <div class="chapter-head"><span class="tag">✓</span><h2>Bài tập: cho Heo ăn xu</h2></div>
+    <div class="panel toy">
+      <div class="feed">
+        <span class="char" id="feedPig"></span>
+        <div class="stack" style="gap:8px">
+          <strong id="feedText"></strong>
+          <div class="bar" aria-hidden="true"><div id="feedBar"></div></div>
+          <span class="note">Chỉ coi module là xong khi đã tick hết bài tập, không phải khi đọc xong. Tiến độ được lưu trên trình duyệt này.</span>
+        </div>
+      </div>
+      <ul class="tasks" id="tasks" data-module="NN">
+        <li><label><input type="checkbox" id="t1"><span>Bài tập 1</span></label></li>
+      </ul>
+    </div>
+    <a class="panel next" href="NN-chuong-sau.html">
+      <div class="stack" style="gap:4px">
+        <span class="eyebrow">Chương sau →</span>
+        <h3>Module N+1: Tên</h3>
+        <span class="note">Một câu gợi tò mò.</span>
+      </div>
+      <span class="char bob" data-char="owl:smile" style="width:72px"></span>
+    </a>
+    <p class="disclaimer">Giáo trình mang tính giáo dục, không phải khuyến nghị mua bán mã cổ phiếu nào.</p>
+  </section>
+</main>
+
+<script src="assets/truyen.js"></script>
+<script>
+(function () {
+  var T = Truyen, $ = T.$;
+  function render() {
+    var x = +$('x').value;
+    $('xOut').textContent = x;
+    $('xRes').textContent = T.num(x * 2);
+  }
+  $('x').addEventListener('input', render);
+  render();
+})();
+</script>
+</body>
+</html>

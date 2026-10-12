@@ -1,0 +1,330 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Sổ nhật ký Heo Đất</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;800&family=Be+Vietnam+Pro:wght@400;600;700&family=Patrick+Hand&display=swap">
+<link rel="stylesheet" href="assets/truyen.css">
+<style>
+/* Nhật ký: form ghi lệnh theo mẫu, bảng tổng hợp, đánh giá theo quý, sao lưu ra file */
+.form { display: grid; gap: 18px; }
+.fs { border: 2.5px dashed var(--border); border-radius: 10px; padding: 14px; display: grid; gap: 12px; margin: 0; min-width: 0; }
+.fs legend { font-family: var(--f-display); font-weight: 800; font-size: 1.1rem; padding: 0 6px; }
+.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 12px; }
+.f { display: grid; gap: 4px; min-width: 0; }
+.f label { font-weight: 600; font-size: .88rem; }
+.f .calc { font-size: .82rem; color: var(--muted); font-variant-numeric: tabular-nums; }
+textarea { min-height: 64px; resize: vertical; }
+.btns { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+.btn {
+  font: inherit; font-weight: 700; cursor: pointer; color: #1D2140; background: var(--pig);
+  border: 2.5px solid var(--border); border-radius: 999px; padding: 8px 18px; box-shadow: 3px 3px 0 var(--hard);
+}
+.btn.ghost { background: var(--panel); color: var(--ink); }
+.btn.danger { background: var(--warn-soft); color: var(--warn); border-color: var(--warn); }
+.btn:active { transform: translate(2px, 2px); box-shadow: 1px 1px 0 var(--hard); }
+.toast { font-weight: 600; color: var(--money); }
+.tbl tr.sel td { background: var(--bubble-pig); }
+.tbl button.link { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; text-decoration: underline; text-decoration-color: var(--pig-deep); text-underline-offset: 3px; font-weight: 700; }
+.pos { color: var(--money); font-weight: 700; } .neg { color: var(--warn); font-weight: 700; }
+.empty { display: grid; grid-template-columns: 90px minmax(0, 1fr); gap: 14px; align-items: center; }
+.confirm { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+</style>
+</head>
+<body>
+<main class="book">
+
+  <nav class="topnav"><a href="index.html">← Mục lục</a><span class="note">Nhật ký</span></nav>
+
+  <header class="hero">
+    <div class="hero-title">
+      <span class="eyebrow">Ghi mỗi lần mua hoặc bán (cả giao dịch giấy)</span>
+      <h1>Sổ nhật ký Heo Đất</h1>
+      <p class="sub">Ghi từng lệnh theo mẫu, xem bảng tổng hợp và tự chấm điểm mỗi quý. Cuối mỗi quý, đọc lại toàn bộ và điền phần đánh giá.</p>
+    </div>
+    <div class="strip">
+      <div class="panel"><div class="say pig"><span class="char" data-char="pig:worried"></span><p class="bubble">Em mua mã đó vì… ơ, em quên mất vì sao rồi.</p></div></div>
+      <div class="panel"><div class="say owl right"><p class="bubble">Thế nên phải viết ra trước khi bấm mua. Sau một năm, cuốn sổ này là tài liệu quý nhất của con.</p><span class="char" data-char="owl:stern"></span></div></div>
+    </div>
+    <div class="callout warn">
+      <strong>Dữ liệu nằm trong trình duyệt này</strong>
+      <p>Nhật ký được lưu trên trình duyệt đang mở trang. Xoá dữ liệu trình duyệt hoặc đổi máy là mất. Hãy bấm <b>Tải bản sao lưu</b> ở cuối trang thường xuyên và lưu file vào thư mục giáo trình này.</p>
+    </div>
+  </header>
+
+  <section class="chapter" id="ghi-lenh">
+    <div class="chapter-head"><span class="tag">1</span><h2 id="formTitle">Ghi lệnh mới</h2></div>
+    <form class="panel form" id="form" autocomplete="off">
+      <fieldset class="fs">
+        <legend>Khi mua</legend>
+        <div class="grid">
+          <div class="f"><label for="ma">Mã</label><input id="ma" type="text" required maxlength="10" placeholder="VD: VNM"></div>
+          <div class="f"><label for="ngayMua">Ngày mua</label><input id="ngayMua" type="date" required></div>
+          <div class="f"><label for="giaMua">Giá mua (đồng/cp)</label><input id="giaMua" type="number" min="0" step="any" required></div>
+          <div class="f"><label for="kl">Khối lượng (cp)</label><input id="kl" type="number" min="0" step="1"></div>
+          <div class="f"><label for="tyTrong">Tỷ trọng (% danh mục)</label><input id="tyTrong" type="number" min="0" max="100" step="any"></div>
+          <div class="f"><label for="truongPhai">Trường phái</label>
+            <select id="truongPhai"><option>thụ động</option><option>giá trị</option><option>tăng trưởng</option><option>cổ tức</option><option>theo đà</option></select></div>
+        </div>
+        <div class="f"><label for="lyDo1">Lý do mua (3 câu)</label>
+          <input id="lyDo1" type="text" placeholder="1." aria-label="Lý do 1">
+          <input id="lyDo2" type="text" placeholder="2." aria-label="Lý do 2">
+          <input id="lyDo3" type="text" placeholder="3." aria-label="Lý do 3"></div>
+        <div class="grid">
+          <div class="f"><label for="noiTai">Giá trị nội tại ước tính</label><input id="noiTai" type="number" min="0" step="any"><span class="calc" id="bienAT"></span></div>
+          <div class="f"><label for="catLo">Giá cắt lỗ</label><input id="catLo" type="number" min="0" step="any"><span class="calc" id="catLoPct"></span></div>
+          <div class="f"><label for="mucTieu">Giá mục tiêu</label><input id="mucTieu" type="number" min="0" step="any"><span class="calc" id="mucTieuPct"></span></div>
+          <div class="f"><label for="camXuc">Cảm xúc lúc mua</label>
+            <select id="camXuc"><option>bình tĩnh</option><option>hưng phấn</option><option>sợ bỏ lỡ</option><option>lo lắng</option><option>muốn gỡ lỗ</option><option>khác</option></select></div>
+        </div>
+        <div class="f"><label for="phaVo">Luận điểm bị phá vỡ khi</label><textarea id="phaVo"></textarea></div>
+        <div class="f"><label for="phanBac">Lập luận phản bác mạnh nhất</label><textarea id="phanBac"></textarea></div>
+      </fieldset>
+
+      <fieldset class="fs">
+        <legend>Khi bán (điền sau)</legend>
+        <div class="grid">
+          <div class="f"><label for="ngayBan">Ngày bán</label><input id="ngayBan" type="date"></div>
+          <div class="f"><label for="giaBan">Giá bán</label><input id="giaBan" type="number" min="0" step="any"><span class="calc" id="laiGop"></span></div>
+          <div class="f"><label for="laiLo">Lãi/lỗ sau phí và thuế (%)</label><input id="laiLo" type="number" step="any"></div>
+          <div class="f"><label for="dungKH">Đúng kế hoạch?</label>
+            <select id="dungKH"><option value="">Chưa đánh giá</option><option value="co">Có</option><option value="khong">Không</option></select></div>
+        </div>
+        <div class="f"><label for="lyDoBan">Lý do bán</label><textarea id="lyDoBan"></textarea></div>
+        <div class="f"><label for="viSao">Nếu không đúng kế hoạch, vì sao?</label><textarea id="viSao"></textarea></div>
+        <div class="f"><label for="baiHoc">Bài học</label><textarea id="baiHoc"></textarea></div>
+      </fieldset>
+
+      <div class="btns">
+        <button class="btn" type="submit" id="saveBtn">Lưu lệnh</button>
+        <button class="btn ghost" type="button" id="newBtn">Ghi lệnh mới</button>
+        <span class="confirm" id="delWrap"></span>
+        <span class="toast" id="toast" role="status"></span>
+      </div>
+    </form>
+  </section>
+
+  <section class="chapter" id="tong-hop">
+    <div class="chapter-head"><span class="tag">2</span><h2>Bảng tổng hợp</h2></div>
+    <div id="summary"></div>
+  </section>
+
+  <section class="chapter" id="danh-gia-quy">
+    <div class="chapter-head"><span class="tag">3</span><h2>Đánh giá theo quý</h2></div>
+    <div class="panel talk">
+      <div class="say owl"><span class="char" data-char="owl:talk"></span><p class="bubble">Các cột thống kê tự tính từ lệnh đã bán. Phần so với VN-Index và bài học thì con tự điền nhé.</p></div>
+    </div>
+    <div id="quarters"></div>
+  </section>
+
+  <section class="chapter" id="sao-luu">
+    <div class="chapter-head"><span class="tag">4</span><h2>Sao lưu</h2></div>
+    <div class="panel toy">
+      <p>Tải file sao lưu (.json) để khôi phục sau này, hoặc tải bản Markdown để đọc lại và in.</p>
+      <div class="btns">
+        <button class="btn" type="button" id="expJson">Tải bản sao lưu (.json)</button>
+        <button class="btn ghost" type="button" id="expMd">Tải bản đọc (.md)</button>
+        <label class="btn ghost" for="impFile" style="display:inline-block">Khôi phục từ file</label>
+        <input id="impFile" type="file" accept=".json,application/json" hidden>
+        <span class="toast" id="ioToast" role="status"></span>
+      </div>
+    </div>
+    <p class="disclaimer">Giáo trình mang tính giáo dục, không phải khuyến nghị mua bán mã cổ phiếu nào.</p>
+  </section>
+</main>
+
+<script src="assets/truyen.js"></script>
+<script>
+(function () {
+  var T = Truyen, $ = T.$, KEY = 'heo-dat:journal';
+  var data = T.store(KEY) || { trades: [], reviews: {} };
+  if (!data.trades) data.trades = [];
+  if (!data.reviews) data.reviews = {};
+  var editing = null;
+  var FIELDS = ['ma', 'ngayMua', 'giaMua', 'kl', 'tyTrong', 'truongPhai', 'lyDo1', 'lyDo2', 'lyDo3', 'noiTai', 'catLo', 'mucTieu', 'camXuc', 'phaVo', 'phanBac', 'ngayBan', 'giaBan', 'laiLo', 'dungKH', 'lyDoBan', 'viSao', 'baiHoc'];
+
+  function save() { T.store(KEY, data); }
+  function esc(s) { return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+  function n(v) { var x = parseFloat(v); return isFinite(x) ? x : null; }
+  function fmtDate(s) { if (!s) return ''; var p = s.split('-'); return p[2] + '/' + p[1] + '/' + p[0]; }
+  function signed(x) { return (x > 0 ? '+' : '') + T.trim(x, 1) + '%'; }
+  function cls(x) { return x > 0 ? 'pos' : x < 0 ? 'neg' : ''; }
+  // Lãi/lỗ dùng cho thống kê: ưu tiên số sau phí thuế người dùng nhập, nếu không có thì lấy lãi gộp
+  function result(t) {
+    var l = n(t.laiLo);
+    if (l !== null) return l;
+    var b = n(t.giaMua), s = n(t.giaBan);
+    return b && s ? (s / b - 1) * 100 : null;
+  }
+
+  // ---------- form ----------
+  function calcHints() {
+    var b = n($('giaMua').value);
+    var nt = n($('noiTai').value), cl = n($('catLo').value), mt = n($('mucTieu').value), gb = n($('giaBan').value);
+    $('bienAT').textContent = b && nt ? 'Biên an toàn: ' + T.trim((1 - b / nt) * 100, 1) + '%' : '';
+    $('catLoPct').textContent = b && cl ? 'Cắt lỗ: ' + signed((cl / b - 1) * 100) : '';
+    $('mucTieuPct').textContent = b && mt ? 'Mục tiêu: ' + signed((mt / b - 1) * 100) : '';
+    $('laiGop').textContent = b && gb ? 'Lãi/lỗ gộp (chưa trừ phí, thuế): ' + signed((gb / b - 1) * 100) : '';
+  }
+  ['giaMua', 'noiTai', 'catLo', 'mucTieu', 'giaBan'].forEach(function (id) { $(id).addEventListener('input', calcHints); });
+
+  function fill(t) {
+    FIELDS.forEach(function (f) { $(f).value = t && t[f] != null ? t[f] : ''; });
+    if (!t) { $('truongPhai').selectedIndex = 0; $('camXuc').selectedIndex = 0; $('ngayMua').value = new Date().toISOString().slice(0, 10); }
+    calcHints();
+  }
+  function setMode(i) {
+    editing = i;
+    $('formTitle').textContent = i === null ? 'Ghi lệnh mới' : 'Sửa lệnh #' + (i + 1) + ' · ' + data.trades[i].ma;
+    $('saveBtn').textContent = i === null ? 'Lưu lệnh' : 'Lưu thay đổi';
+    $('delWrap').innerHTML = i === null ? '' : '<button class="btn danger" type="button" id="delBtn">Xoá lệnh này</button>';
+    if (i !== null) $('delBtn').addEventListener('click', askDelete);
+    fill(i === null ? null : data.trades[i]);
+    renderSummary();
+  }
+  function askDelete() {
+    $('delWrap').innerHTML = '<span>Xoá hẳn lệnh này?</span><button class="btn danger" type="button" id="delYes">Xoá</button><button class="btn ghost" type="button" id="delNo">Giữ lại</button>';
+    $('delYes').addEventListener('click', function () {
+      data.trades.splice(editing, 1); save(); flash('toast', 'Đã xoá lệnh.'); setMode(null); renderQuarters();
+    });
+    $('delNo').addEventListener('click', function () { setMode(editing); });
+  }
+  function flash(id, msg) { $(id).textContent = msg; setTimeout(function () { $(id).textContent = ''; }, 3000); }
+
+  $('form').addEventListener('submit', function (e) {
+    e.preventDefault();
+    var t = {};
+    FIELDS.forEach(function (f) { t[f] = $(f).value.trim(); });
+    t.ma = t.ma.toUpperCase();
+    if (editing === null) { data.trades.push(t); flash('toast', 'Đã lưu lệnh #' + data.trades.length + '.'); setMode(null); }
+    else { data.trades[editing] = t; flash('toast', 'Đã lưu thay đổi.'); setMode(editing); }
+    save(); renderSummary(); renderQuarters();
+  });
+  $('newBtn').addEventListener('click', function () { setMode(null); });
+
+  // ---------- bảng tổng hợp ----------
+  function renderSummary() {
+    var box = $('summary');
+    if (!data.trades.length) {
+      box.innerHTML = '<div class="panel empty"><span class="char">' + T.pig('wow') + '</span><div class="stack"><h3>Chưa có lệnh nào</h3><p>Điền form ở trên và bấm <b>Lưu lệnh</b>. Mỗi lệnh sẽ hiện thành một dòng ở đây; bấm vào mã để mở lại và điền phần bán.</p></div></div>';
+      return;
+    }
+    var rows = data.trades.map(function (t, i) {
+      var r = result(t);
+      var kh = t.dungKH === 'co' ? 'Có' : t.dungKH === 'khong' ? 'Không' : '';
+      return '<tr class="' + (i === editing ? 'sel' : '') + '"><td>' + (i + 1) + '</td><td><button class="link" type="button" data-i="' + i + '">' + esc(t.ma) + '</button></td>' +
+        '<td>' + fmtDate(t.ngayMua) + '</td><td class="r">' + (n(t.giaMua) !== null ? T.num(n(t.giaMua)) : '') + '</td><td class="r">' + (n(t.kl) !== null ? T.num(n(t.kl)) : '') + '</td>' +
+        '<td class="r">' + (t.tyTrong ? esc(t.tyTrong) + '%' : '') + '</td><td class="r">' + (n(t.catLo) !== null ? T.num(n(t.catLo)) : '') + '</td>' +
+        '<td>' + fmtDate(t.ngayBan) + '</td><td class="r">' + (n(t.giaBan) !== null ? T.num(n(t.giaBan)) : '') + '</td>' +
+        '<td class="r ' + (r !== null && t.giaBan ? cls(r) : '') + '">' + (r !== null && t.giaBan ? signed(r) : '') + '</td><td>' + kh + '</td></tr>';
+    }).join('');
+    box.innerHTML = '<div class="tbl-wrap"><table class="tbl"><thead><tr><th>#</th><th>Mã</th><th>Ngày mua</th><th class="r">Giá mua</th><th class="r">Khối lượng</th><th class="r">Tỷ trọng</th><th class="r">Giá cắt lỗ</th><th>Ngày bán</th><th class="r">Giá bán</th><th class="r">Lãi/lỗ</th><th>Đúng kế hoạch?</th></tr></thead><tbody>' + rows + '</tbody></table></div>' +
+      '<p class="note">Lãi/lỗ lấy số sau phí và thuế nếu bạn đã nhập; nếu chưa, đó là lãi gộp tính từ giá.</p>';
+    box.querySelectorAll('button.link').forEach(function (b) {
+      b.addEventListener('click', function () { setMode(+b.dataset.i); $('ghi-lenh').scrollIntoView({ behavior: 'smooth' }); });
+    });
+  }
+
+  // ---------- đánh giá theo quý ----------
+  function quarterOf(d) { var p = d.split('-'); return 'Q' + (Math.floor((+p[1] - 1) / 3) + 1) + '/' + p[0]; }
+  function renderQuarters() {
+    var groups = {};
+    data.trades.forEach(function (t) {
+      if (!t.ngayBan || !t.giaBan) return;
+      var q = quarterOf(t.ngayBan), r = result(t);
+      if (r === null) return;
+      (groups[q] = groups[q] || []).push(r);
+    });
+    var keys = Object.keys(groups).sort(function (a, b) {
+      var pa = a.slice(1).split('/'), pb = b.slice(1).split('/');
+      return (pb[1] - pa[1]) || (pb[0] - pa[0]);
+    });
+    var box = $('quarters');
+    if (!keys.length) {
+      box.innerHTML = '<div class="panel empty"><span class="char">' + T.owl('talk') + '</span><div class="stack"><h3>Chưa có lệnh nào đã bán</h3><p>Khi một lệnh có ngày bán và giá bán, quý của nó sẽ xuất hiện ở đây với số lệnh, tỷ lệ thắng, lãi trung bình và lỗ trung bình.</p></div></div>';
+      return;
+    }
+    box.innerHTML = keys.map(function (q) {
+      var rs = groups[q], wins = rs.filter(function (r) { return r > 0; }), losses = rs.filter(function (r) { return r <= 0; });
+      var avg = function (a) { return a.length ? a.reduce(function (s, x) { return s + x; }, 0) / a.length : null; };
+      var rv = data.reviews[q] || {}, id = q.replace('/', '-');
+      return '<div class="panel toy"><h3>' + q + '</h3><div class="result">' +
+        '<div class="stat"><div class="k">Số lệnh</div><div class="v">' + rs.length + '</div></div>' +
+        '<div class="stat"><div class="k">Tỷ lệ thắng</div><div class="v">' + T.trim(wins.length / rs.length * 100, 0) + '%</div></div>' +
+        '<div class="stat money"><div class="k">Lãi TB lệnh thắng</div><div class="v">' + (wins.length ? signed(avg(wins)) : '–') + '</div></div>' +
+        '<div class="stat warn"><div class="k">Lỗ TB lệnh thua</div><div class="v">' + (losses.length ? signed(avg(losses)) : '–') + '</div></div></div>' +
+        '<div class="grid">' +
+        '<div class="f"><label for="pf-' + id + '">Danh mục (%)</label><input id="pf-' + id + '" data-q="' + q + '" data-k="pf" type="number" step="any" value="' + esc(rv.pf) + '"></div>' +
+        '<div class="f"><label for="vn-' + id + '">VN-Index (%)</label><input id="vn-' + id + '" data-q="' + q + '" data-k="vn" type="number" step="any" value="' + esc(rv.vn) + '"></div></div>' +
+        '<div class="f"><label for="sl-' + id + '">Sai lầm lặp lại</label><textarea id="sl-' + id + '" data-q="' + q + '" data-k="sl">' + esc(rv.sl) + '</textarea></div>' +
+        '<div class="f"><label for="td-' + id + '">Sẽ thay đổi gì</label><textarea id="td-' + id + '" data-q="' + q + '" data-k="td">' + esc(rv.td) + '</textarea></div></div>';
+    }).join('');
+    box.querySelectorAll('[data-q]').forEach(function (el) {
+      el.addEventListener('change', function () {
+        var q = el.dataset.q;
+        data.reviews[q] = data.reviews[q] || {};
+        data.reviews[q][el.dataset.k] = el.value;
+        save();
+      });
+    });
+  }
+
+  // ---------- sao lưu ----------
+  function download(name, text, type) {
+    var a = document.createElement('a');
+    a.href = URL.createObjectURL(new Blob([text], { type: type }));
+    a.download = name;
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(function () { URL.revokeObjectURL(a.href); }, 1000);
+  }
+  var today = function () { return new Date().toISOString().slice(0, 10); };
+  $('expJson').addEventListener('click', function () {
+    download('nhat-ky-dau-tu-' + today() + '.json', JSON.stringify(data, null, 2), 'application/json');
+    flash('ioToast', 'Đã tải file sao lưu.');
+  });
+  $('expMd').addEventListener('click', function () {
+    var md = '# Nhật ký đầu tư\n\nXuất ngày ' + fmtDate(today()) + '\n';
+    data.trades.forEach(function (t, i) {
+      md += '\n### Lệnh #' + (i + 1) + ' — Mã: ' + t.ma + '\n\n' +
+        'Ngày mua: ' + fmtDate(t.ngayMua) + ' · Giá: ' + t.giaMua + ' · Khối lượng: ' + t.kl + ' · Tỷ trọng: ' + t.tyTrong + '%\n' +
+        'Trường phái: ' + t.truongPhai + '\n\nLý do mua:\n1. ' + t.lyDo1 + '\n2. ' + t.lyDo2 + '\n3. ' + t.lyDo3 + '\n\n' +
+        'Giá trị nội tại ước tính: ' + t.noiTai + ' · Giá cắt lỗ: ' + t.catLo + ' · Mục tiêu: ' + t.mucTieu + '\n' +
+        'Luận điểm bị phá vỡ khi: ' + t.phaVo + '\nLập luận phản bác mạnh nhất: ' + t.phanBac + '\nCảm xúc lúc mua: ' + t.camXuc + '\n';
+      if (t.ngayBan) md += '\nNgày bán: ' + fmtDate(t.ngayBan) + ' · Giá: ' + t.giaBan + ' · Lãi/lỗ sau phí và thuế: ' + t.laiLo + '%\n' +
+        'Lý do bán: ' + t.lyDoBan + '\nĐúng kế hoạch: ' + (t.dungKH === 'co' ? 'Có' : t.dungKH === 'khong' ? 'Không' : '') + ' ' + t.viSao + '\nBài học: ' + t.baiHoc + '\n';
+    });
+    Object.keys(data.reviews).forEach(function (q) {
+      var r = data.reviews[q];
+      md += '\n## Đánh giá ' + q + '\n\nDanh mục: ' + (r.pf || '') + '% · VN-Index: ' + (r.vn || '') + '%\nSai lầm lặp lại: ' + (r.sl || '') + '\nSẽ thay đổi gì: ' + (r.td || '') + '\n';
+    });
+    download('nhat-ky-dau-tu-' + today() + '.md', md, 'text/markdown');
+    flash('ioToast', 'Đã tải bản Markdown.');
+  });
+  $('impFile').addEventListener('change', function (e) {
+    var f = e.target.files[0];
+    if (!f) return;
+    var rd = new FileReader();
+    rd.onload = function () {
+      try {
+        var d = JSON.parse(rd.result);
+        if (!d || !Array.isArray(d.trades)) throw new Error();
+        data = { trades: d.trades, reviews: d.reviews || {} };
+        save(); setMode(null); renderQuarters();
+        flash('ioToast', 'Đã khôi phục ' + data.trades.length + ' lệnh.');
+      } catch (err) {
+        flash('ioToast', 'File không đúng định dạng sao lưu của nhật ký. Hãy chọn file .json đã tải từ trang này.');
+      }
+      e.target.value = '';
+    };
+    rd.readAsText(f);
+  });
+
+  setMode(null);
+  renderQuarters();
+})();
+</script>
+</body>
+</html>

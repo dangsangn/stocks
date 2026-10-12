@@ -1,0 +1,1009 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Heo Đất học đọc biểu đồ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;800&family=Be+Vietnam+Pro:wght@400;600;700&family=Patrick+Hand&display=swap">
+<link rel="stylesheet" href="assets/truyen.css">
+<style>
+/* Riêng Module 7: máy dựng nến, biểu đồ giá giả lập, công tắc chỉ báo, bảng khối lượng bấm được */
+.candle-lab { display: grid; grid-template-columns: 220px minmax(0, 1fr); gap: 20px; align-items: center; }
+@media (max-width: 600px) { .candle-lab { grid-template-columns: 1fr; justify-items: center; } .candle-lab > * { width: 100%; } .candle-svg { max-width: 240px; } }
+.candle-svg svg { width: 100%; height: auto; display: block; }
+.candle-svg text { fill: var(--muted); font-family: var(--f-body); font-size: 12px; }
+.toggles { display: flex; flex-wrap: wrap; gap: 8px; }
+.toggles label { display: inline-flex; align-items: center; gap: 6px; font-weight: 600; font-size: .92rem; cursor: pointer; border: 2.5px solid var(--border); border-radius: 999px; padding: 4px 12px; background: var(--panel); }
+.toggles input { accent-color: var(--pig-deep); width: 16px; height: 16px; margin: 0; }
+.toggles i { width: 14px; height: 4px; border-radius: 2px; display: inline-block; }
+.sub-chart { margin-top: -6px; }
+.sub-chart .lbl { font-weight: 700; font-size: .85rem; color: var(--muted); }
+.vol-grid tr.on td { background: var(--bubble-pig); }
+.vol-grid tr { cursor: pointer; }
+.tag-row { display: flex; flex-wrap: wrap; gap: 6px; }
+.tag-row .chip { font-size: .92rem; }
+.chip.up { background: var(--money-soft); color: var(--money); border-color: var(--money); }
+.chip.down { background: var(--warn-soft); color: var(--warn); border-color: var(--warn); }
+.checks { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.checks li { display: grid; grid-template-columns: 28px minmax(0, 1fr); gap: 8px; align-items: start; padding: 8px 12px; border: 2.5px solid var(--border); border-radius: 10px; background: var(--chip); }
+.checks li.ok { background: var(--money-soft); }
+.checks li.no { background: var(--warn-soft); }
+.checks .mk { font-family: var(--f-display); font-weight: 800; font-size: 1.2rem; line-height: 1.2; }
+.rules { margin: 0; padding-left: 1.4em; display: grid; gap: 8px; }
+.rules li::marker { font-family: var(--f-display); font-weight: 800; }
+</style>
+</head>
+<body>
+<main class="book">
+
+  <nav class="topnav"><a href="index.html">← Mục lục</a><span class="note">Module 7 / 9</span></nav>
+
+  <!-- MỞ ĐẦU -->
+  <header class="hero">
+    <div class="hero-title">
+      <span class="eyebrow">Module 7 · Tuần 28–33</span>
+      <h1>Heo Đất học đọc biểu đồ</h1>
+      <p class="sub">Phân tích kỹ thuật: đọc nến, xu hướng, hỗ trợ, kháng cự, khối lượng và chỉ báo để chọn lúc mua, lúc bán và chỗ cắt lỗ. Mọi biểu đồ giá trong trang là dữ liệu tự tạo để minh họa.</p>
+    </div>
+    <div class="strip">
+      <div class="panel">
+        <div class="say pig"><span class="char" data-char="pig:wow"></span><p class="bubble">Em đã chọn được một công ty tốt nhờ phân tích cơ bản. Mua luôn hôm nay hả thầy?</p></div>
+      </div>
+      <div class="panel">
+        <div class="say owl right"><p class="bubble">Phân tích cơ bản trả lời <b>mua gì</b>. Phân tích kỹ thuật giúp trả lời <b>mua khi nào và bán khi nào</b>.</p><span class="char" data-char="owl:talk"></span></div>
+      </div>
+      <div class="panel">
+        <div class="say pig"><span class="char" data-char="pig:happy"></span><p class="bubble">Vậy nhìn biểu đồ là biết mai giá lên hay xuống luôn!</p></div>
+      </div>
+      <div class="panel">
+        <div class="say owl right"><p class="bubble">Không. Đây là công cụ <b>xác suất</b>, không phải quả cầu tiên tri.</p><span class="char" data-char="owl:stern"></span></div>
+      </div>
+      <div class="panel wide">
+        <div class="say owl"><span class="char" data-char="owl:talk"></span><p class="bubble">Phân tích kỹ thuật giả định rằng giá và khối lượng phản ánh hành vi của đám đông, và hành vi đó có xu hướng lặp lại. Dùng nó để quản lý <b>điểm vào, điểm ra và cắt lỗ</b>, đừng dùng làm lý do duy nhất để mua.</p></div>
+      </div>
+    </div>
+  </header>
+
+  <!-- 7.1 -->
+  <section class="chapter" id="nen">
+    <div class="chapter-head"><span class="tag">7.1</span><h2>Cây nến Nhật: bốn con số trong một que kem</h2></div>
+    <div class="callout"><strong>Phân tích kỹ thuật là gì</strong><span>Phân tích cơ bản trả lời <b>mua gì</b>; phân tích kỹ thuật giúp trả lời <b>mua khi nào và bán khi nào</b>. Nó dựa trên giả định rằng giá và khối lượng phản ánh hành vi của đám đông, và hành vi đó có xu hướng lặp lại. Đây là công cụ <b>xác suất</b>, không phải quả cầu tiên tri: dùng để quản lý điểm vào, điểm ra và cắt lỗ, đừng dùng làm lý do duy nhất để mua.</span></div>
+    <div class="strip">
+      <div class="panel">
+        <div class="talk">
+          <div class="say pig"><span class="char" data-char="pig:worried"></span><p class="bubble">Biểu đồ toàn que xanh que đỏ, em hoa cả mắt.</p></div>
+          <div class="say owl right"><p class="bubble">Mỗi cây nến chỉ kể 4 mức giá trong một khoảng thời gian (ngày, tuần, tháng): <b>mở cửa, cao nhất, thấp nhất, đóng cửa</b>.</p><span class="char" data-char="owl:talk"></span></div>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="chalk" aria-label="Cấu tạo cây nến">
+          <span>Râu trên: lên tới giá cao nhất</span>
+          <span>Thân: từ giá mở cửa đến giá đóng cửa</span>
+          <span>Râu dưới: xuống tới giá thấp nhất</span>
+          <small>Nến xanh: đóng cửa &gt; mở cửa (tăng)<br>Nến đỏ: đóng cửa &lt; mở cửa (giảm)</small>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel toy">
+      <div class="toy-title"><h3>Máy dựng nến của Heo Đất</h3><span class="pill">Kéo thử</span></div>
+      <div class="tabs" role="group" aria-label="Nến mẫu" id="candlePresets">
+        <button class="opt" type="button" data-p="0">Tăng thân dài</button>
+        <button class="opt" type="button" data-p="1">Giảm thân dài</button>
+        <button class="opt" type="button" data-p="2">Râu dưới dài</button>
+        <button class="opt" type="button" data-p="3">Râu trên dài</button>
+        <button class="opt" type="button" data-p="4">Doji</button>
+      </div>
+      <div class="controls">
+        <div class="ctl"><label for="cO">Giá mở cửa <output id="cOOut"></output></label><input id="cO" type="range" min="40" max="60" step="0.1" value="48"></div>
+        <div class="ctl"><label for="cH">Giá cao nhất <output id="cHOut"></output></label><input id="cH" type="range" min="40" max="60" step="0.1" value="55"></div>
+        <div class="ctl"><label for="cL">Giá thấp nhất <output id="cLOut"></output></label><input id="cL" type="range" min="40" max="60" step="0.1" value="46"></div>
+        <div class="ctl"><label for="cC">Giá đóng cửa <output id="cCOut"></output></label><input id="cC" type="range" min="40" max="60" step="0.1" value="54"></div>
+      </div>
+      <div class="candle-lab">
+        <div class="candle-svg"><svg id="candleSvg" viewBox="0 0 220 280" role="img" aria-label="Cây nến dựng từ bốn mức giá"></svg></div>
+        <div class="stack">
+          <div class="result">
+            <div class="stat"><div class="k">Thân nến</div><div class="v" id="cBody"></div></div>
+            <div class="stat"><div class="k">Râu trên</div><div class="v" id="cUp"></div></div>
+            <div class="stat"><div class="k">Râu dưới</div><div class="v" id="cLow"></div></div>
+          </div>
+          <div class="tag-row" id="cTags"></div>
+          <div class="say owl"><span class="char" data-char="owl:talk"></span><p class="bubble" id="cSay"></p></div>
+        </div>
+      </div>
+      <p class="note">Giá tính bằng nghìn đồng, tự tạo. Máy tự giữ đúng luật: giá cao nhất không thấp hơn thân, giá thấp nhất không cao hơn thân. Ngưỡng phân loại do trang tự đặt để minh họa: thân ≤ 10% biên độ là doji, thân ≥ 60% biên độ là thân dài, râu dài khi ≥ 40% biên độ và ≥ 2 lần thân.</p>
+    </div>
+
+    <div class="tbl-wrap">
+      <table class="tbl">
+        <thead><tr><th>Hình dạng</th><th>Ý nghĩa</th></tr></thead>
+        <tbody>
+          <tr><td><b>Thân dài</b></td><td>Một bên (mua hoặc bán) áp đảo</td></tr>
+          <tr><td><b>Râu dưới dài</b></td><td>Giá bị bán xuống sâu nhưng có lực mua kéo lên, có thể là tín hiệu đáy</td></tr>
+          <tr><td><b>Râu trên dài</b></td><td>Giá được đẩy lên nhưng bị bán xuống, có thể là tín hiệu đỉnh</td></tr>
+          <tr><td><b>Nến doji</b> (thân rất nhỏ)</td><td>Hai bên cân bằng, thị trường lưỡng lự</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="panel toy">
+      <div class="toy-title"><h3>Khung thời gian nào cho Heo?</h3></div>
+      <div class="tabs" role="group" aria-label="Chọn khung thời gian" id="tfTabs">
+        <button class="opt" type="button" data-t="0" aria-pressed="true">Biểu đồ tuần</button>
+        <button class="opt" type="button" data-t="1">Biểu đồ ngày</button>
+        <button class="opt" type="button" data-t="2">Biểu đồ giờ, phút</button>
+      </div>
+      <div class="say pig"><span class="char" id="tfPig"></span><p class="bubble" id="tfSay"></p></div>
+      <p class="note">Nhà đầu tư trung, dài hạn nên xem biểu đồ <b>tuần</b> để thấy xu hướng lớn, biểu đồ ngày để chọn điểm vào. Biểu đồ phút và giờ chỉ dành cho người giao dịch trong ngày, không phù hợp với người mới.</p>
+    </div>
+
+    <div class="panel quiz">
+      <div class="mcq q" data-answer="2" data-right="Đúng. Râu dưới dài: giá bị bán xuống sâu nhưng có lực mua kéo lên, có thể là tín hiệu đáy. Nhớ chữ &quot;có thể&quot;: đây là xác suất." data-wrong="Chưa đúng. Nhìn lại: giá đã xuống rất sâu trong phiên rồi được kéo lên gần giá mở cửa.">
+        <h3>Một cây nến có thân nhỏ ở phía trên, râu dưới rất dài. Nó kể chuyện gì?</h3>
+        <div class="opts">
+          <button class="opt" type="button">Bên bán áp đảo suốt phiên</button>
+          <button class="opt" type="button">Giá được đẩy lên rồi bị bán xuống</button>
+          <button class="opt" type="button">Giá bị bán sâu nhưng lực mua kéo lên, có thể là tín hiệu đáy</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 7.2 -->
+  <section class="chapter" id="xu-huong">
+    <div class="chapter-head"><span class="tag">7.2</span><h2>Xu hướng là bạn, dao rơi thì không</h2></div>
+    <div class="panel talk">
+      <div class="say pig"><span class="char" data-char="pig:happy"></span><p class="bubble">Mã này giảm nhiều rồi, chắc rẻ lắm. Em bắt đáy nhé!</p></div>
+      <div class="say owl right"><p class="bubble">Đó là <b>bắt dao rơi</b>, cách người mới mất tiền nhiều nhất. Câu nói nổi tiếng nhất của trường phái này: <b>"Xu hướng là bạn"</b> (the trend is your friend).</p><span class="char" data-char="owl:stern"></span></div>
+    </div>
+
+    <div class="tbl-wrap">
+      <table class="tbl">
+        <thead><tr><th>Xu hướng</th><th>Nhận diện</th><th>Hành động</th></tr></thead>
+        <tbody>
+          <tr><td><b>Tăng</b></td><td>Đỉnh sau cao hơn đỉnh trước, đáy sau cao hơn đáy trước</td><td>Ưu tiên mua khi giá điều chỉnh về hỗ trợ</td></tr>
+          <tr><td><b>Giảm</b></td><td>Đỉnh sau thấp hơn đỉnh trước, đáy sau thấp hơn đáy trước</td><td>Không bắt đáy; đứng ngoài hoặc giảm tỷ trọng</td></tr>
+          <tr><td><b>Đi ngang</b></td><td>Giá dao động trong một vùng</td><td>Chờ giá thoát khỏi vùng (breakout)</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout warn"><strong>"Xu hướng là bạn"</strong><span>Người mới mất tiền nhiều nhất vì <b>bắt dao rơi</b>, tức mua một cổ phiếu đang trong xu hướng giảm chỉ vì "đã giảm nhiều rồi, chắc rẻ".</span></div>
+    <div class="panel toy">
+      <div class="toy-title"><h3>Đoán xu hướng qua đỉnh và đáy</h3><span class="pill">Bấm chọn</span></div>
+      <div class="chart-box"><svg id="swingSvg" viewBox="0 0 640 240" role="img" aria-label="Đường giá tự tạo với các đỉnh và đáy được đánh số"></svg></div>
+      <div class="tabs" role="group" aria-label="Chọn xu hướng" id="swingOpts">
+        <button class="opt" type="button" data-g="up">Tăng</button>
+        <button class="opt" type="button" data-g="down">Giảm</button>
+        <button class="opt" type="button" data-g="side">Đi ngang</button>
+        <button class="opt" type="button" id="swingNew">Biểu đồ khác ↻</button>
+      </div>
+      <div class="say owl"><span class="char" id="swingOwl"></span><p class="bubble" id="swingSay"></p></div>
+      <p class="note">Đường giá vẽ ngẫu nhiên mỗi lần bấm, không phải mã thật. Trang coi là đi ngang khi hai đỉnh cuối và hai đáy cuối chênh nhau không quá 2%.</p>
+    </div>
+
+    <div class="panel toy">
+      <div class="toy-title"><h3>Heo bắt dao rơi</h3><span class="pill">Kéo thử</span></div>
+      <p>Cổ phiếu giả lập đi xuống từ đỉnh. Heo nghĩ "đã giảm nhiều rồi, chắc rẻ" và mua khi giá đã giảm bao nhiêu % từ đỉnh?</p>
+      <div class="ctl" style="max-width:420px"><label for="knife">Heo mua khi đã giảm <output id="knifeOut"></output></label><input id="knife" type="range" min="10" max="40" step="1" value="20"></div>
+      <div class="result">
+        <div class="stat"><div class="k">Giá Heo mua</div><div class="v" id="knBuy"></div></div>
+        <div class="stat warn"><div class="k">Đáy sau đó</div><div class="v" id="knLow"></div></div>
+        <div class="stat warn"><div class="k">Heo lỗ thêm tối đa</div><div class="v" id="knLoss"></div></div>
+      </div>
+      <div class="chart-box"><svg id="knifeSvg" viewBox="0 0 640 240" role="img" aria-label="Đường giá giả lập giai đoạn giảm, đánh dấu điểm Heo mua và đáy sau đó"></svg></div>
+      <div class="say pig"><span class="char" id="knPig"></span><p class="bubble" id="knSay"></p></div>
+    </div>
+  </section>
+
+  <!-- 7.3 -->
+  <section class="chapter" id="ho-tro">
+    <div class="chapter-head"><span class="tag">7.3</span><h2>Sàn nhà và trần nhà của giá</h2></div>
+    <div class="panel talk">
+      <div class="say pig"><span class="char" data-char="pig:wow"></span><p class="bubble">Thầy ơi, sao giá cứ chạm mức kia là bật lên, chạm mức này là quay xuống?</p></div>
+      <div class="say owl right"><p class="bubble">Vì ở đó đám đông từng mua mạnh hoặc bán mạnh. Gọi là <b>hỗ trợ</b> và <b>kháng cự</b>. Nhớ: chúng là <b>vùng</b>, không phải một con số chính xác.</p><span class="char" data-char="owl:talk"></span></div>
+    </div>
+    <div class="cards">
+      <button class="flip" type="button"><span class="front">Hỗ trợ</span><span class="back">Vùng giá mà lực mua từng xuất hiện mạnh, giá khó giảm xuống dưới.</span></button>
+      <button class="flip" type="button"><span class="front">Kháng cự</span><span class="back">Vùng giá mà lực bán từng xuất hiện mạnh, giá khó vượt lên trên.</span></button>
+      <button class="flip" type="button"><span class="front">Đổi vai</span><span class="back">Kháng cự bị phá vỡ thường trở thành hỗ trợ mới, và ngược lại.</span></button>
+      <button class="flip" type="button"><span class="front">Mốc tâm lý</span><span class="back">Số tròn (VN-Index 1.000, 1.200, 1.300 điểm), đỉnh và đáy cũ, vùng giá có khối lượng giao dịch lớn.</span></button>
+    </div>
+    <div class="panel toy">
+      <div class="toy-title"><h3>Vẽ vùng hỗ trợ, kháng cự</h3><span class="pill">Bật tắt</span></div>
+      <div class="toggles" id="srToggles">
+        <label><input type="checkbox" id="srSup" checked><i style="background:var(--money)"></i>Hỗ trợ</label>
+        <label><input type="checkbox" id="srRes" checked><i style="background:var(--warn)"></i>Kháng cự</label>
+        <label><input type="checkbox" id="srFlip"><i style="background:var(--gold)"></i>Đổi vai sau breakout</label>
+      </div>
+      <div class="chart-box"><svg id="srSvg" viewBox="0 0 640 260" role="img" aria-label="Giá giả lập với vùng hỗ trợ và kháng cự"></svg></div>
+      <div class="say owl"><span class="char" data-char="owl:smile"></span><p class="bubble" id="srSay"></p></div>
+      <p class="note">Chuỗi giá giả lập, giá tính bằng nghìn đồng. Trên thực tế, vẽ hỗ trợ và kháng cự trên biểu đồ tuần sẽ tin cậy hơn biểu đồ ngày.</p>
+    </div>
+  </section>
+
+  <!-- 7.4 -->
+  <section class="chapter" id="khoi-luong">
+    <div class="chapter-head"><span class="tag">7.4</span><h2>Khối lượng: máy phát hiện nói dối</h2></div>
+    <div class="panel talk">
+      <div class="say pig"><span class="char" data-char="pig:wow"></span><p class="bubble">Giá vừa vượt kháng cự! Em mua đuổi ngay!</p></div>
+      <div class="say owl right"><p class="bubble">Nhìn khối lượng trước đã. Khối lượng <b>xác nhận độ tin cậy</b> của biến động giá. Giá lên mà ít người mua thật thì dễ là bẫy.</p><span class="char" data-char="owl:stern"></span></div>
+    </div>
+    <div class="panel toy">
+      <div class="toy-title"><h3>Giá và khối lượng nói gì?</h3><span class="pill">Bấm chọn</span></div>
+      <div class="controls">
+        <div class="ctl"><span class="note"><b>Giá</b></span><div class="tabs" role="group" aria-label="Giá" id="pvPrice"><button class="opt" type="button" data-v="up" aria-pressed="true">Tăng</button><button class="opt" type="button" data-v="down">Giảm</button></div></div>
+        <div class="ctl"><span class="note"><b>Khối lượng</b></span><div class="tabs" role="group" aria-label="Khối lượng" id="pvVol"><button class="opt" type="button" data-v="up" aria-pressed="true">Tăng</button><button class="opt" type="button" data-v="down">Giảm</button></div></div>
+      </div>
+      <div class="tbl-wrap">
+        <table class="tbl vol-grid">
+          <thead><tr><th>Giá</th><th>Khối lượng</th><th>Ý nghĩa</th></tr></thead>
+          <tbody id="pvRows">
+            <tr data-k="up-up"><td>Tăng</td><td>Tăng</td><td>Xu hướng tăng khỏe, dòng tiền thật đang vào</td></tr>
+            <tr data-k="up-down"><td>Tăng</td><td>Giảm</td><td>Đà tăng yếu, có thể sắp điều chỉnh</td></tr>
+            <tr data-k="down-up"><td>Giảm</td><td>Tăng</td><td>Áp lực bán mạnh, cẩn trọng</td></tr>
+            <tr data-k="down-down"><td>Giảm</td><td>Giảm</td><td>Áp lực bán cạn dần, có thể sắp tạo đáy</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="say pig"><span class="char" id="pvPig"></span><p class="bubble" id="pvSay"></p></div>
+    </div>
+
+    <div class="panel toy">
+      <div class="toy-title"><h3>Breakout thật hay bẫy?</h3><span class="pill">Kéo thử</span></div>
+      <div class="callout"><strong>Breakout chuẩn</strong><span>Giá vượt kháng cự với khối lượng lớn hơn <b>1,5–2 lần</b> khối lượng trung bình 20 phiên. Breakout với khối lượng thấp dễ là breakout giả (bull trap).</span></div>
+      <div class="controls">
+        <div class="ctl"><label for="boPx">Giá đóng cửa so với đỉnh kháng cự <output id="boPxOut"></output></label><input id="boPx" type="range" min="-3" max="5" step="0.5" value="2"></div>
+        <div class="ctl"><label for="boVol">Khối lượng phiên ÷ TB 20 phiên <output id="boVolOut"></output></label><input id="boVol" type="range" min="0.5" max="3" step="0.1" value="1.2"></div>
+      </div>
+      <div class="chart-box"><svg id="boSvg" viewBox="0 0 640 200" role="img" aria-label="So sánh khối lượng phiên với trung bình 20 phiên"></svg></div>
+      <div class="verdict" id="boVerdict"></div>
+      <p class="note" id="boReal"></p>
+    </div>
+
+    <div class="panel quiz">
+      <div class="mcq q" data-answer="0" data-right="Đúng. Giá lên nhưng khối lượng thấp hơn mức 1,5 lần trung bình 20 phiên: dễ là breakout giả (bull trap)." data-wrong="Chưa đúng. Breakout chuẩn cần khối lượng lớn hơn 1,5–2 lần trung bình 20 phiên. Ở đây chỉ gấp 1,1 lần.">
+        <h3>Giá vượt kháng cự, khối lượng phiên bằng 1,1 lần trung bình 20 phiên. Nhận định nào hợp lý nhất?</h3>
+        <div class="opts">
+          <button class="opt" type="button">Khối lượng thấp, dễ là bull trap</button>
+          <button class="opt" type="button">Breakout chuẩn, mua ngay</button>
+          <button class="opt" type="button">Áp lực bán cạn dần, sắp tạo đáy</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 7.5 -->
+  <section class="chapter" id="chi-bao">
+    <div class="chapter-head"><span class="tag">7.5</span><h2>Hộp đồ nghề chỉ báo</h2></div>
+    <div class="panel talk">
+      <div class="say pig"><span class="char" data-char="pig:proud"></span><p class="bubble">Em bật hết mười chỉ báo lên biểu đồ cho chắc ăn!</p></div>
+      <div class="say owl right"><p class="bubble">Mười chỉ báo chỉ gây rối. Dùng <b>2–3 chỉ báo bổ trợ nhau</b>: một chỉ báo xu hướng như MA, một chỉ báo động lượng như RSI hoặc MACD, cộng khối lượng.</p><span class="char" data-char="owl:stern"></span></div>
+    </div>
+
+    <div class="tbl-wrap">
+      <table class="tbl">
+        <thead><tr><th>Chỉ báo</th><th>Tham số thường dùng</th><th>Cách đọc cơ bản</th><th>Điểm yếu</th></tr></thead>
+        <tbody>
+          <tr><td><b>Đường trung bình động MA / EMA</b></td><td>20 (ngắn hạn), 50 (trung hạn), 200 (dài hạn)</td><td>Giá trên MA200 là xu hướng dài hạn tăng. MA50 cắt lên MA200 ("golden cross") là tín hiệu tích cực, cắt xuống ("death cross") là tiêu cực</td><td>Luôn trễ so với giá</td></tr>
+          <tr><td><b>RSI</b></td><td>14 phiên</td><td>Trên 70 là quá mua, dưới 30 là quá bán. Phân kỳ (giá tạo đỉnh mới nhưng RSI không) là dấu hiệu xu hướng yếu</td><td>Trong xu hướng mạnh, RSI có thể ở vùng quá mua rất lâu</td></tr>
+          <tr><td><b>MACD</b></td><td>12, 26, 9</td><td>Đường MACD cắt lên đường tín hiệu là tích cực; histogram cho biết động lượng</td><td>Nhiều tín hiệu nhiễu khi thị trường đi ngang</td></tr>
+          <tr><td><b>Bollinger Bands</b></td><td>MA20, ±2 độ lệch chuẩn</td><td>Dải co hẹp báo hiệu sắp có biến động mạnh. Giá chạm dải trên hay dưới cho biết giá đang ở mức cực đoan tương đối</td><td>Không cho biết hướng đi</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout good"><strong>Nguyên tắc</strong><span>Dùng 2–3 chỉ báo bổ trợ nhau: một chỉ báo xu hướng như MA, một chỉ báo động lượng như RSI hoặc MACD, cộng khối lượng. Mười chỉ báo trên một biểu đồ chỉ gây rối.</span></div>
+    <div class="panel toy">
+      <div class="toy-title"><h3>Bàn thí nghiệm chỉ báo</h3><span class="pill">Bật tắt</span></div>
+      <p>Chuỗi giá giả lập 420 phiên của "cổ phiếu Heo" (không phải mã thật). Bật tắt từng chỉ báo và xem biểu đồ đông dần.</p>
+      <div class="toggles" id="indToggles">
+        <label><input type="checkbox" id="iMa20"><i style="background:var(--gold)"></i>MA20</label>
+        <label><input type="checkbox" id="iMa50" checked><i style="background:var(--pig-deep)"></i>MA50</label>
+        <label><input type="checkbox" id="iMa200" checked><i style="background:var(--save)"></i>MA200</label>
+        <label><input type="checkbox" id="iBoll"><i style="background:var(--owl)"></i>Bollinger (MA20 ±2σ)</label>
+        <label><input type="checkbox" id="iVol" checked><i style="background:var(--muted)"></i>Khối lượng</label>
+        <label><input type="checkbox" id="iRsi" checked><i style="background:var(--pig-deep)"></i>RSI 14</label>
+        <label><input type="checkbox" id="iMacd"><i style="background:var(--money)"></i>MACD 12, 26, 9</label>
+      </div>
+      <div class="chart-box"><svg id="pxSvg" viewBox="0 0 680 280" role="img" aria-label="Giá giả lập và các đường chỉ báo"></svg></div>
+      <div class="chart-box sub-chart" id="volBox"><span class="lbl">Khối lượng (triệu cp)</span><svg id="volSvg" viewBox="0 0 680 90" role="img" aria-label="Khối lượng giao dịch giả lập"></svg></div>
+      <div class="chart-box sub-chart" id="rsiBox"><span class="lbl">RSI 14</span><svg id="rsiSvg" viewBox="0 0 680 110" role="img" aria-label="RSI 14 phiên"></svg></div>
+      <div class="chart-box sub-chart" id="macdBox"><span class="lbl">MACD (đường MACD, đường tín hiệu, histogram)</span><svg id="macdSvg" viewBox="0 0 680 110" role="img" aria-label="MACD 12, 26, 9"></svg></div>
+      <div class="verdict" id="indVerdict"></div>
+      <ul class="plain note" id="indFacts"></ul>
+    </div>
+
+    <div class="panel quiz">
+      <div class="mcq q" data-answer="1" data-right="Đúng. Trong xu hướng mạnh, RSI có thể ở vùng quá mua rất lâu. Quá mua không có nghĩa là phải bán ngay." data-wrong="Chưa đúng. RSI trên 70 là quá mua, nhưng đó là điểm yếu nổi tiếng: trong xu hướng mạnh nó có thể nằm trên 70 rất lâu.">
+        <h3>RSI 14 của một cổ phiếu đang tăng mạnh vượt 70. Hiểu thế nào cho đúng?</h3>
+        <div class="opts">
+          <button class="opt" type="button">Quá mua, chắc chắn sắp giảm, bán hết</button>
+          <button class="opt" type="button">Quá mua, nhưng trong xu hướng mạnh RSI có thể ở đó rất lâu</button>
+          <button class="opt" type="button">Quá bán, nên mua thêm</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 7.6 -->
+  <section class="chapter" id="mo-hinh">
+    <div class="chapter-head"><span class="tag">7.6</span><h2>Những hình quen mặt trên biểu đồ</h2></div>
+    <div class="panel talk">
+      <div class="say pig"><span class="char" data-char="pig:wow"></span><p class="bubble">Em thấy hình vai – đầu – vai rồi! Bán ngay thôi!</p></div>
+      <div class="say owl right"><p class="bubble">Mô hình chỉ có giá trị khi được <b>xác nhận</b>. Vai – đầu – vai chỉ xác nhận khi giá phá xuống đường viền cổ.</p><span class="char" data-char="owl:talk"></span></div>
+    </div>
+    <div class="tbl-wrap">
+      <table class="tbl">
+        <thead><tr><th>Mô hình</th><th>Ý nghĩa</th><th>Cách xác nhận</th></tr></thead>
+        <tbody>
+          <tr><td><b>Nền tích lũy</b> (đi ngang dài, biên độ hẹp)</td><td>Cổ phiếu đang được gom, chuẩn bị cho một con sóng</td><td>Breakout khỏi nền với khối lượng lớn</td></tr>
+          <tr><td><b>Cốc tay cầm</b> (cup with handle)</td><td>Mô hình tiếp diễn xu hướng tăng (theo William O'Neil)</td><td>Vượt đỉnh tay cầm với khối lượng lớn</td></tr>
+          <tr><td><b>Vai – đầu – vai</b></td><td>Mô hình đảo chiều từ tăng sang giảm</td><td>Giá phá xuống đường viền cổ</td></tr>
+          <tr><td><b>Hai đáy (chữ W) / hai đỉnh (chữ M)</b></td><td>Đảo chiều</td><td>Vượt qua đỉnh giữa (W) hoặc phá xuống đáy giữa (M)</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="panel toy">
+      <div class="toy-title"><h3>Sổ tay mô hình</h3><span class="pill">Bấm chọn</span></div>
+      <div class="tabs" role="group" aria-label="Chọn mô hình" id="patTabs">
+        <button class="opt" type="button" data-p="0" aria-pressed="true">Nền tích lũy</button>
+        <button class="opt" type="button" data-p="1">Cốc tay cầm</button>
+        <button class="opt" type="button" data-p="2">Vai – đầu – vai</button>
+        <button class="opt" type="button" data-p="3">Hai đáy (W)</button>
+        <button class="opt" type="button" data-p="4">Hai đỉnh (M)</button>
+      </div>
+      <div class="chart-box"><svg id="patSvg" viewBox="0 0 640 280" role="img" aria-label="Hình vẽ minh họa mô hình giá"></svg></div>
+      <div class="legend"><span><i style="background:var(--ink)"></i>Đường giá (hình vẽ minh họa)</span><span><i style="background:var(--gold)"></i>Mốc xác nhận</span><span><i style="background:var(--save)"></i>Khối lượng</span></div>
+      <div class="say owl"><span class="char" data-char="owl:talk"></span><p class="bubble" id="patSay"></p></div>
+    </div>
+  </section>
+
+  <!-- 7.7 -->
+  <section class="chapter" id="he-thong">
+    <div class="chapter-head"><span class="tag">7.7</span><h2>Bộ luật năm bước của Heo</h2></div>
+    <div class="panel talk">
+      <div class="say pig"><span class="char" data-char="pig:worried"></span><p class="bubble">Nhiều thứ quá, em không biết bắt đầu từ đâu.</p></div>
+      <div class="say owl right"><p class="bubble">Ghép cơ bản và kỹ thuật thành một bộ quy tắc rõ ràng. Đây là ví dụ để minh họa, con cần <b>tự kiểm chứng</b> trước khi dùng.</p><span class="char" data-char="owl:talk"></span></div>
+    </div>
+    <div class="panel">
+      <ol class="rules">
+        <li><b>Lọc cơ bản:</b> chỉ xem các cổ phiếu đạt checklist ở Module 5.</li>
+        <li><b>Lọc xu hướng:</b> giá nằm trên MA200 và MA50 đang đi lên.</li>
+        <li><b>Điểm vào:</b> giá điều chỉnh về gần MA50 hoặc vùng hỗ trợ, khối lượng giảm khi điều chỉnh, rồi có phiên tăng trở lại với khối lượng tăng. Hoặc breakout khỏi nền tích lũy với khối lượng lớn.</li>
+        <li><b>Cắt lỗ:</b> đặt ngay khi mua, dưới vùng hỗ trợ gần nhất, thường là −7% đến −8% (theo O'Neil).</li>
+        <li><b>Chốt lời hoặc giảm tỷ trọng:</b> khi giá đóng cửa dưới MA50 với khối lượng lớn, hoặc luận điểm cơ bản thay đổi.</li>
+      </ol>
+    </div>
+
+    <div class="panel toy">
+      <div class="toy-title"><h3>Soi từng phiên bằng bộ luật</h3><span class="pill">Kéo thử</span></div>
+      <p>Kéo tới một phiên của cổ phiếu giả lập, xem luật 2 và luật 5 nói gì. Luật 1 (cơ bản) giả định đã đạt.</p>
+      <div class="ctl"><label for="sysDay">Phiên thứ <output id="sysDayOut"></output></label><input id="sysDay" type="range" min="200" max="419" step="1" value="300"></div>
+      <div class="chart-box"><svg id="sysSvg" viewBox="0 0 680 240" role="img" aria-label="Giá giả lập với MA50, MA200 và phiên đang xét"></svg></div>
+      <div class="legend"><span><i style="background:var(--ink)"></i>Giá đóng cửa</span><span><i style="background:var(--pig-deep)"></i>MA50</span><span><i style="background:var(--save)"></i>MA200</span><span><i style="background:var(--gold)"></i>Phiên đang xét</span></div>
+      <ul class="checks" id="sysChecks"></ul>
+      <div class="say owl"><span class="char" id="sysOwl"></span><p class="bubble" id="sysSay"></p></div>
+      <p class="note">Cách trang hiểu luật: "MA50 đang đi lên" là MA50 hôm nay cao hơn 5 phiên trước; "khối lượng lớn" là gấp từ 1,5 lần trung bình 20 phiên trước đó.</p>
+    </div>
+
+    <div class="panel toy">
+      <div class="toy-title"><h3>Đặt cắt lỗ ngay khi mua</h3></div>
+      <div class="controls">
+        <div class="ctl"><label for="slPrice">Giá mua (nghìn đồng/cp)</label><input id="slPrice" type="number" min="1" max="1000" step="0.1" value="50" inputmode="decimal"></div>
+        <div class="ctl"><label for="slMoney">Số tiền mua (triệu đồng)</label><input id="slMoney" type="number" min="1" max="10000" step="1" value="100" inputmode="decimal"></div>
+      </div>
+      <div class="result">
+        <div class="stat warn"><div class="k">Giá cắt lỗ (−7% đến −8%)</div><div class="v" id="slLevel"></div></div>
+        <div class="stat warn"><div class="k">Khoản lỗ nếu chạm cắt lỗ</div><div class="v" id="slLoss"></div></div>
+      </div>
+      <p class="note">Thực tế đặt dưới vùng hỗ trợ gần nhất; −7% đến −8% là mức thường gặp theo O'Neil. Chưa tính phí giao dịch và thuế.</p>
+    </div>
+  </section>
+
+  <!-- 7.8 -->
+  <section class="chapter" id="sai-lam">
+    <div class="chapter-head"><span class="tag">7.8</span><h2>Năm cái bẫy Heo hay sa vào</h2></div>
+    <div class="panel talk">
+      <div class="say pig"><span class="char" data-char="pig:sad"></span><p class="bubble">Biểu đồ vẫn đẹp mà sao em lỗ mãi thầy ơi…</p></div>
+      <div class="say owl right"><p class="bubble">Vì con bỏ qua cắt lỗ. Lật từng thẻ xem con đã dính bao nhiêu cái bẫy.</p><span class="char" data-char="owl:stern"></span></div>
+    </div>
+    <div class="cards">
+      <button class="flip" type="button"><span class="front">Thiên kiến xác nhận</span><span class="back">Tìm tín hiệu để <b>xác nhận</b> quyết định đã có sẵn trong đầu.</span></button>
+      <button class="flip" type="button"><span class="front">Nhảy khung</span><span class="back">Đổi khung thời gian liên tục cho đến khi thấy tín hiệu mình muốn.</span></button>
+      <button class="flip" type="button"><span class="front">Mô hình chắc chắn</span><span class="back">Tin vào các "mô hình chắc chắn" trên mạng xã hội.</span></button>
+      <button class="flip" type="button"><span class="front">"Biểu đồ vẫn đẹp"</span><span class="back">Bỏ qua cắt lỗ vì "biểu đồ vẫn đẹp".</span></button>
+      <button class="flip" type="button"><span class="front">Giao dịch quá nhiều</span><span class="back">Chi phí giao dịch ăn mòn lợi nhuận (xem Module 2, mục 2.5).</span></button>
+    </div>
+    <div class="panel quiz">
+      <div class="mcq q" data-answer="2" data-right="Đúng. Đổi khung cho tới khi thấy tín hiệu mình muốn, rồi dùng nó để xác nhận ý định có sẵn: dính cả hai bẫy." data-wrong="Chưa đúng. Heo không thiếu chỉ báo, Heo đang chọn khung thời gian để chiều theo điều mình đã muốn.">
+        <h3>Heo muốn mua mã X. Biểu đồ tuần xấu, ngày xấu, Heo chuyển sang biểu đồ 15 phút thấy "đẹp" và mua. Heo dính bẫy nào?</h3>
+        <div class="opts">
+          <button class="opt" type="button">Giao dịch quá nhiều</button>
+          <button class="opt" type="button">Dùng quá ít chỉ báo</button>
+          <button class="opt" type="button">Đổi khung thời gian đến khi thấy tín hiệu mình muốn, thiên kiến xác nhận</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BÀI TẬP -->
+  <section class="chapter" id="bai-tap">
+    <div class="chapter-head"><span class="tag">✓</span><h2>Bài tập: cho Heo ăn xu</h2></div>
+    <div class="panel toy">
+      <div class="feed">
+        <span class="char" id="feedPig"></span>
+        <div class="stack" style="gap:8px">
+          <strong id="feedText"></strong>
+          <div class="bar" aria-hidden="true"><div id="feedBar"></div></div>
+          <span class="note">Chỉ coi module là xong khi đã tick hết bài tập, không phải khi đọc xong. Tiến độ được lưu trên trình duyệt này.</span>
+        </div>
+      </div>
+      <ul class="tasks" id="tasks" data-module="08">
+        <li><label><input type="checkbox" id="t1"><span>Mở TradingView, thêm MA20/50/200, RSI 14, khối lượng vào biểu đồ VN-Index khung tuần</span></label></li>
+        <li><label><input type="checkbox" id="t2"><span>Đánh dấu xu hướng, hỗ trợ và kháng cự của VN-Index giai đoạn 2021–nay</span></label></li>
+        <li><label><input type="checkbox" id="t3"><span>Chọn 5 cổ phiếu, xác định mỗi mã đang ở xu hướng tăng, giảm hay đi ngang và giải thích</span></label></li>
+        <li><label><input type="checkbox" id="t4"><span>Tìm 3 ví dụ breakout thật và 3 ví dụ breakout giả trong quá khứ. Khối lượng khác nhau thế nào?</span></label></li>
+        <li><label><input type="checkbox" id="t5"><span>Ghi "giao dịch giấy" (không dùng tiền thật) trong 2 tháng theo hệ thống ở mục 7.7, ghi chép mọi lệnh vào nhật ký</span></label></li>
+      </ul>
+    </div>
+    <a class="panel next" href="09-quan-tri-rui-ro.html">
+      <div class="stack" style="gap:4px">
+        <span class="eyebrow">Chương sau →</span>
+        <h3>Module 8: Quản trị rủi ro và danh mục</h3>
+        <span class="note">Cắt lỗ mới là bước đầu. Chương sau học cách chia vốn để một lần sai không thành thảm họa.</span>
+      </div>
+      <span class="char bob" data-char="owl:smile" style="width:72px"></span>
+    </a>
+    <p class="disclaimer">Giáo trình mang tính giáo dục, không phải khuyến nghị mua bán mã cổ phiếu nào. Mọi đường giá, khối lượng và chỉ báo trong trang là dữ liệu tự tạo để minh họa, không phải số liệu của mã thật. Phân tích kỹ thuật là công cụ xác suất, không đảm bảo kết quả.</p>
+  </section>
+</main>
+
+<script src="assets/truyen.js"></script>
+<script>
+(function () {
+  var T = Truyen, $ = T.$, trim = T.trim, pct = T.pct;
+// ---- PURE START
+  function rng(seed) {
+    return function () {
+      seed |= 0; seed = seed + 0x6D2B79F5 | 0;
+      var t = Math.imul(seed ^ seed >>> 15, 1 | seed);
+      t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t;
+      return ((t ^ t >>> 14) >>> 0) / 4294967296;
+    };
+  }
+  // Mốc giá (phiên, nghìn đồng) của chuỗi giả lập
+  var ANCHORS = [[0, 36], [30, 37.5], [60, 34.6], [100, 30], [125, 28.6], [140, 27.2], [155, 25.4], [180, 21.4], [192, 22.7], [206, 21.2], [220, 22.8], [234, 21.3], [248, 22.6], [258, 22.2], [263, 24.9], [268, 25.4], [278, 23.2], [300, 27.6], [312, 26.6], [332, 30.4], [344, 29.2], [370, 34.6], [382, 33.4], [396, 35.2], [403, 34.3], [410, 31.4], [419, 30.6]];
+  var N = 420;
+  function interp(i) {
+    for (var k = 1; k < ANCHORS.length; k++) {
+      var a = ANCHORS[k - 1], b = ANCHORS[k];
+      if (i <= b[0]) return a[1] + (b[1] - a[1]) * (i - a[0]) / (b[0] - a[0]);
+    }
+    return ANCHORS[ANCHORS.length - 1][1];
+  }
+  function makeSeries() {
+    var r = rng(20240708), e = 0, close = [], vol = [];
+    for (var i = 0; i < N; i++) {
+      var g = Math.sqrt(-2 * Math.log(r() + 1e-12)) * Math.cos(2 * Math.PI * r());
+      e = 0.55 * e + 0.007 * g;
+      close.push(Math.round(interp(i) * (1 + e) * 100) / 100);
+    }
+    for (i = 0; i < N; i++) {
+      var up = i > 0 && close[i] > close[i - 1];
+      var f = up ? 1.15 : 0.9;
+      if (i >= 180 && i < 259) f *= 0.7;            // nền tích lũy: khối lượng cạn
+      if (i >= 268 && i < 278) f *= 0.65;           // điều chỉnh về kháng cự cũ: khối lượng giảm
+      if (i >= 259 && i <= 263) f *= 2.4;           // breakout khỏi nền
+      if (i >= 405 && i <= 408) f *= 2.2;           // thủng MA50 với khối lượng lớn
+      vol.push(Math.round(1e6 * (0.8 + 0.4 * r()) * f / 1000) * 1000);
+    }
+    return { close: close, vol: vol };
+  }
+  function sma(a, n) { var out = [], s = 0; for (var i = 0; i < a.length; i++) { s += a[i]; if (i >= n) s -= a[i - n]; out.push(i >= n - 1 ? s / n : null); } return out; }
+  function ema(a, n) { var k = 2 / (n + 1), out = [], prev = null; for (var i = 0; i < a.length; i++) { if (a[i] == null) { out.push(null); continue; } prev = prev == null ? a[i] : a[i] * k + prev * (1 - k); out.push(prev); } return out; }
+  function rsi(a, n) {
+    var out = [null], g = 0, l = 0;
+    for (var i = 1; i < a.length; i++) {
+      var d = a[i] - a[i - 1], up = Math.max(d, 0), dn = Math.max(-d, 0);
+      if (i <= n) { g += up / n; l += dn / n; out.push(i === n ? (l === 0 ? 100 : 100 - 100 / (1 + g / l)) : null); }
+      else { g = (g * (n - 1) + up) / n; l = (l * (n - 1) + dn) / n; out.push(l === 0 ? 100 : 100 - 100 / (1 + g / l)); }
+    }
+    return out;
+  }
+  function boll(a, n, k) {
+    var m = sma(a, n), up = [], lo = [];
+    for (var i = 0; i < a.length; i++) {
+      if (m[i] == null) { up.push(null); lo.push(null); continue; }
+      var s = 0; for (var j = i - n + 1; j <= i; j++) s += (a[j] - m[i]) * (a[j] - m[i]);
+      var sd = Math.sqrt(s / n); up.push(m[i] + k * sd); lo.push(m[i] - k * sd);
+    }
+    return { mid: m, up: up, lo: lo };
+  }
+  function macd(a) {
+    var e12 = ema(a, 12), e26 = ema(a, 26), line = a.map(function (_, i) { return i >= 25 ? e12[i] - e26[i] : null; });
+    var sig = ema(line, 9), hist = line.map(function (v, i) { return v == null || sig[i] == null ? null : v - sig[i]; });
+    return { line: line, sig: sig, hist: hist };
+  }
+  function crosses(f, s) {
+    var out = [];
+    for (var i = 1; i < f.length; i++) {
+      if (f[i] == null || s[i] == null || f[i - 1] == null || s[i - 1] == null) continue;
+      if (f[i - 1] <= s[i - 1] && f[i] > s[i]) out.push({ i: i, up: true });
+      if (f[i - 1] >= s[i - 1] && f[i] < s[i]) out.push({ i: i, up: false });
+    }
+    return out;
+  }
+  // phân loại nến: ngưỡng do trang tự đặt để minh họa
+  function candleKind(o, h, l, c) {
+    var range = h - l, body = Math.abs(c - o), upper = h - Math.max(o, c), lower = Math.min(o, c) - l, tags = [];
+    if (range <= 0) return { dir: 'flat', tags: ['doji'] };
+    var dir = c > o ? 'up' : c < o ? 'down' : 'flat';
+    if (body <= 0.1 * range) return { dir: dir, tags: ['doji'], body: body, range: range, upper: upper, lower: lower };
+    if (body >= 0.6 * range) tags.push('long');
+    if (lower >= 2 * Math.max(body, 0.05 * range) && lower >= 0.4 * range) tags.push('lower');
+    if (upper >= 2 * Math.max(body, 0.05 * range) && upper >= 0.4 * range) tags.push('upper');
+    return { dir: dir, tags: tags, body: body, range: range, upper: upper, lower: lower };
+  }
+  function trendOf(peaks, troughs) {
+    var p = peaks.slice(-2), t = troughs.slice(-2), tol = 0.02;
+    var dp = (p[1] - p[0]) / p[0], dt = (t[1] - t[0]) / t[0];
+    if (Math.abs(dp) <= tol && Math.abs(dt) <= tol) return 'side';
+    if (dp > 0 && dt > 0) return 'up';
+    if (dp < 0 && dt < 0) return 'down';
+    return 'mixed';
+  }
+// ---- PURE END
+
+  // ---------- tiện ích vẽ ----------
+  function px(v) { return trim(v, 2); }
+  function vlm(v) { return trim(v / 1e6, 2) + ' triệu cp'; }
+  function linePath(arr, x, y, i0, i1) {
+    var d = '', pen = false;
+    for (var i = i0; i <= i1; i++) {
+      if (arr[i] == null) { pen = false; continue; }
+      d += (pen ? 'L' : 'M') + x(i).toFixed(1) + ' ' + y(arr[i]).toFixed(1); pen = true;
+    }
+    return d;
+  }
+  function extent(arrs, i0, i1) {
+    var lo = Infinity, hi = -Infinity;
+    arrs.forEach(function (a) { for (var i = i0; i <= i1; i++) if (a[i] != null) { lo = Math.min(lo, a[i]); hi = Math.max(hi, a[i]); } });
+    return [lo, hi];
+  }
+  function niceRange(lo, hi) {
+    var st = T.niceStep(hi - lo);
+    return { lo: Math.floor(lo / st) * st, hi: Math.ceil(hi / st) * st, step: st };
+  }
+  function gridY(nr, y, L, Rx, fmt) {
+    var g = '', n = Math.round((nr.hi - nr.lo) / nr.step);
+    for (var k = 0; k <= n; k++) {
+      var t = nr.lo + k * nr.step;
+      g += '<line x1="' + L + '" x2="' + Rx + '" y1="' + y(t) + '" y2="' + y(t) + '" stroke="var(--dot)" stroke-width="1.5"/>' +
+        '<text x="' + (L - 6) + '" y="' + (y(t) + 4) + '" text-anchor="end">' + fmt(t) + '</text>';
+    }
+    return g;
+  }
+  function pathEl(d, color, w, extra) { return '<path d="' + d + '" fill="none" stroke="' + color + '" stroke-width="' + w + '" stroke-linejoin="round"' + (extra || '') + '/>'; }
+  function setPressed(group, el) { group.forEach(function (b) { b.setAttribute('aria-pressed', String(b === el)); }); }
+
+  // ---------- chuỗi giá giả lập dùng chung ----------
+  var S = makeSeries(), C = S.close, V = S.vol;
+  var MA20 = sma(C, 20), MA50 = sma(C, 50), MA200 = sma(C, 200), VA20 = sma(V, 20);
+  var RSI = rsi(C, 14), BB = boll(C, 20, 2), MACD = macd(C);
+  function volRatio(i) { return i >= 20 ? V[i] / VA20[i - 1] : null; }
+  var SUP = [21.1, 21.6], RES = [22.7, 23.3], BASE0 = 180, BASE1 = 258;
+  var BO = -1; for (var i = BASE1; i < N; i++) if (C[i] > RES[1]) { BO = i; break; }
+
+  // ---------- 7.1 máy dựng nến ----------
+  var presets = [[46, 53.5, 45.5, 53], [53, 53.5, 45.5, 46], [51.5, 53, 44, 52.8], [48, 57, 47.6, 49.2], [50, 52, 48, 50.1]];
+  var cIds = ['cO', 'cH', 'cL', 'cC'];
+  function cVals() { return cIds.map(function (id) { return +$(id).value; }); }
+  function fixCandle(changed) {
+    var v = cVals(), o = v[0], h = v[1], l = v[2], c = v[3];
+    if (changed === 'cH' && h < Math.max(o, c)) $('cH').value = Math.max(o, c);
+    else if (changed === 'cL' && l > Math.min(o, c)) $('cL').value = Math.min(o, c);
+    else {
+      if (Math.max(o, c) > h) $('cH').value = Math.max(o, c);
+      if (Math.min(o, c) < l) $('cL').value = Math.min(o, c);
+    }
+  }
+  function renderCandle() {
+    var v = cVals(), o = v[0], h = v[1], l = v[2], c = v[3];
+    $('cOOut').textContent = px(o); $('cHOut').textContent = px(h); $('cLOut').textContent = px(l); $('cCOut').textContent = px(c);
+    var y = function (p) { return 14 + (280 - 28) * (60 - p) / 20; };
+    var col = c > o ? 'var(--money)' : c < o ? 'var(--warn)' : 'var(--ink)', cx = 105, bw = 48;
+    var g = gridY({ lo: 40, hi: 60, step: 5 }, y, 34, 200, function (t) { return t; });
+    g += '<line x1="' + cx + '" x2="' + cx + '" y1="' + y(h) + '" y2="' + y(l) + '" stroke="var(--border)" stroke-width="3"/>';
+    var top = y(Math.max(o, c)), bot = y(Math.min(o, c));
+    g += '<rect x="' + (cx - bw / 2) + '" y="' + top + '" width="' + bw + '" height="' + Math.max(2, bot - top) + '" fill="' + col + '" stroke="var(--border)" stroke-width="3" rx="3"/>';
+    var labs = [['Cao ' + px(h), y(h)], [(c >= o ? 'Đóng ' : 'Mở ') + px(Math.max(o, c)), top], [(c >= o ? 'Mở ' : 'Đóng ') + px(Math.min(o, c)), bot], ['Thấp ' + px(l), y(l)]];
+    for (var k = 1; k < labs.length; k++) if (labs[k][1] < labs[k - 1][1] + 13) labs[k][1] = labs[k - 1][1] + 13;
+    labs.forEach(function (a) { g += '<text x="' + (cx + bw / 2 + 8) + '" y="' + (a[1] + 4) + '">' + a[0] + '</text>'; });
+    $('candleSvg').innerHTML = g;
+
+    var k2 = candleKind(o, h, l, c), rg = k2.range || 1;
+    $('cBody').textContent = px(k2.body || 0) + ' · ' + Math.round((k2.body || 0) / rg * 100) + '%';
+    $('cUp').textContent = px(k2.upper || 0) + ' · ' + Math.round((k2.upper || 0) / rg * 100) + '%';
+    $('cLow').textContent = px(k2.lower || 0) + ' · ' + Math.round((k2.lower || 0) / rg * 100) + '%';
+    var chips = k2.dir === 'up' ? '<span class="chip up">Nến xanh: tăng</span>' : k2.dir === 'down' ? '<span class="chip down">Nến đỏ: giảm</span>' : '<span class="chip">Mở cửa = đóng cửa</span>';
+    var names = { long: 'Thân dài', lower: 'Râu dưới dài', upper: 'Râu trên dài', doji: 'Doji' };
+    k2.tags.forEach(function (t) { chips += '<span class="chip">' + names[t] + '</span>'; });
+    $('cTags').innerHTML = chips;
+    var says = [];
+    if (k2.tags.indexOf('doji') >= 0) says.push('Thân rất nhỏ: hai bên cân bằng, thị trường lưỡng lự.');
+    if (k2.tags.indexOf('long') >= 0) says.push('Thân dài: bên ' + (k2.dir === 'up' ? 'mua' : 'bán') + ' áp đảo.');
+    if (k2.tags.indexOf('lower') >= 0) says.push('Râu dưới dài: giá bị bán xuống sâu nhưng có lực mua kéo lên, có thể là tín hiệu đáy.');
+    if (k2.tags.indexOf('upper') >= 0) says.push('Râu trên dài: giá được đẩy lên nhưng bị bán xuống, có thể là tín hiệu đỉnh.');
+    if (!says.length) says.push('Cây nến này không có gì nổi bật. Thử kéo cho thân thật dài, hoặc kéo giá cao nhất, thấp nhất ra xa thân.');
+    $('cSay').textContent = says.join(' ');
+  }
+  cIds.forEach(function (id) {
+    $(id).addEventListener('input', function () {
+      fixCandle(id); renderCandle();
+      document.querySelectorAll('#candlePresets .opt').forEach(function (b) { b.setAttribute('aria-pressed', 'false'); });
+    });
+  });
+  var presetBtns = Array.prototype.slice.call(document.querySelectorAll('#candlePresets .opt'));
+  presetBtns.forEach(function (b) {
+    b.setAttribute('aria-pressed', 'false');
+    b.addEventListener('click', function () {
+      presets[+b.dataset.p].forEach(function (val, k) { $(cIds[k]).value = val; });
+      setPressed(presetBtns, b); renderCandle();
+    });
+  });
+  renderCandle();
+
+  var tfText = [
+    ['proud', 'Biểu đồ tuần: em thấy rõ xu hướng lớn. Đúng khung cho nhà đầu tư trung, dài hạn như em.'],
+    ['happy', 'Biểu đồ ngày: em dùng để chọn điểm vào, sau khi đã xem xu hướng trên biểu đồ tuần.'],
+    ['worried', 'Biểu đồ giờ, phút: chỉ dành cho người giao dịch trong ngày, không phù hợp với người mới như em.']
+  ];
+  var tfBtns = Array.prototype.slice.call(document.querySelectorAll('#tfTabs .opt'));
+  function renderTf(t) { setPressed(tfBtns, tfBtns[t]); $('tfPig').innerHTML = T.pig(tfText[t][0]); $('tfSay').textContent = tfText[t][1]; }
+  tfBtns.forEach(function (b) { b.addEventListener('click', function () { renderTf(+b.dataset.t); }); });
+  renderTf(0);
+
+  // ---------- 7.2 đoán xu hướng ----------
+  var swing = null;
+  var trendInfo = {
+    up: ['Tăng', 'Đỉnh sau cao hơn đỉnh trước, đáy sau cao hơn đáy trước.', 'Ưu tiên mua khi giá điều chỉnh về hỗ trợ.'],
+    down: ['Giảm', 'Đỉnh sau thấp hơn đỉnh trước, đáy sau thấp hơn đáy trước.', 'Không bắt đáy; đứng ngoài hoặc giảm tỷ trọng.'],
+    side: ['Đi ngang', 'Giá dao động trong một vùng: các đỉnh gần bằng nhau, các đáy gần bằng nhau.', 'Chờ giá thoát khỏi vùng (breakout).']
+  };
+  function makeSwing() {
+    var kinds = ['up', 'down', 'side'], kind, pts, peaks, troughs, tries = 0;
+    do {
+      kind = kinds[Math.floor(Math.random() * 3)];
+      var start = kind === 'up' ? 38 : kind === 'down' ? 62 : 48, step = kind === 'up' ? 4 : kind === 'down' ? -4 : 0, jit = kind === 'side' ? 0.4 : 1;
+      pts = []; peaks = []; troughs = [];
+      for (var k = 0; k < 7; k++) {
+        var isPeak = k % 2 === 1, v = start + step * (k >> 1) + (isPeak ? 12 + step / 2 : 0) + jit * (Math.random() * 2 - 1);
+        pts.push(v); (isPeak ? peaks : troughs).push(v);
+      }
+      tries++;
+    } while (trendOf(peaks, troughs) !== kind && tries < 50);
+    return { kind: kind, pts: pts, guess: null };
+  }
+  function renderSwing() {
+    var W = 640, H = 240, L = 20, R = 20, Tp = 26, B = 26, seg = 5, n = (swing.pts.length - 1) * seg;
+    var x = function (i) { return L + (W - L - R) * i / n; }, y = function (v) { return Tp + (H - Tp - B) * (90 - v) / (90 - 30); };
+    var line = [];
+    for (var k = 0; k < swing.pts.length - 1; k++) for (var s = 0; s < seg; s++) {
+      var a = swing.pts[k], b = swing.pts[k + 1], f = s / seg, wob = s === 0 ? 0 : Math.sin((k * seg + s) * 2.3) * 0.25 * Math.abs(b - a) / seg;
+      line.push(a + (b - a) * f + wob);
+    }
+    line.push(swing.pts[swing.pts.length - 1]);
+    var g = '<line x1="' + L + '" x2="' + (W - R) + '" y1="' + (H - B) + '" y2="' + (H - B) + '" stroke="var(--dot)" stroke-width="2"/>';
+    g += pathEl(linePath(line, x, y, 0, n), 'var(--ink)', 2.5);
+    var pi = 0, ti = 0;
+    swing.pts.forEach(function (v, k) {
+      var isPeak = k % 2 === 1, xx = x(k * seg), yy = y(v);
+      g += '<circle cx="' + xx + '" cy="' + yy + '" r="5" fill="' + (isPeak ? 'var(--pig)' : 'var(--save)') + '" stroke="var(--border)" stroke-width="2"/>';
+      g += '<text x="' + xx + '" y="' + (isPeak ? yy - 10 : yy + 18) + '" text-anchor="middle">' + (isPeak ? 'Đỉnh ' + (++pi) : 'Đáy ' + (++ti)) + '</text>';
+    });
+    $('swingSvg').innerHTML = g;
+    var btns = document.querySelectorAll('#swingOpts .opt[data-g]');
+    btns.forEach(function (b) { b.classList.remove('right', 'wrong'); b.setAttribute('aria-pressed', 'false'); });
+    if (!swing.guess) {
+      $('swingOwl').innerHTML = T.owl('talk');
+      $('swingSay').textContent = 'So đỉnh cuối với đỉnh trước, đáy cuối với đáy trước, rồi chọn: tăng, giảm hay đi ngang?';
+      return;
+    }
+    var ok = swing.guess === swing.kind, info = trendInfo[swing.kind];
+    btns.forEach(function (b) { if (b.dataset.g === swing.guess) { b.classList.add(ok ? 'right' : 'wrong'); b.setAttribute('aria-pressed', 'true'); } });
+    $('swingOwl').innerHTML = T.owl(ok ? 'smile' : 'stern');
+    $('swingSay').innerHTML = (ok ? 'Đúng, xu hướng ' : 'Chưa đúng. Đây là xu hướng ') + '<b>' + info[0].toLowerCase() + '</b>. ' + info[1] + ' Hành động: ' + info[2].charAt(0).toLowerCase() + info[2].slice(1);
+  }
+  document.querySelectorAll('#swingOpts .opt[data-g]').forEach(function (b) {
+    b.addEventListener('click', function () { swing.guess = b.dataset.g; renderSwing(); });
+  });
+  $('swingNew').addEventListener('click', function () { swing = makeSwing(); renderSwing(); });
+  swing = makeSwing(); renderSwing();
+
+  // ---------- 7.2 bắt dao rơi ----------
+  var KN1 = BASE1, PK = 0;
+  for (i = 0; i <= 100; i++) if (C[i] > C[PK]) PK = i;
+  function renderKnife() {
+    var d = +$('knife').value, target = C[PK] * (1 - d / 100), buy = -1;
+    $('knifeOut').textContent = d + '%';
+    for (var i = PK; i <= KN1; i++) if (C[i] <= target) { buy = i; break; }
+    var lo = buy, W = 640, H = 240, L = 44, R = 12, Tp = 16, B = 28;
+    if (buy >= 0) for (i = buy; i <= KN1; i++) if (C[i] < C[lo]) lo = i;
+    var nr = niceRange.apply(null, extent([C], 0, KN1));
+    var x = function (i) { return L + (W - L - R) * i / KN1; }, y = function (v) { return Tp + (H - Tp - B) * (nr.hi - v) / (nr.hi - nr.lo); };
+    var g = gridY(nr, y, L, W - R, function (t) { return trim(t, 1); });
+    for (var k = 0; k <= KN1; k += 50) g += '<text x="' + x(k) + '" y="' + (H - 8) + '" text-anchor="middle">phiên ' + k + '</text>';
+    g += pathEl(linePath(C, x, y, 0, KN1), 'var(--ink)', 2);
+    g += '<circle cx="' + x(PK) + '" cy="' + y(C[PK]) + '" r="6" fill="var(--gold)" stroke="var(--border)" stroke-width="2"/><text x="' + (x(PK) + 10) + '" y="' + (y(C[PK]) + 4) + '">Đỉnh ' + px(C[PK]) + '</text>';
+    if (buy < 0) {
+      $('knBuy').textContent = '—'; $('knLow').textContent = '—'; $('knLoss').textContent = '—';
+      $('knPig').innerHTML = T.pig('happy'); $('knSay').textContent = 'Giá chưa bao giờ giảm sâu tới mức đó, Heo chưa mua.';
+    } else {
+      var loss = C[lo] / C[buy] - 1;
+      g += '<line x1="' + x(buy) + '" x2="' + x(lo) + '" y1="' + y(C[buy]) + '" y2="' + y(C[buy]) + '" stroke="var(--pig-deep)" stroke-width="2" stroke-dasharray="5 4"/>';
+      g += '<circle cx="' + x(buy) + '" cy="' + y(C[buy]) + '" r="6" fill="var(--pig)" stroke="var(--border)" stroke-width="2"/><text x="' + (x(buy) + 10) + '" y="' + (y(C[buy]) - 8) + '">Heo mua</text>';
+      g += '<circle cx="' + x(lo) + '" cy="' + y(C[lo]) + '" r="6" fill="var(--warn)" stroke="var(--border)" stroke-width="2"/><text x="' + x(lo) + '" y="' + (y(C[lo]) + 20) + '" text-anchor="middle">Đáy</text>';
+      $('knBuy').textContent = px(C[buy]) + ' · phiên ' + buy;
+      $('knLow').textContent = px(C[lo]) + ' · phiên ' + lo;
+      $('knLoss').textContent = '−' + pct(-loss * 100);
+      $('knPig').innerHTML = T.pig(loss < -0.15 ? 'sad' : 'worried');
+      $('knSay').textContent = 'Em tưởng giảm ' + d + '% là rẻ rồi, thế mà sau đó giá còn rơi thêm ' + pct(-loss * 100) + ' trong ' + (lo - buy) + ' phiên. Đỉnh sau vẫn thấp hơn đỉnh trước, em đã mua ngược xu hướng.';
+    }
+    $('knifeSvg').innerHTML = g;
+  }
+  $('knife').addEventListener('input', renderKnife); renderKnife();
+
+  // ---------- 7.3 hỗ trợ, kháng cự ----------
+  function renderSR() {
+    var i0 = 150, i1 = 330, W = 640, H = 260, L = 44, R = 12, Tp = 16, B = 28;
+    var nr = niceRange.apply(null, extent([C], i0, i1));
+    var x = function (i) { return L + (W - L - R) * (i - i0) / (i1 - i0); }, y = function (v) { return Tp + (H - Tp - B) * (nr.hi - v) / (nr.hi - nr.lo); };
+    var g = gridY(nr, y, L, W - R, function (t) { return trim(t, 1); });
+    for (var k = 150; k <= i1; k += 30) g += '<text x="' + x(k) + '" y="' + (H - 8) + '" text-anchor="middle">phiên ' + k + '</text>';
+    function zone(z, a, b, col, label) {
+      return '<rect x="' + x(a) + '" y="' + y(z[1]) + '" width="' + (x(b) - x(a)) + '" height="' + (y(z[0]) - y(z[1])) + '" fill="' + col + '" opacity=".25" stroke="' + col + '" stroke-width="1.5"/>' +
+        '<text x="' + (x(a) + 4) + '" y="' + (y(z[1]) - 5) + '" style="fill:' + col + ';font-weight:700">' + label + '</text>';
+    }
+    if ($('srSup').checked) g += zone(SUP, BASE0, BASE1, 'var(--money)', 'Hỗ trợ ' + trim(SUP[0], 1) + '–' + trim(SUP[1], 1));
+    if ($('srRes').checked) g += zone(RES, BASE0, BO, 'var(--warn)', 'Kháng cự ' + trim(RES[0], 1) + '–' + trim(RES[1], 1));
+    var rt = BO + 1; for (var i = BO + 1; i <= BO + 30; i++) if (C[i] < C[rt]) rt = i;
+    if ($('srFlip').checked) {
+      g += zone(RES, BO, i1, 'var(--gold)', 'Kháng cự cũ thành hỗ trợ mới');
+      g += '<circle cx="' + x(rt) + '" cy="' + y(C[rt]) + '" r="6" fill="var(--gold)" stroke="var(--border)" stroke-width="2"/>';
+    }
+    g += pathEl(linePath(C, x, y, i0, i1), 'var(--ink)', 2);
+    g += '<circle cx="' + x(BO) + '" cy="' + y(C[BO]) + '" r="6" fill="var(--money)" stroke="var(--border)" stroke-width="2"/><text x="' + (x(BO) - 8) + '" y="' + (y(C[BO]) - 10) + '" text-anchor="end">Breakout</text>';
+    $('srSvg').innerHTML = g;
+    $('srSay').innerHTML = $('srFlip').checked
+      ? 'Phiên ' + BO + ' giá vượt kháng cự. Phiên ' + rt + ' giá điều chỉnh về ' + px(C[rt]) + ', ngay vùng kháng cự cũ, rồi bật lên. Kháng cự bị phá vỡ đã <b>đổi vai</b> thành hỗ trợ mới.'
+      : 'Từ phiên ' + BASE0 + ' đến ' + BASE1 + ', giá đi ngang: xuống vùng ' + trim(SUP[0], 1) + '–' + trim(SUP[1], 1) + ' là có người mua, lên vùng ' + trim(RES[0], 1) + '–' + trim(RES[1], 1) + ' là có người bán. Bật "Đổi vai" xem chuyện gì xảy ra sau breakout.';
+  }
+  ['srSup', 'srRes', 'srFlip'].forEach(function (id) { $(id).addEventListener('change', renderSR); });
+  renderSR();
+
+  // ---------- 7.4 giá và khối lượng ----------
+  var pv = { price: 'up', vol: 'up' };
+  var pvMood = { 'up-up': 'proud', 'up-down': 'worried', 'down-up': 'sad', 'down-down': 'wow' };
+  function renderPV() {
+    var key = pv.price + '-' + pv.vol;
+    ['pvPrice', 'pvVol'].forEach(function (id, k) {
+      $(id).querySelectorAll('.opt').forEach(function (b) { b.setAttribute('aria-pressed', String(b.dataset.v === (k ? pv.vol : pv.price))); });
+    });
+    var txt = '';
+    document.querySelectorAll('#pvRows tr').forEach(function (r) { var on = r.dataset.k === key; r.classList.toggle('on', on); if (on) txt = r.cells[2].textContent; });
+    $('pvPig').innerHTML = T.pig(pvMood[key]);
+    $('pvSay').textContent = 'Giá ' + (pv.price === 'up' ? 'tăng' : 'giảm') + ', khối lượng ' + (pv.vol === 'up' ? 'tăng' : 'giảm') + ': ' + txt.charAt(0).toLowerCase() + txt.slice(1) + '.';
+  }
+  ['pvPrice', 'pvVol'].forEach(function (id, k) {
+    $(id).querySelectorAll('.opt').forEach(function (b) { b.addEventListener('click', function () { pv[k ? 'vol' : 'price'] = b.dataset.v; renderPV(); }); });
+  });
+  document.querySelectorAll('#pvRows tr').forEach(function (r) {
+    r.addEventListener('click', function () { var p = r.dataset.k.split('-'); pv.price = p[0]; pv.vol = p[1]; renderPV(); });
+  });
+  renderPV();
+
+  function renderBO() {
+    var d = +$('boPx').value, r = +$('boVol').value;
+    $('boPxOut').textContent = (d > 0 ? '+' : '') + pct(d); $('boVolOut').textContent = '×' + trim(r, 1);
+    var W = 640, H = 200, L = 44, R = 12, Tp = 14, B = 28, top = 3;
+    var y = function (v) { return Tp + (H - Tp - B) * (1 - v / top); };
+    var g = gridY({ lo: 0, hi: 3, step: 0.5 }, y, L, W - R, function (t) { return '×' + trim(t, 1); });
+    [[1.5, 'ngưỡng ×1,5'], [2, 'ngưỡng ×2']].forEach(function (a) {
+      g += '<line x1="' + L + '" x2="' + (W - R) + '" y1="' + y(a[0]) + '" y2="' + y(a[0]) + '" stroke="var(--gold)" stroke-width="2.5" stroke-dasharray="7 5"/><text x="' + (W - R - 4) + '" y="' + (y(a[0]) - 5) + '" text-anchor="end">' + a[1] + '</text>';
+    });
+    var bars = [['TB 20 phiên', 1, 'var(--save)'], ['Phiên đang xét', r, r >= 1.5 ? 'var(--money)' : 'var(--warn)']];
+    bars.forEach(function (b, k) {
+      var cx = L + (W - L - R) * (k === 0 ? 0.28 : 0.62), bw = 110;
+      g += '<rect x="' + (cx - bw / 2) + '" y="' + y(b[1]) + '" width="' + bw + '" height="' + (y(0) - y(b[1])) + '" fill="' + b[2] + '" stroke="var(--border)" stroke-width="2.5"/>' +
+        '<text x="' + cx + '" y="' + (H - 8) + '" text-anchor="middle">' + b[0] + ' (×' + trim(b[1], 1) + ')</text>';
+    });
+    $('boSvg').innerHTML = g;
+    var who, h, p;
+    if (d <= 0) { who = T.pig('worried'); h = 'Chưa có breakout'; p = 'Giá đóng cửa ' + (d === 0 ? 'đúng bằng' : pct(-d) + ' dưới') + ' đỉnh kháng cự. Chưa vượt thì chưa có gì để xác nhận, cứ chờ.'; }
+    else if (r < 1.5) { who = T.owl('stern'); h = 'Dễ là breakout giả (bull trap)'; p = 'Giá vượt kháng cự ' + pct(d) + ' nhưng khối lượng chỉ gấp ' + trim(r, 1) + ' lần trung bình 20 phiên, chưa tới 1,5 lần. Ít dòng tiền thật đứng sau.'; }
+    else { who = T.pig('proud'); h = 'Breakout chuẩn'; p = 'Giá vượt kháng cự ' + pct(d) + ' với khối lượng gấp ' + trim(r, 1) + ' lần trung bình 20 phiên' + (r >= 2 ? ', vượt cả ngưỡng 2 lần.' : ', đạt ngưỡng 1,5–2 lần.') + ' Vẫn phải đặt cắt lỗ.'; }
+    $('boVerdict').innerHTML = '<span class="char">' + who + '</span><div><h3>' + h + '</h3><p>' + p + '</p></div>';
+  }
+  ['boPx', 'boVol'].forEach(function (id) { $(id).addEventListener('input', renderBO); });
+  renderBO();
+  $('boReal').textContent = 'Trên chuỗi giả lập ở mục 7.3: phiên ' + BO + ' đóng cửa ' + px(C[BO]) + ', vượt đỉnh kháng cự ' + trim(RES[1], 1) + ', khối lượng ' + vlm(V[BO]) + ', gấp ' + trim(volRatio(BO), 2) + ' lần trung bình 20 phiên trước đó.';
+
+  // ---------- 7.5 bàn thí nghiệm chỉ báo ----------
+  var IW = 680, IL = 48, IR = 10;
+  var X = function (i) { return IL + (IW - IL - IR) * i / (N - 1); };
+  var GC = crosses(MA50, MA200), PC = crosses(C, MA200).filter(function (c) { return c.up; })[0];
+  function on(id) { return $(id).checked; }
+  function renderInd() {
+    var H = 280, Tp = 14, B = 26, g;
+    var nr = niceRange.apply(null, extent([C, BB.up, BB.lo], 0, N - 1));
+    var y = function (v) { return Tp + (H - Tp - B) * (nr.hi - v) / (nr.hi - nr.lo); };
+    g = gridY(nr, y, IL, IW - IR, function (t) { return trim(t, 1); });
+    for (var k = 0; k < N; k += 100) g += '<text x="' + X(k) + '" y="' + (H - 6) + '" text-anchor="middle">phiên ' + k + '</text>';
+    if (on('iBoll')) {
+      var up = [], lo = [];
+      for (var i = 19; i < N; i++) { up.push(X(i).toFixed(1) + ',' + y(BB.up[i]).toFixed(1)); lo.unshift(X(i).toFixed(1) + ',' + y(BB.lo[i]).toFixed(1)); }
+      g += '<polygon points="' + up.concat(lo).join(' ') + '" fill="var(--owl)" opacity=".2"/>';
+      g += pathEl(linePath(BB.up, X, y, 0, N - 1), 'var(--owl)', 1.2) + pathEl(linePath(BB.lo, X, y, 0, N - 1), 'var(--owl)', 1.2);
+    }
+    g += pathEl(linePath(C, X, y, 0, N - 1), 'var(--ink)', 1.4);
+    if (on('iMa20')) g += pathEl(linePath(MA20, X, y, 0, N - 1), 'var(--gold)', 2);
+    if (on('iMa50')) g += pathEl(linePath(MA50, X, y, 0, N - 1), 'var(--pig-deep)', 2.4);
+    if (on('iMa200')) g += pathEl(linePath(MA200, X, y, 0, N - 1), 'var(--save)', 2.8);
+    if (on('iMa50') && on('iMa200')) GC.forEach(function (c) {
+      g += '<circle cx="' + X(c.i) + '" cy="' + y(MA50[c.i]) + '" r="7" fill="' + (c.up ? 'var(--gold)' : 'var(--warn)') + '" stroke="var(--border)" stroke-width="2.5"/>' +
+        '<text x="' + (X(c.i) + 4) + '" y="' + (y(MA50[c.i]) + 22) + '" style="font-weight:700">' + (c.up ? 'Golden cross' : 'Death cross') + '</text>';
+    });
+    $('pxSvg').innerHTML = g;
+
+    $('volBox').hidden = !on('iVol');
+    if (on('iVol')) {
+      var vh = 90, vmax = Math.max.apply(null, V), vy = function (v) { return 6 + (vh - 12) * (1 - v / vmax); }, bw = (IW - IL - IR) / N * 0.8;
+      g = '';
+      for (i = 0; i < N; i++) g += '<rect x="' + (X(i) - bw / 2).toFixed(1) + '" y="' + vy(V[i]).toFixed(1) + '" width="' + bw.toFixed(2) + '" height="' + (vy(0) - vy(V[i])).toFixed(1) + '" fill="' + (i > 0 && C[i] >= C[i - 1] ? 'var(--money)' : 'var(--warn)') + '" opacity=".7"/>';
+      g += pathEl(linePath(VA20, X, vy, 0, N - 1), 'var(--ink)', 1.5);
+      g += '<text x="' + (IL - 6) + '" y="' + (vy(vmax) + 8) + '" text-anchor="end">' + trim(vmax / 1e6, 1) + '</text><text x="' + (IL - 6) + '" y="' + vy(0) + '" text-anchor="end">0</text>';
+      $('volSvg').innerHTML = g;
+    }
+    $('rsiBox').hidden = !on('iRsi');
+    if (on('iRsi')) {
+      var rh = 110, ry = function (v) { return 6 + (rh - 12) * (1 - v / 100); };
+      g = '<rect x="' + IL + '" y="' + ry(100) + '" width="' + (IW - IL - IR) + '" height="' + (ry(70) - ry(100)) + '" fill="var(--warn)" opacity=".12"/>' +
+        '<rect x="' + IL + '" y="' + ry(30) + '" width="' + (IW - IL - IR) + '" height="' + (ry(0) - ry(30)) + '" fill="var(--money)" opacity=".15"/>';
+      [0, 30, 70, 100].forEach(function (t) { g += '<line x1="' + IL + '" x2="' + (IW - IR) + '" y1="' + ry(t) + '" y2="' + ry(t) + '" stroke="var(--dot)" stroke-width="1.5"' + (t === 30 || t === 70 ? ' stroke-dasharray="5 4"' : '') + '/><text x="' + (IL - 6) + '" y="' + (ry(t) + 4) + '" text-anchor="end">' + t + '</text>'; });
+      g += pathEl(linePath(RSI, X, ry, 0, N - 1), 'var(--pig-deep)', 1.6);
+      $('rsiSvg').innerHTML = g;
+    }
+    $('macdBox').hidden = !on('iMacd');
+    if (on('iMacd')) {
+      var mh = 110, ext = extent([MACD.line, MACD.sig, MACD.hist], 0, N - 1), mm = Math.max(Math.abs(ext[0]), Math.abs(ext[1]));
+      var my = function (v) { return 6 + (mh - 12) * (mm - v) / (2 * mm); }, hw = (IW - IL - IR) / N * 0.8;
+      g = '<line x1="' + IL + '" x2="' + (IW - IR) + '" y1="' + my(0) + '" y2="' + my(0) + '" stroke="var(--dot)" stroke-width="1.5"/><text x="' + (IL - 6) + '" y="' + (my(0) + 4) + '" text-anchor="end">0</text>';
+      for (i = 0; i < N; i++) if (MACD.hist[i] != null) {
+        var hv = MACD.hist[i];
+        g += '<rect x="' + (X(i) - hw / 2).toFixed(1) + '" y="' + my(Math.max(hv, 0)).toFixed(1) + '" width="' + hw.toFixed(2) + '" height="' + Math.abs(my(hv) - my(0)).toFixed(1) + '" fill="' + (hv >= 0 ? 'var(--money)' : 'var(--warn)') + '" opacity=".6"/>';
+      }
+      g += pathEl(linePath(MACD.line, X, my, 0, N - 1), 'var(--ink)', 1.5) + pathEl(linePath(MACD.sig, X, my, 0, N - 1), 'var(--gold)', 1.5);
+      $('macdSvg').innerHTML = g;
+    }
+
+    var hasMA = on('iMa20') || on('iMa50') || on('iMa200'), hasMom = on('iRsi') || on('iMacd'), hasVol = on('iVol');
+    var n = (hasMA ? 1 : 0) + (on('iBoll') ? 1 : 0) + (on('iRsi') ? 1 : 0) + (on('iMacd') ? 1 : 0) + (hasVol ? 1 : 0);
+    var who, h, p;
+    if (n > 3) { who = T.owl('stern'); h = n + ' loại chỉ báo: bắt đầu rối'; p = 'Nhiều chỉ báo hơn không làm tín hiệu chắc hơn, chỉ làm biểu đồ khó đọc. Giữ 2–3 loại bổ trợ nhau.'; }
+    else if (hasMA && hasMom && hasVol) { who = T.pig('proud'); h = 'Bộ đồ nghề gọn gàng'; p = 'Một chỉ báo xu hướng (MA), một chỉ báo động lượng (' + (on('iRsi') ? 'RSI' : 'MACD') + '), cộng khối lượng. Đúng nguyên tắc.'; }
+    else {
+      var miss = [];
+      if (!hasMA) miss.push('một chỉ báo xu hướng như MA');
+      if (!hasMom) miss.push('một chỉ báo động lượng như RSI hoặc MACD');
+      if (!hasVol) miss.push('khối lượng');
+      who = T.owl('talk'); h = 'Còn thiếu mảnh ghép'; p = 'Nên có ' + miss.join(', ') + '.';
+    }
+    $('indVerdict').innerHTML = '<span class="char">' + who + '</span><div><h3>' + h + '</h3><p>' + p + '</p></div>';
+  }
+  ['iMa20', 'iMa50', 'iMa200', 'iBoll', 'iVol', 'iRsi', 'iMacd'].forEach(function (id) { $(id).addEventListener('change', renderInd); });
+  renderInd();
+
+  (function facts() {
+    var out = [], gc = GC.filter(function (c) { return c.up; })[0];
+    if (gc && PC) out.push('Giá vượt lên MA200 ở phiên ' + PC.i + ', nhưng MA50 mới cắt lên MA200 (golden cross) ở phiên ' + gc.i + ': đường trung bình luôn trễ so với giá.');
+    var best = 0, cur = 0, end = -1;
+    for (var i = 0; i < N; i++) { cur = RSI[i] > 70 ? cur + 1 : 0; if (cur > best) { best = cur; end = i; } }
+    if (best) out.push('RSI 14 nằm liền ' + best + ' phiên trên 70 (phiên ' + (end - best + 1) + '–' + end + ') trong khi giá vẫn đi lên: quá mua có thể kéo dài.');
+    var mc = crosses(MACD.line, MACD.sig).filter(function (c) { return c.i >= BASE0 && c.i <= BASE1; }).length;
+    out.push('Trong nền đi ngang phiên ' + BASE0 + '–' + BASE1 + ', đường MACD cắt đường tín hiệu ' + mc + ' lần: nhiều tín hiệu nhiễu khi thị trường đi ngang.');
+    $('indFacts').innerHTML = out.map(function (t) { return '<li>' + t + '</li>'; }).join('');
+  })();
+
+  // ---------- 7.6 mô hình giá ----------
+  var pats = [
+    { pts: [[0, 85], [15, 60], [25, 42], [30, 47], [35, 40], [42, 46], [48, 40], [55, 46], [62, 41], [68, 46], [72, 43], [78, 58], [88, 66], [100, 74]], line: 46, dir: 1, label: 'Đỉnh nền', from: 70, vol: [25, 72],
+      say: 'Nền tích lũy: đi ngang dài, biên độ hẹp. Cổ phiếu đang được gom, chuẩn bị cho một con sóng. Xác nhận khi breakout khỏi nền với khối lượng lớn.' },
+    { pts: [[0, 40], [12, 80], [20, 70], [28, 58], [38, 50], [48, 49], [58, 55], [66, 68], [72, 79], [76, 75], [80, 71], [84, 74], [92, 86], [100, 94]], line: 79, dir: 1, label: 'Đỉnh tay cầm', from: 84, vol: [72, 84],
+      say: 'Cốc tay cầm (cup with handle): mô hình tiếp diễn xu hướng tăng, theo William O\'Neil. Xác nhận khi vượt đỉnh tay cầm với khối lượng lớn.' },
+    { pts: [[0, 30], [12, 56], [20, 45], [32, 76], [44, 45], [54, 57], [64, 45], [72, 32], [82, 38], [100, 22]], line: 45, dir: -1, label: 'Đường viền cổ', from: 60,
+      say: 'Vai – đầu – vai: mô hình đảo chiều từ tăng sang giảm. Ba đỉnh, đỉnh giữa (đầu) cao nhất. Xác nhận khi giá phá xuống đường viền cổ.' },
+    { pts: [[0, 85], [18, 40], [32, 62], [46, 41], [60, 58], [66, 62], [80, 74], [100, 82]], line: 62, dir: 1, label: 'Đỉnh giữa', from: 60,
+      say: 'Hai đáy (chữ W): đảo chiều từ giảm sang tăng. Xác nhận khi giá vượt qua đỉnh giữa.' },
+    { pts: [[0, 30], [18, 78], [32, 55], [46, 77], [60, 59], [66, 55], [80, 42], [100, 34]], line: 55, dir: -1, label: 'Đáy giữa', from: 60,
+      say: 'Hai đỉnh (chữ M): đảo chiều từ tăng sang giảm. Xác nhận khi giá phá xuống đáy giữa.' }
+  ];
+  var patBtns = Array.prototype.slice.call(document.querySelectorAll('#patTabs .opt'));
+  function renderPat(p) {
+    setPressed(patBtns, patBtns[p]);
+    var P = pats[p], W = 640, H = 280, L = 20, R = 20, Tp = 16, priceB = 200;
+    var x = function (v) { return L + (W - L - R) * v / 100; }, y = function (v) { return Tp + (priceB - Tp) * (100 - v) / 100; };
+    var g = '<line x1="' + L + '" x2="' + (W - R) + '" y1="' + y(P.line) + '" y2="' + y(P.line) + '" stroke="var(--gold)" stroke-width="3" stroke-dasharray="8 6"/>' +
+      '<text x="' + (W - R) + '" y="' + (y(P.line) + (P.dir > 0 ? 18 : -8)) + '" text-anchor="end" style="font-weight:700">' + P.label + '</text>';
+    g += '<polyline points="' + P.pts.map(function (q) { return x(q[0]) + ',' + y(q[1]); }).join(' ') + '" fill="none" stroke="var(--ink)" stroke-width="3" stroke-linejoin="round"/>';
+    var bx = null;
+    for (var k = 1; k < P.pts.length && bx === null; k++) {
+      var a = P.pts[k - 1], b = P.pts[k];
+      if (a[0] < P.from) continue;
+      if ((P.dir > 0 && a[1] <= P.line && b[1] > P.line) || (P.dir < 0 && a[1] >= P.line && b[1] < P.line)) bx = a[0] + (b[0] - a[0]) * (P.line - a[1]) / (b[1] - a[1]);
+    }
+    if (bx !== null) g += '<circle cx="' + x(bx) + '" cy="' + y(P.line) + '" r="8" fill="var(--gold)" stroke="var(--border)" stroke-width="2.5"/><text x="' + x(bx) + '" y="' + (y(P.line) + (P.dir > 0 ? -14 : 24)) + '" text-anchor="middle" style="font-weight:700">Xác nhận</text>';
+    if (P.vol) {
+      var vy = function (v) { return H - 4 - 56 * v / 2.4; }, nb = 25;
+      g += '<line x1="' + L + '" x2="' + (W - R) + '" y1="' + vy(0) + '" y2="' + vy(0) + '" stroke="var(--dot)" stroke-width="1.5"/>';
+      for (k = 0; k < nb; k++) {
+        var xv = 100 * (k + 0.5) / nb, v = 1 + 0.2 * Math.sin(k * 1.7);
+        if (xv >= P.vol[0] && xv < P.vol[1]) v *= 0.55;
+        if (bx !== null && xv >= bx - 2 && xv < bx + 10) v = 2.2;
+        g += '<rect x="' + (x(xv) - 8) + '" y="' + vy(v) + '" width="16" height="' + (vy(0) - vy(v)) + '" fill="var(--save)" stroke="var(--border)" stroke-width="1.5"/>';
+      }
+    } else {
+      g += '<text x="' + (W / 2) + '" y="' + (H - 20) + '" text-anchor="middle">Bảng không đặt điều kiện khối lượng cho mô hình này</text>';
+    }
+    $('patSvg').innerHTML = g;
+    $('patSay').textContent = P.say;
+  }
+  patBtns.forEach(function (b) { b.addEventListener('click', function () { renderPat(+b.dataset.p); }); });
+  renderPat(0);
+
+  // ---------- 7.7 soi từng phiên ----------
+  function sysState(d) {
+    var r = volRatio(d);
+    return { above200: C[d] > MA200[d], ma50up: MA50[d] > MA50[d - 5], sell: C[d] < MA50[d] && r >= 1.5, ratio: r };
+  }
+  function renderSys() {
+    var d = +$('sysDay').value, s = sysState(d), i0 = 150, i1 = N - 1, W = 680, H = 240, L = 44, R = 10, Tp = 14, B = 26;
+    $('sysDayOut').textContent = d;
+    var nr = niceRange.apply(null, extent([C, MA50, MA200], i0, i1));
+    var x = function (i) { return L + (W - L - R) * (i - i0) / (i1 - i0); }, y = function (v) { return Tp + (H - Tp - B) * (nr.hi - v) / (nr.hi - nr.lo); };
+    var g = gridY(nr, y, L, W - R, function (t) { return trim(t, 1); });
+    for (var k = 150; k <= i1; k += 50) g += '<text x="' + x(k) + '" y="' + (H - 6) + '" text-anchor="middle">phiên ' + k + '</text>';
+    g += pathEl(linePath(C, x, y, i0, i1), 'var(--ink)', 1.5) + pathEl(linePath(MA50, x, y, i0, i1), 'var(--pig-deep)', 2.4) + pathEl(linePath(MA200, x, y, i0, i1), 'var(--save)', 2.8);
+    g += '<line x1="' + x(d) + '" x2="' + x(d) + '" y1="' + Tp + '" y2="' + (H - B) + '" stroke="var(--gold)" stroke-width="3"/><circle cx="' + x(d) + '" cy="' + y(C[d]) + '" r="6" fill="var(--gold)" stroke="var(--border)" stroke-width="2.5"/>';
+    $('sysSvg').innerHTML = g;
+    var rows = [
+      [null, 'Luật 1 · Lọc cơ bản: giả định cổ phiếu đã đạt checklist ở Module 5.'],
+      [s.above200, 'Luật 2 · Giá ' + px(C[d]) + ' ' + (s.above200 ? 'nằm trên' : 'nằm dưới') + ' MA200 (' + px(MA200[d]) + ').'],
+      [s.ma50up, 'Luật 2 · MA50 ' + (s.ma50up ? 'đang đi lên' : 'không đi lên') + ': ' + px(MA50[d]) + ' so với ' + px(MA50[d - 5]) + ' của 5 phiên trước.'],
+      [!s.sell, 'Luật 5 · ' + (s.sell ? 'Giá đóng cửa dưới MA50 với khối lượng lớn' : 'Chưa có phiên đóng cửa dưới MA50 với khối lượng lớn') + ' (giá ' + (C[d] < MA50[d] ? 'dưới' : 'trên') + ' MA50, khối lượng ×' + trim(s.ratio, 2) + ' trung bình 20 phiên).']
+    ];
+    $('sysChecks').innerHTML = rows.map(function (r) {
+      return '<li class="' + (r[0] === null ? '' : r[0] ? 'ok' : 'no') + '"><span class="mk">' + (r[0] === null ? '–' : r[0] ? '✓' : '✗') + '</span><span>' + r[1] + '</span></li>';
+    }).join('');
+    var msg, mood;
+    if (s.sell) { mood = 'stern'; msg = 'Luật 5 bật đèn đỏ: chốt lời hoặc giảm tỷ trọng.'; }
+    else if (s.above200 && s.ma50up) { mood = 'smile'; msg = 'Qua bộ lọc xu hướng. Giờ chờ điểm vào theo luật 3: giá điều chỉnh về gần MA50 hoặc hỗ trợ với khối lượng giảm, rồi có phiên tăng lại với khối lượng tăng. Mua xong đặt cắt lỗ ngay.'; }
+    else { mood = 'talk'; msg = 'Chưa qua bộ lọc xu hướng ở luật 2. Đứng ngoài, chưa cần tìm điểm vào.'; }
+    $('sysOwl').innerHTML = T.owl(mood); $('sysSay').textContent = msg;
+  }
+  $('sysDay').addEventListener('input', renderSys); renderSys();
+
+  function renderSL() {
+    var p = parseFloat($('slPrice').value), m = parseFloat($('slMoney').value);
+    if (!(p > 0) || !(m > 0)) { $('slLevel').textContent = 'Nhập số dương'; $('slLoss').textContent = '—'; return; }
+    $('slLevel').textContent = px(p * 0.93) + ' – ' + px(p * 0.92);
+    $('slLoss').textContent = T.money(m * 1e6 * 0.07) + ' – ' + T.money(m * 1e6 * 0.08);
+  }
+  ['slPrice', 'slMoney'].forEach(function (id) { $(id).addEventListener('input', renderSL); }); renderSL();
+})();
+</script>
+</body>
+</html>

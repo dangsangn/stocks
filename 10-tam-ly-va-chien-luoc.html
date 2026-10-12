@@ -1,0 +1,737 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Heo Đất thắng chính mình</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;800&family=Be+Vietnam+Pro:wght@400;600;700&family=Patrick+Hand&display=swap">
+<link rel="stylesheet" href="assets/truyen.css">
+<style>
+/* Riêng Module 9: trò chơi tình huống, cân cảm xúc, biểu đồ giờ/tuần, DCA, cổng checklist, phân loại tin */
+.book > *, .chapter > * { min-width: 0; } /* bảng rộng cuộn trong .tbl-wrap, không đẩy trang */
+.scene { display: grid; gap: 14px; }
+.scene-top { display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; }
+.dots { display: flex; gap: 6px; flex-wrap: wrap; }
+.dots i { width: 14px; height: 14px; border-radius: 50%; border: 2.5px solid var(--border); background: var(--chip); display: inline-block; }
+.dots i.ok { background: var(--money); }
+.dots i.bad { background: var(--warn); }
+.dots i.now { background: var(--gold); }
+.situ { border: 2.5px solid var(--border); border-radius: 12px; background: var(--bubble-pig); padding: 12px 14px; display: grid; grid-template-columns: 72px minmax(0, 1fr); gap: 12px; align-items: center; }
+.choices { display: grid; gap: 8px; }
+.choices .opt { border-radius: 12px; }
+.choices .opt[disabled] { cursor: default; transform: none; }
+.outcome { display: grid; gap: 10px; }
+.btn {
+  font: inherit; font-weight: 700; cursor: pointer; color: #1D2140; background: var(--gold);
+  border: 2.5px solid var(--border); border-radius: 999px; padding: 6px 18px; box-shadow: 3px 3px 0 var(--hard); justify-self: start;
+}
+.btn:hover { transform: translateY(-2px); }
+.btn.ghost { background: var(--panel); color: var(--ink); }
+
+.feel { display: grid; gap: 8px; }
+.feel-row { display: grid; grid-template-columns: 150px minmax(0, 1fr); gap: 10px; align-items: center; font-weight: 600; font-size: .92rem; }
+.feel-bar { height: 26px; border: 2.5px solid var(--border); border-radius: 6px; transition: width .2s ease; min-width: 4px; }
+@media (max-width: 480px) { .feel-row { grid-template-columns: 1fr; gap: 4px; } }
+
+.price-ctl { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px 20px; }
+
+.gate { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.gate label { display: grid; grid-template-columns: 28px minmax(0, 1fr); gap: 10px; align-items: start; cursor: pointer; padding: 8px 12px; border: 2.5px dashed var(--border); border-radius: 10px; background: var(--chip); }
+.gate input { width: 22px; height: 22px; margin: 2px 0 0; accent-color: var(--money); }
+.gate input:checked + span { font-weight: 600; }
+
+.sorter { display: grid; gap: 10px; }
+.news { border: 2.5px solid var(--border); border-radius: 12px; padding: 10px 14px; display: grid; gap: 8px; background: var(--panel); }
+.news.done-ok { background: var(--money-soft); border-color: var(--money); }
+.news.done-bad { background: var(--warn-soft); border-color: var(--warn); }
+.news p.h { font-weight: 700; }
+</style>
+</head>
+<body>
+<main class="book">
+
+  <nav class="topnav"><a href="index.html">← Mục lục</a><span class="note">Module 9 / 9</span></nav>
+
+  <!-- MỞ ĐẦU -->
+  <header class="hero">
+    <div class="hero-title">
+      <span class="eyebrow">Module 9 · Tuần 39–44, ôn liên tục</span>
+      <h1>Heo Đất thắng chính mình</h1>
+      <p class="sub">Tâm lý và chiến lược đầu tư. Chơi tám tình huống cám dỗ, thử DCA, chọn trường phái hợp với mình, rồi tick bài tập ở cuối trang.</p>
+    </div>
+    <div class="strip">
+      <div class="panel">
+        <div class="say pig"><span class="char" data-char="pig:proud"></span><p class="bubble">Em học xong báo cáo tài chính, định giá, phân tích kỹ thuật, quản trị rủi ro rồi. Giờ chắc thắng!</p></div>
+      </div>
+      <div class="panel">
+        <div class="say owl right"><p class="bubble">Kiến thức giúp con biết phải làm gì. Tâm lý quyết định con <b>có làm được hay không</b>.</p><span class="char" data-char="owl:stern"></span></div>
+      </div>
+      <div class="panel">
+        <div class="say pig"><span class="char" data-char="pig:worried"></span><p class="bubble">Thế người ta thua vì thiếu thông tin hả thầy?</p></div>
+      </div>
+      <div class="panel">
+        <div class="say owl right"><p class="bubble">Hầu hết nhà đầu tư cá nhân thua thị trường vì <b>mua khi hưng phấn và bán khi hoảng loạn</b>, không phải vì thiếu thông tin.</p><span class="char" data-char="owl:talk"></span></div>
+      </div>
+      <div class="panel wide">
+        <div class="say owl"><span class="char" data-char="owl:smile"></span><p class="bubble">Morgan Housel viết: "Làm tốt việc quản lý tiền ít liên quan đến bạn thông minh đến đâu, mà liên quan nhiều đến cách bạn hành xử." Chương này luyện cách hành xử.</p></div>
+      </div>
+    </div>
+  </header>
+
+  <!-- 9.1 -->
+  <section class="chapter" id="bay-tam-ly">
+    <div class="chapter-head"><span class="tag">9.1</span><h2>Tám cái bẫy trong đầu Heo</h2></div>
+    <div class="panel talk">
+      <div class="say pig"><span class="char" data-char="pig:happy"></span><p class="bubble">Bẫy tâm lý gì chứ, em tỉnh táo lắm.</p></div>
+      <div class="say owl right"><p class="bubble">Ai cũng nghĩ vậy cho đến khi đứng trước tình huống thật. Thầy cho con sống thử một tuần. Mỗi cảnh, con chọn Heo làm gì.</p><span class="char" data-char="owl:talk"></span></div>
+    </div>
+
+    <div class="panel toy">
+      <div class="toy-title"><h3>Một tuần đầy cám dỗ của Heo Đất</h3><span class="pill">Chọn đi</span></div>
+      <div class="scene" id="scene"></div>
+      <p class="note">Các mã ABC, XYZ… là tên giả, các con số là ví dụ minh họa.</p>
+    </div>
+
+    <div class="tbl-wrap">
+      <table class="tbl">
+        <thead><tr><th>Bẫy</th><th>Biểu hiện</th><th>Cách phòng tránh</th></tr></thead>
+        <tbody>
+          <tr><td><b>FOMO</b> (sợ bỏ lỡ)</td><td>Mua đuổi một cổ phiếu đã tăng mạnh vì "ai cũng đang lãi"</td><td>Chỉ mua theo kế hoạch viết sẵn; bỏ lỡ một cơ hội không làm bạn mất tiền</td></tr>
+          <tr><td><b>Tâm lý bầy đàn</b></td><td>Mua theo hội nhóm, mạng xã hội, "phím hàng"</td><td>Tự hỏi: tôi có tự phân tích không, hay chỉ nghe người khác?</td></tr>
+          <tr><td><b>Ôm lỗ, chốt lời sớm</b> (disposition effect)</td><td>Bán ngay mã đang lãi 5%, giữ mã đang lỗ 30% "chờ về bờ"</td><td>Cắt lỗ theo quy tắc; để lệnh lãi chạy đến khi có tín hiệu bán</td></tr>
+          <tr><td><b>Thiên kiến xác nhận</b></td><td>Chỉ đọc tin tốt về cổ phiếu mình đang nắm</td><td>Chủ động tìm lập luận ngược lại: "Vì sao tôi có thể sai?"</td></tr>
+          <tr><td><b>Hiệu ứng mỏ neo</b></td><td>"Giá từng là 100.000, giờ 50.000 là rẻ"</td><td>Giá quá khứ không quyết định giá trị; hãy định giá lại từ đầu</td></tr>
+          <tr><td><b>Tự tin thái quá</b></td><td>Thắng vài lệnh liên tiếp rồi tăng tỷ trọng, dùng margin</td><td>Giữ nguyên quy tắc tỷ trọng; may mắn khác với kỹ năng</td></tr>
+          <tr><td><b>Ác cảm mất mát</b></td><td>Nỗi đau mất 10 triệu lớn gấp khoảng 2 lần niềm vui lãi 10 triệu</td><td>Nhìn kết quả theo năm, không theo ngày; tắt app khi không cần</td></tr>
+          <tr><td><b>Gỡ gạc</b> (revenge trading)</td><td>Sau một lệnh thua, vội vào lệnh lớn hơn để gỡ</td><td>Sau 2–3 lệnh thua liên tiếp, nghỉ giao dịch vài ngày</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="panel toy">
+      <div class="toy-title"><h3>Cân cảm xúc: lãi và lỗ không nặng như nhau</h3><span class="pill">Kéo thử</span></div>
+      <div class="controls">
+        <div class="ctl"><label for="laX">Số tiền lãi hoặc lỗ <output id="laXOut"></output></label><input id="laX" type="range" min="1" max="50" step="1" value="10"></div>
+      </div>
+      <div class="feel">
+        <div class="feel-row"><span id="laJoyK"></span><div class="feel-bar" id="laJoy" style="background:var(--money)"></div></div>
+        <div class="feel-row"><span id="laPainK"></span><div class="feel-bar" id="laPain" style="background:var(--warn)"></div></div>
+      </div>
+      <div class="say owl"><span class="char" data-char="owl:talk"></span><p class="bubble" id="laSay"></p></div>
+
+      <div class="toy-title"><h3>"Chờ về bờ" xa đến đâu?</h3></div>
+      <p>Mã đang lỗ bao nhiêu thì phải tăng bao nhiêu mới hòa vốn? Phần tăng tính trên giá đã giảm, nên luôn lớn hơn phần giảm.</p>
+      <div class="controls">
+        <div class="ctl"><label for="rcL">Mã đang lỗ <output id="rcLOut"></output></label><input id="rcL" type="range" min="5" max="80" step="5" value="30"></div>
+      </div>
+      <div class="chalk"><span class="f">Cần tăng = L ÷ (1 − L)</span><small>L: mức lỗ hiện tại (dạng thập phân)</small></div>
+      <div class="result">
+        <div class="stat warn"><div class="k">Đang lỗ</div><div class="v" id="rcLoss"></div></div>
+        <div class="stat"><div class="k">Phải tăng thêm để về bờ</div><div class="v" id="rcNeed"></div></div>
+      </div>
+      <p class="note" id="rcNote"></p>
+    </div>
+
+    <div class="panel quiz">
+      <div class="mcq q" data-answer="2" data-right="Đúng. Giá quá khứ không quyết định giá trị. 50.000 rẻ hay đắt phụ thuộc vào doanh nghiệp bây giờ, nên phải định giá lại từ đầu." data-wrong="Đó là hiệu ứng mỏ neo: lấy giá cũ làm thước đo. Giá từng là 100.000 không nói gì về giá trị hiện tại.">
+        <h3>Mã D từng giá 100.000, giờ còn 50.000. Câu nào là suy nghĩ đúng?</h3>
+        <div class="opts">
+          <button class="opt" type="button">Rẻ một nửa rồi, mua ngay</button>
+          <button class="opt" type="button">Chờ giá về lại 100.000 rồi bán</button>
+          <button class="opt" type="button">Định giá lại doanh nghiệp từ đầu, quên giá 100.000 đi</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 9.2 -->
+  <section class="chapter" id="truong-phai">
+    <div class="chapter-head"><span class="tag">9.2</span><h2>Năm trường phái, một con heo</h2></div>
+    <div class="panel talk">
+      <div class="say pig"><span class="char" data-char="pig:wow"></span><p class="bubble">Thầy ơi, trường phái nào đúng nhất? Em theo trường phái đó.</p></div>
+      <div class="say owl right"><p class="bubble">Không có trường phái nào là "đúng" duy nhất. Con chọn cái <b>hợp với tính cách và thời gian</b> của mình, rồi theo đuổi nhất quán.</p><span class="char" data-char="owl:talk"></span></div>
+    </div>
+
+    <div class="tbl-wrap">
+      <table class="tbl">
+        <thead><tr><th>Trường phái</th><th>Cách làm</th><th>Thời gian cần</th><th>Phù hợp với ai</th><th>Đại diện</th></tr></thead>
+        <tbody>
+          <tr><td><b>Đầu tư thụ động</b></td><td>Mua ETF hoặc quỹ chỉ số định kỳ, nắm giữ nhiều năm</td><td>1–2 giờ/tháng</td><td>Người bận rộn, người mới</td><td>John Bogle</td></tr>
+          <tr><td><b>Đầu tư giá trị</b></td><td>Mua doanh nghiệp tốt với giá thấp hơn giá trị nội tại, nắm giữ dài hạn</td><td>5–10 giờ/tuần</td><td>Người kiên nhẫn, thích đọc BCTC</td><td>Benjamin Graham, Warren Buffett</td></tr>
+          <tr><td><b>Đầu tư tăng trưởng</b></td><td>Mua doanh nghiệp tăng trưởng lợi nhuận nhanh, chấp nhận định giá cao</td><td>5–10 giờ/tuần</td><td>Người chịu được biến động lớn</td><td>Philip Fisher, Peter Lynch</td></tr>
+          <tr><td><b>Đầu tư cổ tức</b></td><td>Mua doanh nghiệp trả cổ tức tiền mặt cao và đều</td><td>2–5 giờ/tuần</td><td>Người cần dòng tiền ổn định</td><td>—</td></tr>
+          <tr><td><b>Đầu tư theo đà</b> (CANSLIM, swing trading)</td><td>Kết hợp tăng trưởng lợi nhuận với phân tích kỹ thuật, nắm giữ vài tuần đến vài tháng</td><td>10+ giờ/tuần</td><td>Người có thời gian theo dõi và kỷ luật cao</td><td>William O'Neil, Mark Minervini</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="panel toy">
+      <div class="toy-title"><h3>Tuần của bạn có bao nhiêu giờ cho đầu tư?</h3><span class="pill">Kéo thử</span></div>
+      <div class="ctl" style="max-width:420px"><label for="hrs">Giờ thật sự dành được mỗi tuần <output id="hrsOut"></output></label><input id="hrs" type="range" min="0" max="15" step="0.5" value="3"></div>
+      <div class="chart-box"><svg id="hrsChart" viewBox="0 0 480 250" role="img" aria-label="Thời gian mỗi tuần mà từng trường phái cần"></svg></div>
+      <div class="legend"><span><i style="background:var(--money)"></i>Đủ thời gian</span><span><i style="background:var(--chip)"></i>Chưa đủ thời gian</span><span><i style="background:var(--pig-deep)"></i>Giờ của bạn</span></div>
+      <p class="note">1–2 giờ/tháng của đầu tư thụ động quy đổi ≈ 0,2–0,5 giờ/tuần. Thanh "10+ giờ" vẽ đến mép phải biểu đồ.</p>
+      <div class="say owl"><span class="char" data-char="owl:talk"></span><p class="bubble" id="hrsSay"></p></div>
+    </div>
+
+    <div class="panel quiz">
+      <div class="mcq q" data-answer="1" data-right="Đúng. Người đổi phong cách mỗi khi thua lỗ thường thua ở tất cả các phong cách. Giai đoạn kém là một phần của mọi trường phái." data-wrong="Chưa đúng. Đổi phong cách mỗi khi thua lỗ khiến Heo không bao giờ đi đủ xa với phong cách nào, và thường thua cả ở tất cả các phong cách.">
+        <h3>Heo theo đầu tư giá trị, danh mục đứng yên 6 tháng trong khi bạn bè lướt sóng có lãi. Heo nên làm gì?</h3>
+        <div class="opts">
+          <button class="opt" type="button">Chuyển sang lướt sóng ngay cho kịp bạn bè</button>
+          <button class="opt" type="button">Kiểm tra lại luận điểm từng mã; nếu doanh nghiệp vẫn tốt thì tiếp tục nhất quán</button>
+          <button class="opt" type="button">Mỗi tháng thử một trường phái khác cho đa dạng</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 9.3 -->
+  <section class="chapter" id="dca">
+    <div class="chapter-head"><span class="tag">9.3</span><h2>DCA: đều đặn thắng đoán mò</h2></div>
+    <div class="panel talk">
+      <div class="say pig"><span class="char" data-char="pig:worried"></span><p class="bubble">Em không biết lúc nào là đáy. Mua hôm nay mai giảm thì sao?</p></div>
+      <div class="say owl right"><p class="bubble">Thì đừng đoán. <b>DCA</b> (dollar-cost averaging) là đầu tư một số tiền cố định mỗi tháng, bất kể giá cao hay thấp. Đây là chiến lược tốt nhất cho người mới.</p><span class="char" data-char="owl:smile"></span></div>
+    </div>
+
+    <div class="panel toy">
+      <div class="toy-title"><h3>Máy DCA ba tháng</h3><span class="pill">Kéo thử</span></div>
+      <p>Mặc định là ví dụ của Cú: mỗi tháng mua 3 triệu chứng chỉ quỹ, giá 30.000 → 20.000 (thị trường giảm) → 30.000.</p>
+      <div class="controls">
+        <div class="ctl"><label for="dcaM">Mỗi tháng bỏ vào <output id="dcaMOut"></output></label><input id="dcaM" type="range" min="1" max="10" step="1" value="3"></div>
+      </div>
+      <div class="price-ctl">
+        <div class="ctl"><label for="p1">Giá tháng 1 <output id="p1Out"></output></label><input id="p1" type="range" min="10000" max="50000" step="1000" value="30000"></div>
+        <div class="ctl"><label for="p2">Giá tháng 2 <output id="p2Out"></output></label><input id="p2" type="range" min="10000" max="50000" step="1000" value="20000"></div>
+        <div class="ctl"><label for="p3">Giá tháng 3 <output id="p3Out"></output></label><input id="p3" type="range" min="10000" max="50000" step="1000" value="30000"></div>
+      </div>
+      <div class="tbl-wrap">
+        <table class="tbl">
+          <thead><tr><th>Tháng</th><th class="r">Giá</th><th class="r">Số chứng chỉ mua được</th></tr></thead>
+          <tbody id="dcaRows"></tbody>
+        </table>
+      </div>
+      <div class="chart-box"><svg id="dcaChart" viewBox="0 0 480 220" role="img" aria-label="Giá mỗi tháng và số chứng chỉ mua được"></svg></div>
+      <div class="legend"><span><i style="background:var(--save)"></i>Giá chứng chỉ</span><span><i style="background:var(--money)"></i>Số chứng chỉ mua được</span></div>
+      <div class="result">
+        <div class="stat"><div class="k">Giá trung bình 3 tháng</div><div class="v" id="dcaAvgP"></div></div>
+        <div class="stat money" id="dcaCostBox"><div class="k">Giá vốn bình quân của bạn</div><div class="v" id="dcaCost"></div></div>
+      </div>
+      <div class="chalk"><span class="f" id="dcaFormula"></span><small>Giá vốn bình quân = tổng tiền bỏ ra ÷ tổng số chứng chỉ</small></div>
+      <div class="say owl"><span class="char" data-char="owl:talk"></span><p class="bubble" id="dcaSay"></p></div>
+      <div class="callout">
+        <strong>So sánh: bỏ cả cục vào tháng 1</strong>
+        <p id="lumpTxt"></p>
+      </div>
+    </div>
+
+    <div class="panel toy">
+      <div class="toy-title"><h3>Tháng 2, giá rơi còn 20.000. Heo làm gì?</h3><span class="pill">Chọn đi</span></div>
+      <div class="situ"><span class="char" data-char="pig:worried"></span><p>Heo đã mua 100 chứng chỉ ở 30.000 (3 triệu) tháng trước. Giờ chúng chỉ còn 2 triệu. Mạng xã hội toàn tin xấu.</p></div>
+      <div class="choices" id="panicOpts">
+        <button class="opt" type="button" data-k="0">Bán hết cho nhẹ đầu, dừng đầu tư</button>
+        <button class="opt" type="button" data-k="1">Tạm dừng, đợi thị trường "rõ xu hướng" rồi tháng 3 mua tiếp</button>
+        <button class="opt" type="button" data-k="2">Vẫn mua đều 3 triệu như kế hoạch</button>
+      </div>
+      <div class="verdict" id="panicOut"></div>
+      <p class="note">Giả định tháng 3 giá về lại 30.000 như ví dụ. Thực tế không ai biết trước giá tháng sau; đó chính là lý do DCA không cần đoán.</p>
+    </div>
+
+    <div class="panel quiz">
+      <div class="mcq q" data-answer="0" data-right="Chính xác. Cùng 3 triệu, tháng giá 20.000 mua được 150 chứng chỉ thay vì 100. Tháng giá thấp chiếm nhiều chứng chỉ hơn nên kéo giá vốn xuống." data-wrong="Chưa đúng. Bí mật nằm ở số lượng: khi giá thấp, cùng số tiền mua được nhiều chứng chỉ hơn.">
+        <h3>Vì sao giá vốn DCA (25.714 đ) thấp hơn giá trung bình 3 tháng (26.667 đ)?</h3>
+        <div class="opts">
+          <button class="opt" type="button">Vì khi giá thấp, cùng số tiền mua được nhiều chứng chỉ hơn</button>
+          <button class="opt" type="button">Vì quỹ giảm phí cho người mua định kỳ</button>
+          <button class="opt" type="button">Vì Heo đoán đúng đáy ở tháng 2</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 9.4 -->
+  <section class="chapter" id="phong-cach">
+    <div class="chapter-head"><span class="tag">9.4</span><h2>Bốn câu hỏi tìm phong cách</h2></div>
+    <div class="panel talk">
+      <div class="say owl"><span class="char" data-char="owl:talk"></span><p class="bubble">Trả lời thật lòng, không phải theo kiểu "nhà đầu tư lý tưởng". Thời gian và tính cách thật của con mới quyết định con theo được bao lâu.</p></div>
+    </div>
+    <div class="panel quiz">
+      <div class="q" data-s="hours">
+        <h3>1. Mỗi tuần tôi thật sự có bao nhiêu giờ cho việc đầu tư?</h3>
+        <div class="opts">
+          <button class="opt" type="button" data-v="0">Dưới 2 giờ</button>
+          <button class="opt" type="button" data-v="1">2–5 giờ</button>
+          <button class="opt" type="button" data-v="2">5–10 giờ</button>
+          <button class="opt" type="button" data-v="3">Trên 10 giờ</button>
+        </div>
+      </div>
+      <div class="q" data-s="bctc">
+        <h3>2. Tôi có thích đọc báo cáo tài chính không?</h3>
+        <div class="opts"><button class="opt" type="button" data-v="1">Có</button><button class="opt" type="button" data-v="0">Không</button></div>
+      </div>
+      <div class="q" data-s="still">
+        <h3>3. Tôi có chịu được việc cổ phiếu đứng yên 1–2 năm không?</h3>
+        <div class="opts"><button class="opt" type="button" data-v="1">Chịu được</button><button class="opt" type="button" data-v="0">Không chịu được</button></div>
+      </div>
+      <div class="q" data-s="cash">
+        <h3>4. Tôi cần dòng tiền đều từ khoản đầu tư không?</h3>
+        <div class="opts"><button class="opt" type="button" data-v="1">Có</button><button class="opt" type="button" data-v="0">Không</button></div>
+      </div>
+      <div class="verdict" id="styleOut"></div>
+      <div class="callout">
+        <strong>Luật chọn</strong>
+        <ul class="plain">
+          <li>Dưới 2 giờ/tuần thì chọn thụ động.</li>
+          <li>Thích đọc báo cáo tài chính thì chọn giá trị hoặc tăng trưởng.</li>
+          <li>Không chịu được cổ phiếu đứng yên 1–2 năm thì chọn theo đà, nhưng phải chấp nhận cắt lỗ thường xuyên.</li>
+          <li>Cần dòng tiền đều thì chọn cổ tức.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="panel toy">
+      <div class="toy-title"><h3>Chia vốn năm đầu tiên</h3><span class="pill">Kéo thử</span></div>
+      <p><b>Gợi ý cho năm đầu tiên:</b> 70–80% vốn đầu tư DCA vào ETF hoặc quỹ mở, 20–30% vốn để thực hành phân tích và tự chọn cổ phiếu.</p>
+      <div class="controls">
+        <div class="ctl"><label for="capV">Vốn đầu tư năm đầu <output id="capVOut"></output></label><input id="capV" type="range" min="10" max="500" step="10" value="100"></div>
+        <div class="ctl"><label for="capP">Phần DCA vào ETF/quỹ mở <output id="capPOut"></output></label><input id="capP" type="range" min="70" max="80" step="1" value="75"></div>
+      </div>
+      <div class="result">
+        <div class="stat money"><div class="k">DCA vào ETF hoặc quỹ mở</div><div class="v" id="capEtf"></div></div>
+        <div class="stat"><div class="k">Thực hành tự chọn cổ phiếu</div><div class="v" id="capSelf"></div></div>
+        <div class="stat"><div class="k">Nếu DCA đều 12 tháng</div><div class="v" id="capMonth"></div></div>
+      </div>
+      <div class="say owl"><span class="char" data-char="owl:smile"></span><p class="bubble">Sau 2–3 năm, nếu phần tự chọn <b>liên tục thắng ETF sau phí</b>, hãy tăng dần tỷ trọng. Nếu không, con vừa tiết kiệm được rất nhiều thời gian.</p></div>
+    </div>
+  </section>
+
+  <!-- 9.5 -->
+  <section class="chapter" id="checklist">
+    <div class="chapter-head"><span class="tag">9.5</span><h2>Cổng kiểm tra trước nút Mua</h2></div>
+    <div class="panel talk">
+      <div class="say pig"><span class="char" data-char="pig:wow"></span><p class="bubble">Thầy ơi, em thấy mã ABC đẹp quá, em bấm Mua luôn nha!</p></div>
+      <div class="say owl right"><p class="bubble">Phi công nào cũng đọc checklist trước khi cất cánh, dù đã bay nghìn lần. Con qua đủ sáu cửa này rồi hãy bấm.</p><span class="char" data-char="owl:stern"></span></div>
+    </div>
+    <div class="panel toy">
+      <div class="toy-title"><h3>Checklist trước mỗi lệnh mua</h3><span class="pill">Tick trung thực</span></div>
+      <ul class="gate" id="gate">
+        <li><label><input type="checkbox"><span>Lệnh này nằm trong kế hoạch, không phải quyết định bộc phát</span></label></li>
+        <li><label><input type="checkbox"><span>Tôi viết được lý do mua trong 3 câu</span></label></li>
+        <li><label><input type="checkbox"><span>Tôi đã xác định giá cắt lỗ và tỷ trọng theo Module 8</span></label></li>
+        <li><label><input type="checkbox"><span>Tôi không mua vì sợ bỏ lỡ hay vì người khác khuyên</span></label></li>
+        <li><label><input type="checkbox"><span>Tôi đã tìm ít nhất 1 lập luận phản bác và cân nhắc nó</span></label></li>
+        <li><label><input type="checkbox"><span>Nếu cổ phiếu giảm 20% ngày mai, tôi vẫn ngủ ngon</span></label></li>
+      </ul>
+      <button class="btn" type="button" id="gateBtn">Bấm Mua</button>
+      <div class="verdict" id="gateOut"></div>
+      <p class="note">Các ô ở đây không được lưu; chúng là bài tập cho từng lệnh. Bấm "Bấm Mua" để Cú kiểm tra.</p>
+    </div>
+  </section>
+
+  <!-- 9.6 -->
+  <section class="chapter" id="thoi-quen">
+    <div class="chapter-head"><span class="tag">9.6</span><h2>Thói quen của heo bền bỉ</h2></div>
+    <div class="panel talk">
+      <div class="say pig"><span class="char" data-char="pig:sad"></span><p class="bubble">Em mở app 50 lần một ngày, tin nào cũng làm em giật mình.</p></div>
+      <div class="say owl right"><p class="bubble">Phần lớn những gì con đọc là tiếng ồn. Chỉ phản ứng khi thông tin <b>thay đổi giá trị doanh nghiệp</b>. Lật năm thẻ thói quen dưới đây.</p><span class="char" data-char="owl:talk"></span></div>
+    </div>
+    <div class="cards">
+      <button class="flip" type="button"><span class="front">Mỗi tuần 1 báo cáo</span><span class="back">Đọc 1 báo cáo thường niên hoặc BCTC mỗi tuần.</span></button>
+      <button class="flip" type="button"><span class="front">Xem danh mục thưa thôi</span><span class="back">Xem lại danh mục mỗi tuần một lần, không phải mỗi giờ.</span></button>
+      <button class="flip" type="button"><span class="front">Nhật ký giao dịch</span><span class="back">Viết nhật ký mỗi lần giao dịch, đánh giá lại mỗi quý.</span></button>
+      <button class="flip" type="button"><span class="front">Tin tức hay tiếng ồn?</span><span class="back">Tách biệt tin tức và tiếng ồn: chỉ phản ứng khi thông tin thay đổi giá trị doanh nghiệp.</span></button>
+      <button class="flip" type="button"><span class="front">Học, đừng tự trách</span><span class="back">Học từ sai lầm của chính mình, không tự trách bản thân.</span></button>
+    </div>
+    <div class="panel toy">
+      <div class="toy-title"><h3>Tin tức hay tiếng ồn?</h3><span class="pill">Phân loại</span></div>
+      <p>Sáu dòng tin về doanh nghiệp giả định X. Dòng nào thay đổi giá trị doanh nghiệp, dòng nào chỉ là tiếng ồn?</p>
+      <div class="sorter" id="sorter"></div>
+      <div class="result"><div class="stat" id="sortBox"><div class="k">Phân loại đúng</div><div class="v" id="sortScore"></div></div></div>
+    </div>
+  </section>
+
+  <!-- BÀI TẬP -->
+  <section class="chapter" id="bai-tap">
+    <div class="chapter-head"><span class="tag">✓</span><h2>Bài tập: cho Heo ăn xu</h2></div>
+    <div class="panel toy">
+      <div class="feed">
+        <span class="char" id="feedPig"></span>
+        <div class="stack" style="gap:8px">
+          <strong id="feedText"></strong>
+          <div class="bar" aria-hidden="true"><div id="feedBar"></div></div>
+          <span class="note">Chỉ coi module là xong khi đã tick hết bài tập, không phải khi đọc xong. Tiến độ được lưu trên trình duyệt này.</span>
+        </div>
+      </div>
+      <ul class="tasks" id="tasks" data-module="10">
+        <li><label><input type="checkbox" id="t1"><span>Đánh giá bản thân với 8 bẫy tâm lý ở mục 9.1: bạn từng mắc bẫy nào? Ghi lại một ví dụ cụ thể</span></label></li>
+        <li><label><input type="checkbox" id="t2"><span>Trả lời 4 câu hỏi ở mục 9.4 và chọn trường phái chính cho bản thân</span></label></li>
+        <li><label><input type="checkbox" id="t3"><span>Thiết lập DCA tự động hằng tháng vào một quỹ ETF hoặc quỹ mở</span></label></li>
+        <li><label><input type="checkbox" id="t4"><span>In checklist mục 9.5 và dùng trước mỗi lệnh mua trong 3 tháng tới</span></label></li>
+        <li><label><input type="checkbox" id="t5"><span>Đọc hết một cuốn sách trong danh sách ở file thuật ngữ và tài nguyên, viết tóm tắt 1 trang</span></label></li>
+        <li><label><input type="checkbox" id="t6"><span>Sau 12 tháng: so sánh kết quả danh mục tự chọn với ETF VN30 và viết đánh giá</span></label></li>
+      </ul>
+    </div>
+    <a class="panel next" href="11-thuat-ngu-va-tai-nguyen.html">
+      <div class="stack" style="gap:4px">
+        <span class="eyebrow">Chương sau →</span>
+        <h3>Thuật ngữ, sách, công cụ</h3>
+        <span class="note">Từ điển nhỏ, kệ sách và hộp đồ nghề để Heo tự học tiếp.</span>
+      </div>
+      <span class="char bob" data-char="owl:smile" style="width:72px"></span>
+    </a>
+    <p class="disclaimer">Giáo trình mang tính giáo dục, không phải khuyến nghị mua bán mã cổ phiếu nào. Các mã ABC, XYZ, X và mọi con số trong tình huống, máy tính là minh họa, không phải số liệu thị trường thực tế.</p>
+  </section>
+</main>
+
+<script src="assets/truyen.js"></script>
+<script>
+(function () {
+  var T = Truyen, $ = T.$, money = T.money, pct = T.pct, trim = T.trim, num = T.num;
+  function vnd(v) { return num(v, 0) + ' đ'; }
+
+  // ---------- 9.1 trò chơi tình huống ----------
+  var scenes = [
+    { trap: 'FOMO (sợ bỏ lỡ)', fix: 'Chỉ mua theo kế hoạch viết sẵn; bỏ lỡ một cơ hội không làm bạn mất tiền.',
+      s: 'Thứ Hai. Mã ABC tăng 60% trong một tháng, cả nhóm Zalo khoe lãi. ABC không có trong kế hoạch của Heo.',
+      c: [
+        { t: 'Mua ngay kẻo lỡ chuyến tàu', ok: false, r: 'Heo mua đuổi ở vùng giá đã tăng mạnh mà không biết vì sao nó tăng. Khi đợt tăng dừng lại, Heo không có kế hoạch nào để biết lúc nào bán.' },
+        { t: 'Mở kế hoạch ra xem: không có ABC, bỏ qua', ok: true, r: 'Heo bỏ lỡ một cơ hội, nhưng bỏ lỡ không làm Heo mất đồng nào. Tiền vẫn ở đó cho kế hoạch thật.' },
+        { t: 'Mua một ít thôi, cho vui', ok: false, r: '"Một ít cho vui" vẫn là quyết định bộc phát. Lần sau "một ít" sẽ lớn hơn.' }
+      ] },
+    { trap: 'Tâm lý bầy đàn', fix: 'Tự hỏi: tôi có tự phân tích không, hay chỉ nghe người khác?',
+      s: 'Thứ Ba. Một kênh "phím hàng" có 50.000 người theo dõi hô mã XYZ "x2 trong tháng".',
+      c: [
+        { t: 'Nhiều người theo thế chắc đúng, mua theo', ok: false, r: 'Đông người không biến một lời đồn thành phân tích. Khi đám đông cùng bán, Heo kẹt giữa đám đông.' },
+        { t: 'Hỏi thêm vài hội nhóm khác cho chắc', ok: false, r: 'Vẫn là nghe người khác, chỉ là nhiều người hơn. Heo chưa tự phân tích dòng nào.' },
+        { t: 'Tự đọc BCTC của XYZ và định giá trước khi nghĩ đến mua', ok: true, r: 'Đúng câu hỏi: "Mình có tự phân tích không?" Nếu sau khi tự làm vẫn thấy hợp lý, đó mới là quyết định của Heo.' }
+      ] },
+    { trap: 'Ôm lỗ, chốt lời sớm (disposition effect)', fix: 'Cắt lỗ theo quy tắc; để lệnh lãi chạy đến khi có tín hiệu bán.',
+      s: 'Thứ Tư. Heo có mã A đang lãi 5% và mã B đang lỗ 30%, đã thủng giá cắt lỗ đặt từ trước. Heo muốn bán bớt một mã.',
+      c: [
+        { t: 'Bán A cho chắc lãi, giữ B chờ về bờ', ok: false, r: 'Heo cắt hoa, tưới cỏ dại. Lỗ 30% thì B phải tăng 42,9% mới về bờ, trong khi A đang chạy tốt lại bị bán sớm.' },
+        { t: 'Mua thêm B để trung bình giá', ok: false, r: 'Heo dồn thêm tiền vào đúng mã đang sai, phá luôn quy tắc tỷ trọng.' },
+        { t: 'Cắt B theo quy tắc, để A chạy đến khi có tín hiệu bán', ok: true, r: 'Lỗ được giữ nhỏ, lãi được phép lớn. Đó là kỷ luật, không phải cảm xúc.' }
+      ] },
+    { trap: 'Thiên kiến xác nhận', fix: 'Chủ động tìm lập luận ngược lại: "Vì sao tôi có thể sai?"',
+      s: 'Thứ Năm. Heo đang nắm mã C. Sáng nay có ba bài viết về C: hai bài khen, một bài chê.',
+      c: [
+        { t: 'Đọc kỹ bài chê, tự hỏi "Vì sao mình có thể sai?"', ok: true, r: 'Bài chê có thể sai, nhưng nếu nó đúng thì Heo biết sớm. Lập luận phản bác là bảo hiểm miễn phí.' },
+        { t: 'Chỉ đọc hai bài khen cho vui', ok: false, r: 'Heo chỉ nghe điều mình muốn nghe. Rủi ro vẫn ở đó, chỉ là Heo không nhìn thấy.' },
+        { t: 'Chặn luôn tác giả bài chê', ok: false, r: 'Heo tự bịt tai. Lần sau tin xấu thật đến, Heo là người biết cuối cùng.' }
+      ] },
+    { trap: 'Hiệu ứng mỏ neo', fix: 'Giá quá khứ không quyết định giá trị; hãy định giá lại từ đầu.',
+      s: 'Thứ Sáu. Mã D từng có giá 100.000, giờ chỉ còn 50.000.',
+      c: [
+        { t: 'Rẻ một nửa rồi, mua!', ok: false, r: 'Rẻ so với giá cũ chưa chắc rẻ so với giá trị. Có thể doanh nghiệp giờ chỉ còn đáng một nửa, hoặc ít hơn.' },
+        { t: 'Định giá lại D từ đầu bằng số liệu hiện tại', ok: true, r: 'Heo nhìn doanh nghiệp, không nhìn con số 100.000. Kết luận có thể là rẻ, cũng có thể là đắt.' },
+        { t: 'Đã mua thì chờ về lại 100.000 mới bán', ok: false, r: 'Lại thả neo ở giá cũ. Thị trường không biết và không quan tâm Heo mua giá bao nhiêu.' }
+      ] },
+    { trap: 'Tự tin thái quá', fix: 'Giữ nguyên quy tắc tỷ trọng; may mắn khác với kỹ năng.',
+      s: 'Thứ Bảy. Heo vừa thắng 4 lệnh liên tiếp và thấy mình là thiên tài.',
+      c: [
+        { t: 'Dồn gấp đôi, vay thêm margin cho lãi to', ok: false, r: 'Ví dụ: 100 triệu vốn vay thêm 100 triệu margin. Cổ phiếu giảm 20% còn 160 triệu, trả nợ 100 triệu, Heo còn 60 triệu: mất 40% vốn, chưa tính lãi vay.' },
+        { t: 'Giữ nguyên tỷ trọng, mở nhật ký xem thắng nhờ kỹ năng hay may mắn', ok: true, r: 'Bốn lệnh là quá ít để biết. Giữ quy tắc thì một chuỗi thua sau đó cũng không làm Heo gục.' }
+      ] },
+    { trap: 'Ác cảm mất mát', fix: 'Nhìn kết quả theo năm, không theo ngày; tắt app khi không cần.',
+      s: 'Chủ Nhật. Danh mục của Heo đỏ 10 triệu trong tuần. Heo mất ngủ, dù tuần trước lãi 10 triệu Heo chỉ vui một chút.',
+      c: [
+        { t: 'Bán hết cho nhẹ đầu', ok: false, r: 'Nỗi đau mất 10 triệu lớn gấp khoảng 2 lần niềm vui lãi 10 triệu, nên Heo bán vì cảm xúc, không vì doanh nghiệp đổi khác.' },
+        { t: 'Mở app 5 phút một lần để canh', ok: false, r: 'Càng xem nhiều, Heo càng thấy nhiều phiên đỏ, càng đau, càng dễ làm bậy.' },
+        { t: 'Tắt app, nhìn kết quả theo năm', ok: true, r: 'Biến động trong tuần là chuyện thường. Heo ngủ được, và quyết định để dành cho buổi xem lại danh mục hằng tuần.' }
+      ] },
+    { trap: 'Gỡ gạc (revenge trading)', fix: 'Sau 2–3 lệnh thua liên tiếp, nghỉ giao dịch vài ngày.',
+      s: 'Thứ Hai tuần sau. Heo vừa thua 3 lệnh liên tiếp, đang cay cú.',
+      c: [
+        { t: 'Vào lệnh lớn gấp đôi để gỡ một lần cho xong', ok: false, r: 'Lệnh to vào lúc đầu óc nóng nhất. Thua thêm lệnh này, Heo mất nhiều hơn cả 3 lệnh trước cộng lại.' },
+        { t: 'Nghỉ giao dịch vài ngày, viết nhật ký về 3 lệnh thua', ok: true, r: 'Heo dừng chuỗi thua trước khi nó thành thảm họa, và có thời gian tìm xem mình sai ở đâu.' },
+        { t: 'Vào ngay lệnh mới cùng cỡ, biết đâu đổi vận', ok: false, r: 'Không phải phân tích, chỉ là muốn gỡ. Thị trường không nợ Heo lần thắng nào.' }
+      ] }
+  ];
+  var sceneIdx = 0, sceneRes = [];
+  function dots() {
+    return '<div class="dots" aria-hidden="true">' + scenes.map(function (_, i) {
+      var c = sceneRes[i] === true ? 'ok' : sceneRes[i] === false ? 'bad' : i === sceneIdx ? 'now' : '';
+      return '<i class="' + c + '"></i>';
+    }).join('') + '</div>';
+  }
+  function renderScene() {
+    var box = $('scene');
+    if (sceneIdx >= scenes.length) {
+      var good = sceneRes.filter(function (x) { return x; }).length;
+      var mood = good === scenes.length ? 'proud' : good >= 5 ? 'happy' : good >= 3 ? 'worried' : 'sad';
+      var missed = scenes.filter(function (_, i) { return !sceneRes[i]; }).map(function (s) { return s.trap; });
+      box.innerHTML = '<div class="scene-top"><strong>Hết tuần!</strong>' + dots() + '</div>' +
+        '<div class="verdict"><span class="char">' + T.pig(mood) + '</span><div><span class="eyebrow">Kết quả · ' + good + '/' + scenes.length + ' cảnh giữ được bình tĩnh</span>' +
+        '<h3>' + (good === scenes.length ? 'Heo thép!' : good >= 5 ? 'Heo khá vững' : 'Heo còn dễ bị cám dỗ') + '</h3>' +
+        '<p>' + (missed.length ? 'Bẫy cần để ý: ' + missed.join(', ') + '. Đó là gợi ý tốt cho bài tập số 1.' : 'Không dính bẫy nào trong trò chơi. Ngoài đời khó hơn nhiều, vì tiền thật làm tim đập nhanh hơn.') + '</p></div></div>' +
+        '<button class="btn ghost" type="button" id="sceneAgain">Chơi lại</button>';
+      $('sceneAgain').addEventListener('click', function () { sceneIdx = 0; sceneRes = []; renderScene(); });
+      return;
+    }
+    var sc = scenes[sceneIdx];
+    box.innerHTML = '<div class="scene-top"><strong>Cảnh ' + (sceneIdx + 1) + '/' + scenes.length + '</strong>' + dots() + '</div>' +
+      '<div class="situ"><span class="char">' + T.pig('wow') + '</span><p>' + sc.s + '</p></div>' +
+      '<div class="choices">' + sc.c.map(function (c, i) { return '<button class="opt" type="button" data-i="' + i + '">' + c.t + '</button>'; }).join('') + '</div>' +
+      '<div class="outcome" id="sceneOut"></div>';
+    box.querySelectorAll('.choices .opt').forEach(function (b) {
+      b.addEventListener('click', function () {
+        var c = sc.c[+b.dataset.i];
+        sceneRes[sceneIdx] = c.ok;
+        box.querySelectorAll('.choices .opt').forEach(function (o) {
+          o.disabled = true;
+          if (sc.c[+o.dataset.i].ok) o.classList.add('right');
+        });
+        if (!c.ok) b.classList.add('wrong');
+        b.setAttribute('aria-pressed', 'true');
+        $('sceneOut').innerHTML =
+          '<div class="say ' + (c.ok ? 'pig' : 'owl') + '"><span class="char">' + (c.ok ? T.pig('proud') : T.owl('stern')) + '</span><p class="bubble">' + c.r + '</p></div>' +
+          '<div class="callout ' + (c.ok ? 'good' : 'warn') + '"><strong>Bẫy: ' + sc.trap + '</strong><p>Cách phòng tránh: ' + sc.fix + '</p></div>' +
+          '<button class="btn" type="button" id="sceneNext">' + (sceneIdx + 1 < scenes.length ? 'Cảnh tiếp →' : 'Xem kết quả') + '</button>';
+        box.querySelector('.dots').outerHTML = dots();
+        $('sceneNext').addEventListener('click', function () { sceneIdx++; renderScene(); });
+      });
+    });
+  }
+  renderScene();
+
+  // ---------- 9.1 cân cảm xúc + về bờ ----------
+  function renderLA() {
+    var x = +$('laX').value;
+    $('laXOut').textContent = x + ' triệu';
+    $('laJoyK').textContent = 'Vui khi lãi ' + x + ' triệu';
+    $('laPainK').textContent = 'Đau khi lỗ ' + x + ' triệu';
+    $('laJoy').style.width = (x / 100 * 100) + '%';
+    $('laPain').style.width = (2 * x / 100 * 100) + '%';
+    $('laSay').innerHTML = 'Mất ' + x + ' triệu đau gấp khoảng <b>2 lần</b> niềm vui lãi ' + x + ' triệu. Cảm giác như mất ' + (2 * x) + ' triệu. Vì thế đừng nhìn danh mục theo ngày: nhìn theo năm, tắt app khi không cần.';
+  }
+  $('laX').addEventListener('input', renderLA); renderLA();
+
+  function renderRC() {
+    var L = +$('rcL').value / 100, need = L / (1 - L);
+    var Lp = Math.round(L * 100) + '%';
+    $('rcLOut').textContent = Lp;
+    $('rcLoss').textContent = '−' + Lp;
+    $('rcNeed').textContent = '+' + pct(need * 100);
+    $('rcNote').textContent = '100 triệu lỗ ' + Lp + ' còn ' + money(100e6 * (1 - L)) + '. Muốn quay lại 100 triệu, số tiền đó phải tăng ' + pct(need * 100) + '. Đó là lý do cắt lỗ sớm theo quy tắc rẻ hơn ngồi "chờ về bờ".';
+  }
+  $('rcL').addEventListener('input', renderRC); renderRC();
+
+  // ---------- 9.2 giờ/tuần ----------
+  var schools = [
+    { n: 'Thụ động', lo: 12 / 52, hi: 24 / 52, lab: '1–2 giờ/tháng' },
+    { n: 'Giá trị', lo: 5, hi: 10, lab: '5–10 giờ/tuần' },
+    { n: 'Tăng trưởng', lo: 5, hi: 10, lab: '5–10 giờ/tuần' },
+    { n: 'Cổ tức', lo: 2, hi: 5, lab: '2–5 giờ/tuần' },
+    { n: 'Theo đà', lo: 10, hi: 15, lab: '10+ giờ/tuần', open: true }
+  ];
+  function renderHrs() {
+    var h = +$('hrs').value;
+    $('hrsOut').textContent = trim(h, 1) + ' giờ';
+    var W = 480, H = 250, L = 96, R = 16, Tp = 10, B = 30, max = 15, rowH = (H - Tp - B) / schools.length;
+    var x = function (v) { return L + (W - L - R) * v / max; };
+    var g = '';
+    for (var t = 0; t <= max; t += 5) {
+      g += '<line x1="' + x(t) + '" x2="' + x(t) + '" y1="' + Tp + '" y2="' + (H - B) + '" stroke="var(--dot)" stroke-width="1.5"/>' +
+        '<text x="' + x(t) + '" y="' + (H - 10) + '" text-anchor="' + (t === max ? 'end' : t === 0 ? 'start' : 'middle') + '">' + (t === max ? t + '+ giờ/tuần' : t) + '</text>';
+    }
+    schools.forEach(function (s, i) {
+      var y0 = Tp + rowH * i, ok = h >= s.lo, bh = rowH * 0.56, yb = y0 + (rowH - bh) / 2;
+      var w = Math.max(4, x(s.hi) - x(s.lo));
+      g += '<text x="' + (L - 8) + '" y="' + (y0 + rowH / 2 + 4) + '" text-anchor="end" style="fill:var(--ink);font-weight:700">' + s.n + '</text>';
+      g += '<rect x="' + x(s.lo) + '" y="' + yb + '" width="' + w + '" height="' + bh + '" rx="4" fill="' + (ok ? 'var(--money)' : 'var(--chip)') + '" stroke="var(--border)" stroke-width="2"/>';
+      var lx = s.open ? x(s.lo) + 6 : x(s.hi) + 6, anchor = 'start';
+      if (lx > W - 90) { lx = x(s.lo) - 6; anchor = 'end'; }
+      if (s.open) { lx = x(s.lo) + 8; anchor = 'start'; }
+      g += '<text x="' + lx + '" y="' + (y0 + rowH / 2 + 4) + '" text-anchor="' + anchor + '"' + (s.open && ok ? ' style="fill:var(--panel);font-weight:700"' : '') + '>' + s.lab + '</text>';
+    });
+    g += '<line x1="' + x(h) + '" x2="' + x(h) + '" y1="' + Tp + '" y2="' + (H - B) + '" stroke="var(--pig-deep)" stroke-width="3" stroke-dasharray="6 4"/>';
+    $('hrsChart').innerHTML = g;
+    var fit = schools.filter(function (s) { return h >= s.lo; }).map(function (s) { return s.n.toLowerCase(); });
+    $('hrsSay').innerHTML = h < 2
+      ? 'Dưới 2 giờ mỗi tuần thì chọn <b>đầu tư thụ động</b>. Không có gì phải ngại: đó là lựa chọn của rất nhiều người bận rộn.'
+      : 'Với ' + trim(h, 1) + ' giờ/tuần, con đủ thời gian cho: <b>' + fit.join(', ') + '</b>. Chọn trong đó cái hợp tính cách, rồi theo đuổi nhất quán.';
+  }
+  $('hrs').addEventListener('input', renderHrs); renderHrs();
+
+  // ---------- 9.3 DCA ----------
+  function dcaCalc(m, prices) {
+    var units = prices.map(function (p) { return m / p; });
+    var U = units.reduce(function (a, b) { return a + b; }, 0), paid = m * prices.length;
+    var avgP = prices.reduce(function (a, b) { return a + b; }, 0) / prices.length;
+    return { units: units, U: U, paid: paid, avgP: avgP, cost: paid / U };
+  }
+  function renderDCA() {
+    var m = +$('dcaM').value * 1e6, prices = [+$('p1').value, +$('p2').value, +$('p3').value];
+    $('dcaMOut').textContent = money(m);
+    prices.forEach(function (p, i) { $('p' + (i + 1) + 'Out').textContent = vnd(p); });
+    var r = dcaCalc(m, prices);
+    $('dcaRows').innerHTML = prices.map(function (p, i) {
+      return '<tr><td>' + (i + 1) + '</td><td class="r">' + vnd(p) + '</td><td class="r">' + num(r.units[i], 1) + '</td></tr>';
+    }).join('') + '<tr><td><b>Tổng</b></td><td class="r"><b>Giá trung bình ' + num(r.avgP, 0) + '</b></td><td class="r"><b>' + num(r.U, 1) + ' chứng chỉ, bỏ ra ' + money(r.paid) + '</b></td></tr>';
+    $('dcaAvgP').textContent = vnd(r.avgP);
+    $('dcaCost').textContent = '≈ ' + vnd(r.cost);
+    $('dcaFormula').textContent = num(r.paid, 0) + ' ÷ ' + num(r.U, 1) + ' ≈ ' + num(r.cost, 0) + ' đ';
+    var diff = r.avgP - r.cost;
+    $('dcaCostBox').className = 'stat ' + (diff > 0.5 ? 'money' : '');
+    $('dcaSay').innerHTML = diff > 0.5
+      ? 'Giá vốn <b>' + vnd(r.cost) + '</b> thấp hơn giá trung bình ' + vnd(r.avgP) + '. Khi giá thấp, cùng số tiền mua được nhiều chứng chỉ hơn. DCA biến đợt giảm đáng sợ thành cơ hội và bỏ việc phải đoán thời điểm.'
+      : 'Giá ba tháng bằng nhau nên giá vốn đúng bằng giá trung bình. Kéo thử một tháng xuống thấp xem điều gì xảy ra.';
+
+    // biểu đồ: cột giá, nhãn số chứng chỉ
+    var W = 480, H = 220, L = 44, R = 16, Tp = 30, B = 30, top = 50000;
+    var y = function (v) { return Tp + (H - Tp - B) * (1 - v / top); };
+    var cw = (W - L - R) / 3, g = '';
+    for (var t = 0; t <= top; t += 10000) {
+      g += '<line x1="' + L + '" x2="' + (W - R) + '" y1="' + y(t) + '" y2="' + y(t) + '" stroke="var(--dot)" stroke-width="1.5"/>' +
+        '<text x="' + (L - 8) + '" y="' + (y(t) + 4) + '" text-anchor="end">' + (t / 1000) + 'k</text>';
+    }
+    prices.forEach(function (p, i) {
+      var cx = L + cw * i + cw / 2, bw = cw * 0.42;
+      g += '<rect x="' + (cx - bw / 2) + '" y="' + y(p) + '" width="' + bw + '" height="' + (y(0) - y(p)) + '" fill="var(--save)" stroke="var(--border)" stroke-width="2.5" rx="3"/>';
+      g += '<text x="' + cx + '" y="' + (y(p) - 8) + '" text-anchor="middle" style="fill:var(--money);font-weight:800;font-size:14px">' + num(r.units[i], 1) + ' CCQ</text>';
+      g += '<text x="' + cx + '" y="' + (H - 10) + '" text-anchor="middle">Tháng ' + (i + 1) + '</text>';
+    });
+    g += '<line x1="' + L + '" x2="' + (W - R) + '" y1="' + y(r.cost) + '" y2="' + y(r.cost) + '" stroke="var(--money)" stroke-width="2.5" stroke-dasharray="6 4"/>';
+    g += '<text x="' + (W - R) + '" y="' + (y(r.cost) - 6) + '" text-anchor="end" style="fill:var(--money)">giá vốn ' + num(r.cost, 0) + '</text>';
+    $('dcaChart').innerHTML = g;
+
+    // so với bỏ một lần ở tháng 1
+    var lumpU = r.paid / prices[0], end = prices[2];
+    var vDca = r.U * end, vLump = lumpU * end;
+    $('lumpTxt').innerHTML = 'Nếu bỏ cả ' + money(r.paid) + ' ngay tháng 1 ở giá ' + vnd(prices[0]) + ', Heo có <b>' + num(lumpU, 1) + '</b> chứng chỉ, cuối tháng 3 đáng <b>' + money(vLump) + '</b>. DCA có ' + num(r.U, 1) + ' chứng chỉ, đáng <b>' + money(vDca) + '</b>. ' +
+      (vDca > vLump + 1 ? 'Lần này DCA thắng nhờ đợt giảm ở giữa.' : vDca < vLump - 1 ? 'Lần này bỏ một lần thắng, vì giá đi lên. Không ai biết trước giá sẽ đi đường nào; DCA đổi một phần lợi nhuận tiềm năng lấy việc không phải đoán.' : 'Hai cách hòa nhau.');
+  }
+  ['dcaM', 'p1', 'p2', 'p3'].forEach(function (id) { $(id).addEventListener('input', renderDCA); });
+  renderDCA();
+
+  // ---------- 9.3 tình huống hoảng loạn ----------
+  var base = dcaCalc(3e6, [30000, 20000, 30000]);
+  var panic = [
+    { mood: 'sad', h: 'Bán ở đáy', units: 100, paid: 3e6, sold: 100 * 20000,
+      p: function () { return 'Heo bán 100 chứng chỉ ở 20.000, thu về ' + money(100 * 20000) + ': lỗ thật ' + money(1e6) + '. Tháng 3 giá về 30.000 nhưng Heo không còn chứng chỉ nào. Khoản lỗ trên giấy đã thành lỗ thật.'; } },
+    { mood: 'worried', h: 'Hòa vốn, bỏ lỡ tháng rẻ nhất', units: 200, paid: 6e6,
+      p: function () { return 'Heo có 100 + 100 = 200 chứng chỉ, bỏ ra ' + money(6e6) + ', cuối tháng 3 đáng ' + money(200 * 30000) + ': hòa vốn. Heo bỏ qua đúng tháng giá rẻ nhất, khi 3 triệu mua được 150 chứng chỉ.'; } },
+    { mood: 'proud', h: 'Kỷ luật được trả công', units: base.U, paid: base.paid,
+      p: function () { var v = base.U * 30000; return 'Heo có ' + num(base.U, 0) + ' chứng chỉ, giá vốn ≈ ' + vnd(base.cost) + ', bỏ ra ' + money(base.paid) + ', cuối tháng 3 đáng ' + money(v) + ': lãi ' + money(v - base.paid) + ' (' + pct((v - base.paid) / base.paid * 100) + '). Tháng 2 đáng sợ hóa ra là tháng mua được nhiều nhất.'; } }
+  ];
+  function renderPanic(k) {
+    var out = $('panicOut');
+    document.querySelectorAll('#panicOpts .opt').forEach(function (b) { b.setAttribute('aria-pressed', String(+b.dataset.k === k)); });
+    if (k == null) {
+      out.innerHTML = '<span class="char">' + T.owl('talk') + '</span><div><h3>Con chọn đi</h3><p>Mỗi lựa chọn dẫn đến một cái kết khác nhau, tính bằng đúng số liệu ví dụ ở trên.</p></div>';
+      return;
+    }
+    var c = panic[k];
+    out.innerHTML = '<span class="char">' + T.pig(c.mood) + '</span><div><h3>' + c.h + '</h3><p>' + c.p() + '</p></div>';
+  }
+  document.querySelectorAll('#panicOpts .opt').forEach(function (b) {
+    b.addEventListener('click', function () { renderPanic(+b.dataset.k); });
+  });
+  renderPanic(null);
+
+  // ---------- 9.4 chọn phong cách ----------
+  var ans = { hours: null, bctc: null, still: null, cash: null };
+  var need = { 'giá trị': 2, 'tăng trưởng': 2, 'theo đà': 3, 'cổ tức': 1 };
+  var hoursLab = ['dưới 2 giờ', '2–5 giờ', '5–10 giờ', 'trên 10 giờ'];
+  var needLab = { 1: '2–5 giờ/tuần', 2: '5–10 giờ/tuần', 3: '10+ giờ/tuần' };
+  function renderStyle() {
+    var a = ans, out = $('styleOut');
+    if (a.hours === null || a.bctc === null || a.still === null || a.cash === null) {
+      out.innerHTML = '<span class="char">' + T.owl('talk') + '</span><div><h3>Chờ con trả lời…</h3><p>Chọn đủ bốn câu, Cú Già sẽ gợi ý trường phái.</p></div>';
+      return;
+    }
+    if (a.hours === 0) {
+      out.innerHTML = '<span class="char">' + T.pig('happy') + '</span><div><span class="eyebrow">Gợi ý</span><h3>Đầu tư thụ động</h3><p>Dưới 2 giờ mỗi tuần thì chọn thụ động: mua ETF hoặc quỹ chỉ số định kỳ, nắm giữ nhiều năm. Chỉ cần 1–2 giờ/tháng.</p></div>';
+      return;
+    }
+    var picks = [];
+    if (a.bctc) { picks.push('giá trị'); picks.push('tăng trưởng'); }
+    if (!a.still) picks.push('theo đà');
+    if (a.cash) picks.push('cổ tức');
+    if (!picks.length) {
+      out.innerHTML = '<span class="char">' + T.pig('happy') + '</span><div><span class="eyebrow">Gợi ý</span><h3>Đầu tư thụ động</h3><p>Con không thích đọc BCTC, chịu được chờ đợi và không cần dòng tiền đều. Thụ động là lựa chọn gọn nhất, và thời gian rảnh dành cho việc khác.</p></div>';
+      return;
+    }
+    var notes = [];
+    picks.forEach(function (p) { if (a.hours < need[p]) notes.push('Đầu tư ' + p + ' cần khoảng ' + needLab[need[p]] + ', con mới có ' + hoursLab[a.hours] + '.'); });
+    if (picks.indexOf('theo đà') >= 0) notes.push('Chọn theo đà nghĩa là phải chấp nhận cắt lỗ thường xuyên.');
+    out.innerHTML = '<span class="char">' + T.pig(notes.length ? 'worried' : 'proud') + '</span><div><span class="eyebrow">Gợi ý</span><h3>Đầu tư ' + picks.join(' / ') + '</h3><p>' +
+      (picks.length > 1 ? 'Câu trả lời hợp với nhiều trường phái; hãy chọn <b>một</b> làm chính. ' : '') +
+      notes.join(' ') + (notes.length ? ' Khi chưa đủ giờ, phần lớn vốn vẫn nên DCA thụ động như gợi ý năm đầu bên dưới.' : ' Năm đầu vẫn nên giữ phần lớn vốn ở DCA như gợi ý bên dưới.') + '</p></div>';
+  }
+  document.querySelectorAll('.q[data-s]').forEach(function (q) {
+    q.querySelectorAll('.opt').forEach(function (b) {
+      b.setAttribute('aria-pressed', 'false');
+      b.addEventListener('click', function () {
+        q.querySelectorAll('.opt').forEach(function (o) { o.setAttribute('aria-pressed', String(o === b)); });
+        ans[q.dataset.s] = +b.dataset.v;
+        renderStyle();
+      });
+    });
+  });
+  renderStyle();
+
+  function renderCap() {
+    var v = +$('capV').value * 1e6, p = +$('capP').value;
+    $('capVOut').textContent = money(v);
+    $('capPOut').textContent = p + '%';
+    var etf = v * p / 100;
+    $('capEtf').textContent = money(etf);
+    $('capSelf').textContent = money(v - etf);
+    $('capMonth').textContent = money(etf / 12) + '/tháng';
+  }
+  ['capV', 'capP'].forEach(function (id) { $(id).addEventListener('input', renderCap); });
+  renderCap();
+
+  // ---------- 9.5 cổng checklist ----------
+  var gateBoxes = document.querySelectorAll('#gate input');
+  function renderGate(pressed) {
+    var out = $('gateOut'), miss = [];
+    gateBoxes.forEach(function (b) { if (!b.checked) miss.push(b.nextElementSibling.textContent); });
+    if (!pressed) {
+      out.innerHTML = '<span class="char">' + T.owl('talk') + '</span><div><h3>' + (6 - miss.length) + '/6 cửa đã qua</h3><p>Tick những gì thật sự đúng với lệnh con định đặt, rồi bấm Mua.</p></div>';
+      return;
+    }
+    if (!miss.length) {
+      out.innerHTML = '<span class="char">' + T.pig('proud') + '</span><div><h3>Qua đủ 6 cửa. Được bấm Mua.</h3><p>Lệnh vẫn có thể lỗ, nhưng đó là lỗ có kế hoạch, có giá cắt lỗ và tỷ trọng rõ ràng.</p></div>';
+    } else {
+      out.innerHTML = '<span class="char">' + T.owl('stern') + '</span><div><h3>Dừng tay! Còn ' + miss.length + ' cửa chưa qua</h3><p>' + miss.map(function (m) { return '✗ ' + m; }).join('<br>') + '</p></div>';
+    }
+  }
+  gateBoxes.forEach(function (b) { b.addEventListener('change', function () { renderGate(false); }); });
+  $('gateBtn').addEventListener('click', function () { renderGate(true); });
+  renderGate(false);
+
+  // ---------- 9.6 tin tức hay tiếng ồn ----------
+  var news = [
+    { h: 'Cổ phiếu X giảm 3% hôm nay, không có tin gì mới.', v: false, why: 'Giá dao động trong ngày không làm doanh nghiệp đổi khác.' },
+    { h: 'X mất hợp đồng với khách hàng chiếm 40% doanh thu.', v: true, why: 'Doanh thu và lợi nhuận tương lai thay đổi thật. Cần định giá lại.' },
+    { h: 'Hội nhóm đồn X "sắp có sóng lớn".', v: false, why: 'Lời đồn không phải thông tin về doanh nghiệp.' },
+    { h: 'X công bố lợi nhuận quý giảm một nửa so với cùng kỳ.', v: true, why: 'Kết quả kinh doanh là thứ quyết định giá trị. Xem nguyên nhân là tạm thời hay lâu dài.' },
+    { h: 'Một người nổi tiếng trên mạng dự báo chỉ số tuần sau.', v: false, why: 'Dự báo ngắn hạn của thị trường không thay đổi giá trị doanh nghiệp X.' },
+    { h: 'X phát hành thêm cổ phiếu, gấp đôi số lượng đang lưu hành.', v: true, why: 'Phần sở hữu của mỗi cổ phiếu bị pha loãng. Cần tính lại giá trị trên mỗi cổ phiếu.' }
+  ];
+  var sorted = [];
+  function renderSorter() {
+    $('sorter').innerHTML = news.map(function (n, i) {
+      var d = sorted[i], cls = d == null ? '' : d === n.v ? 'done-ok' : 'done-bad';
+      return '<div class="news ' + cls + '"><p class="h">' + n.h + '</p>' +
+        (d == null
+          ? '<div class="opts"><button class="opt" type="button" data-i="' + i + '" data-v="1">Thay đổi giá trị</button><button class="opt" type="button" data-i="' + i + '" data-v="0">Tiếng ồn</button></div>'
+          : '<p>' + (d === n.v ? 'Đúng: ' : 'Chưa đúng, đây là ' + (n.v ? 'tin thay đổi giá trị' : 'tiếng ồn') + ': ') + n.why + '</p>') + '</div>';
+    }).join('');
+    $('sorter').querySelectorAll('.opt').forEach(function (b) {
+      b.addEventListener('click', function () { sorted[+b.dataset.i] = b.dataset.v === '1'; renderSorter(); });
+    });
+    var done = 0, ok = 0;
+    news.forEach(function (n, i) { if (sorted[i] != null) { done++; if (sorted[i] === n.v) ok++; } });
+    $('sortScore').textContent = ok + '/' + news.length + (done < news.length ? ' (còn ' + (news.length - done) + ' tin)' : '');
+    $('sortBox').className = 'stat ' + (done === news.length ? (ok === news.length ? 'money' : 'warn') : '');
+  }
+  renderSorter();
+})();
+</script>
+</body>
+</html>
